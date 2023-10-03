@@ -1,0 +1,18 @@
+<ng-template>
+  <div class="mi-popover-panel" role="dialog"
+       [ngClass]="classList"
+       [ngStyle]="popoverPanelStyles"
+       (keydown)="handleKeydown($event)"
+       (click)="onClick()"
+       (mouseover)="onMouseOver()"
+       (mouseleave)="onMouseLeave()"
+       [@transformPopover]="'enter'">
+    <div class="mi-popover-direction-arrow" [ngStyle]="popoverArrowStyles">
+    </div>
+    <div class="mi-popover-content"
+         [cdkTrapFocus]="focusTrapEnabled"
+         [cdkTrapFocusAutoCapture]="focusTrapAutoCaptureEnabled">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-template>

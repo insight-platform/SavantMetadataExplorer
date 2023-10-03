@@ -1,0 +1,28 @@
+<div class="root-page">
+  <div class="side" [ngClass]="{ 'expanded': isExpanded }">
+    <div class="side-content">
+      <div *ngIf="selectedNode" class="title">
+        <div *ngIf="selectedNode.isFrame; else spanTemplate">
+          <div>FRAME</div>
+        </div>
+        <ng-template #spanTemplate>SPAN</ng-template>
+        <button mat-icon-button (click)="isExpanded = false">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      <div class="content" *ngIf="selectedNode">
+        <ng-container *ngIf="selectedNode.isFrame && selectedNode.frameValue; else spanTemplate">
+          <sf-frame-details [frame]="selectedNode.frameValue" [comparedFrame]="comparedFrame"></sf-frame-details>
+        </ng-container>
+        <ng-template #spanTemplate>
+          <div>Namespace: {{ selectedNode.namespace }}</div>
+          <div>Label: {{ selectedNode.label }}</div>
+          <div>Child nodes: {{ selectedNode.children?.length }}</div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <sf-frame-tree [frame]="frame" (onNodeSelected)="displaySide($event)"></sf-frame-tree>
+  </div>
+</div>

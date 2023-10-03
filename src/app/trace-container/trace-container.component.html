@@ -1,0 +1,44 @@
+<mat-toolbar color="primary">
+  <span>Savant Metadata Explorer</span>
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="root-page">
+  <div class="side">
+    <div class="trace-id-search">
+      <mat-form-field>
+        <mat-label>TraceId</mat-label>
+        <input matInput [value]="traceId"/>
+        <button matSuffix mat-icon-button>
+          <mat-icon>start</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+<!--    <h3 class="trace-id">TraceId: {{ traceId }}</h3>-->
+    <sf-span-list [spans]="spans"
+                  [selectedIndex]="selectedFrameIndex"
+                  (compareSpan)="setComparedFrame($event)"
+                  (selectedSpan)="setFrame($event)"></sf-span-list>
+  </div>
+  <div class="main" tabindex="0"
+       (keydown.arrowRight)="selectSpan(1)"
+       (keydown.arrowLeft)="selectSpan(-1)">
+    <div *ngIf="selectedFrameIndex !== -1"
+         class="frame-actions">
+      <button mat-icon-button
+              [disabled]="selectedFrameIndex < 1"
+              (click)="selectSpan(-1)">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button mat-icon-button
+              [disabled]="selectedFrameIndex >= spans.length - 1"
+              (click)="selectSpan(1)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    <sf-frame-container *ngIf="!!frame" [frame]="frame" [comparedFrame]="comparedFrame"></sf-frame-container>
+  </div>
+</div>

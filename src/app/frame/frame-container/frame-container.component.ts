@@ -12,6 +12,7 @@ import { isNil } from 'lodash';
 export class FrameContainerComponent {
   @Input() frame: IFrameJson;
   @Input() comparedFrame: IFrameJson | undefined;
+  @Input() objectFilter: { namespace: string; label: string}[]
   isExpanded = false;
   selectedNode: INodeObject | undefined = undefined;
 

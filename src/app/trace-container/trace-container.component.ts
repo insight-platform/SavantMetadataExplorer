@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IFrameJson, ISpan } from '../api/models/span';
 import { data } from '../api/models/data';
+import { uniq } from 'lodash';
 
 @Component({
   selector: 'sf-trace-container',
@@ -16,6 +17,13 @@ export class TraceContainerComponent {
   frame: IFrameJson | undefined;
   comparedFrame: IFrameJson | undefined;
   selectedFrameIndex = -1;
+  namespaces: string[] = [];
+  labels: string[] = [];
+  objectFilter: { namespace: string; label: string}[] = [];
+
+  setObjectFilter(objectFilter: { namespace: string; label: string}[]) {
+    this.objectFilter = objectFilter;
+  }
 
   setFrame(index: number) {
     this.frame = undefined;
@@ -23,6 +31,9 @@ export class TraceContainerComponent {
     setTimeout(() => {
       this.selectedFrameIndex = index;
       this.frame = this.spans[index].tags.find(tag => tag.key === 'frame_json')?.value as IFrameJson;
+
+      this.namespaces = uniq(this.frame.objects.map(_ => _.namespace));
+      this.labels = uniq(this.frame.objects.map(_ => _.label));
     }, 500);
   }
 

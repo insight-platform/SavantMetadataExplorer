@@ -13,6 +13,7 @@ import { INodeObject } from '../node-object';
 })
 export class FrameTreeComponent implements OnChanges {
   @Input() frame: IFrameJson;
+  @Input() objectFilter: { namespace: string; label: string}[]
   @Output() onNodeSelected = new EventEmitter<INodeObject>();
   objectGroups: { namespace: string, label: string }[] = [];
   selectedNode: INodeObject | undefined = undefined;
@@ -29,6 +30,11 @@ export class FrameTreeComponent implements OnChanges {
           ...res,
           ...uniq(this.frame.objects.map(_ => _.label)).map(label => ({namespace, label})),
         ], [])
+      this._clearSvg();
+      this._createSvg(...this._createTree(this._createDataNode(this.frame)));
+    }
+    if ('objectFilter' in changes && this.objectFilter) {
+      this._clearSvg();
       this._createSvg(...this._createTree(this._createDataNode(this.frame)));
     }
   }
@@ -95,17 +101,21 @@ export class FrameTreeComponent implements OnChanges {
     return [ treemapNode, maxX ];
   }
 
+  private _clearSvg() {
+    d3.select('#treeChart').selectAll('svg').remove();
+  }
+
   private _createSvg(treemapNodes: HierarchyNode<INodeObject>, treeWidth: number): void {
     const svg = d3.select('#treeChart')
       .append('svg')
       .attr('height',(treemapNodes.height + 1) * this.nodeHeight + 'px')
-      .attr('width', (treeWidth + this.nodeWidth) + 'px')
+      .attr('width', (treeWidth + this.nodeWidth) + 'px');
     const g = svg.append('g');
     g.selectAll('.link')
       .data(treemapNodes.descendants().slice(1))
       .enter().append('path')
       .attr('class', 'link')
-      .style('stroke', d => d.parent ? this._getColor(d.parent.data, 1) : '#ddd')
+      .style('stroke', d => d.parent ? this._getColor(d.parent.data, this._getAlfa([d.data, d.parent.data]), false) : '#ddd')
       .style('stroke-width', '2px')
       .style('fill', 'transparent')
       .attr('d', d => {
@@ -160,9 +170,11 @@ export class FrameTreeComponent implements OnChanges {
       .append('rect')
       .attr('width', this._rectWidth)
       .attr('height', this._rectHeight)
+      .attr('rx', 5)
+      .attr('ry', 5)
       .on('click', toggleColor)
       .attr('id', d => 'circle' + d.data.id)
-      .style('stroke', d => this._getColor(d.data, 1))
+      .style('stroke', d => this._getColor(d.data, this._getAlfa([d.data]), false))
       .style('stroke-width', '2px')
       .style('fill', d => this._getColor(d.data));
 
@@ -189,24 +201,54 @@ export class FrameTreeComponent implements OnChanges {
       //.style('text-anchor', 'middle')
       .attr('x', 20)
       .attr('dy', 0)
+      .style('fill', d => this._getTextColor(d.data))
       .text(d => 'ID: ' + d.data.id);
     text
       .append('tspan')
       //.style('text-anchor', 'middle')
       .attr('x', 20)
       .attr('dy', '1.2em')
+      .style('fill', d => this._getTextColor(d.data))
       .text(d => 'Namespace: ' + d.data.namespace);
     text
       .append('tspan')
       //.style('text-anchor', 'middle')
       .attr('x', 20)
       .attr('dy', '1.2em')
+      .style('fill', d => this._getTextColor(d.data))
       .text(d => 'Label: ' + d.data.label);
   }
 
-  private _getColor(data: INodeObject, alfa = 0.5): string {
+  private _getTextColor(data: INodeObject) {
+    if (
+      this.objectFilter && this.objectFilter.length &&
+      this.objectFilter.some(filter => filter.label === data.label && filter.namespace === data.namespace)
+    ) {
+      return '#dddddd'
+    }
+    return '#000';
+  }
+
+  private _getAlfa(nodes: INodeObject[]) {
+    if (
+      this.objectFilter && this.objectFilter.length &&
+      this.objectFilter.some(filter => nodes.some(node => node.label === filter.label && filter.namespace === node.namespace))
+    ) {
+      return 0.3;
+    }
+    return 1;
+  }
+
+  private _getColor(data: INodeObject, alfa = 0.5, applyFilter = true): string {
     const groupIndex = this.objectGroups
       .findIndex(group => group.namespace === data.namespace && data.label === group.label);
+    if (
+      applyFilter &&
+      this.objectFilter && this.objectFilter.length &&
+      this.objectFilter.some(filter => filter.label === data.label && filter.namespace === data.namespace)) {
+      return '#dddddd50'
+    }
+
     if (groupIndex === -1) {
       return getColor(-1, alfa);
     }

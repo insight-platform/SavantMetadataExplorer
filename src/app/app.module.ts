@@ -12,11 +12,16 @@ import { MatInputModule } from '@angular/material/input';
 import { TraceContainerComponent } from './trace-container/trace-container.component';
 import { SpanModule } from './span/span.module';
 import { FrameModule } from './frame/frame.module';
+import { ObjectFilterComponent } from './utils/object-filter/object-filter.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TraceContainerComponent
+    TraceContainerComponent,
+    ObjectFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +34,10 @@ import { FrameModule } from './frame/frame.module';
     MatInputModule,
     SpanModule,
     FrameModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

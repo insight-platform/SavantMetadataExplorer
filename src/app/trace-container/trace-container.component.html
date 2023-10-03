@@ -18,6 +18,9 @@
       </mat-form-field>
     </div>
 <!--    <h3 class="trace-id">TraceId: {{ traceId }}</h3>-->
+    <sf-object-filter [labels]="labels"
+                      [namespaces]="namespaces"
+                      (valueChange)="setObjectFilter($event)"></sf-object-filter>
     <sf-span-list [spans]="spans"
                   [selectedIndex]="selectedFrameIndex"
                   (compareSpan)="setComparedFrame($event)"
@@ -39,6 +42,9 @@
         <mat-icon>chevron_right</mat-icon>
       </button>
     </div>
-    <sf-frame-container *ngIf="!!frame" [frame]="frame" [comparedFrame]="comparedFrame"></sf-frame-container>
+    <sf-frame-container *ngIf="!!frame"
+                        [frame]="frame"
+                        [objectFilter]="objectFilter"
+                        [comparedFrame]="comparedFrame"></sf-frame-container>
   </div>
 </div>

@@ -23,6 +23,8 @@
     </div>
   </div>
   <div class="main">
-    <sf-frame-tree [frame]="frame" (onNodeSelected)="displaySide($event)"></sf-frame-tree>
+    <sf-frame-tree [frame]="frame"
+                   [objectFilter]="objectFilter"
+                   (onNodeSelected)="displaySide($event)"></sf-frame-tree>
   </div>
 </div>

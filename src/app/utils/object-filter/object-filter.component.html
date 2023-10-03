@@ -1,0 +1,22 @@
+<div class="filters">
+  <mat-form-field>
+    <mat-label>Namespace & Label</mat-label>
+    <mat-select #matSelect
+                multiple
+                [compareWith]="compareGroups"
+                [formControl]="namespaceControl">
+      <div class="mat-option-class"
+           [class.selected]="valueIsEmpty"
+           (click)="clearSelection(matSelect)">Any</div>
+      <mat-optgroup *ngFor="let namespace of namespaces" [label]="namespace">
+        <mat-checkbox matPrefix
+                      [checked]="isAllLabelsSelected[namespace]"
+                      (change)="toggleAllLabelsInNamespace(namespace, $event.checked)"
+                      color="primary"></mat-checkbox>
+        <mat-option *ngFor="let label of labels" [value]="{ namespace: namespace, label: label}">
+          {{ label }}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
+</div>

@@ -1,21 +1,26 @@
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { IFrameJson } from '../../api/models/span';
-import { uniq } from 'lodash';
+import { getValue, IAttributes, IFrameJson } from '../../api/models/span';
+import { isNil, isObject, uniq } from 'lodash';
 import { FrameDifference, getFrameDifference } from '../../utils/get-difference';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'sf-frame-details',
   templateUrl: './frame-details.component.html',
   styleUrls: ['./frame-details.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class FrameDetailsComponent implements OnChanges {
   @Input() frame: IFrameJson;
@@ -31,6 +36,7 @@ export class FrameDetailsComponent implements OnChanges {
   ];
   frameDifferences: FrameDifference;
   showJson = false;
+  expandedElement: IAttributes | null;
 
   constructor(private _cdr: ChangeDetectorRef) {
   }
@@ -62,8 +68,12 @@ export class FrameDetailsComponent implements OnChanges {
     }
   }
 
-  getValues(values: any[]) {
-    return  JSON.stringify(values,null, 2);
+  getElementValue(value: any): string {
+    return getValue(value);
+  }
+
+  getJson(value: any) {
+    return JSON.stringify(value, null, 2);
   }
 
   getJsonData() {

@@ -1,9 +1,25 @@
+import { isNil } from 'lodash';
+
 export interface IAttributes {
   name: string;
   namespace: string;
   is_persistent: boolean;
   values: { value: any; confidence: number | null }[];
   [key: string]: any;
+}
+
+export interface ITransformation {
+  initial_size: number[];
+  scale: number[];
+  padding: number[];
+  resulting_size: number[];
+}
+export interface IContent {
+  external: {
+    location: string;
+    method: string;
+  };
+  internal: string | null;
 }
 
 export interface IFrameJsonObject {
@@ -23,6 +39,9 @@ export interface IFrameJson {
   source_id: string;
   type: string;
   version: string;
+  transformations: Partial<ITransformation>[];
+  content: Partial<IContent> | null;
+  time_base: number[];
   [key: string]: any;
 }
 
@@ -49,3 +68,22 @@ export interface IData {
   processes: any,
   [key: string]: any;
 }
+
+export const getValue = (v): string => {
+  if (isNil(v)) {
+    return '—';
+  }
+  if (typeof v === 'string') {
+    return v;
+  }
+  if (typeof v === 'number') {
+    return v.toString();
+  }
+  if (Array.isArray(v)) {
+    return '[' + v.map(vItem => {
+      return getValue(vItem)
+    }).join(', ') + ']';
+  }
+  return Object.keys(v).map(key => `${key}: ${getValue(v[key])}`).join('; ');
+};
+

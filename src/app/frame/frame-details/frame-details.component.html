@@ -27,10 +27,14 @@
     <ng-container matColumnDef="value">
       <th mat-header-cell *matHeaderCellDef> Value </th>
       <td mat-cell *matCellDef="let element">
-        <span>{{element.value || '—' }}</span>
-        <span *ngIf="frameDifferences?.updatedValues?.hasOwnProperty(element.key)">
-          -> {{ frameDifferences.updatedValues[element.key] }}
-        </span>
+        <ng-template #valuesPopover>
+          <div class="json-value">
+            <pre>{{ getJson(element.value) }}</pre>
+          </div>
+        </ng-template>
+        <mi-element-popover [popoverTemplate]="valuesPopover">
+          <span>{{ getElementValue(element.value) }}</span>
+        </mi-element-popover>
       </td>
     </ng-container>
 
@@ -44,7 +48,9 @@
       Namespace "{{ namespace.namespace }}"
     </mat-expansion-panel-header>
 
-    <table mat-table [dataSource]="namespace.attributes" class="attribute-table">
+    <table mat-table
+           [dataSource]="namespace.attributes" multiTemplateDataRows
+           class="attribute-table">
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -69,14 +75,47 @@
         <td mat-cell *matCellDef="let element">
           <ng-template #valuesPopover>
             <div class="json-value">
-              <pre>{{ getValues(element.values) }}</pre>
+              <pre>{{ getJson(element.values) }}</pre>
             </div>
           </ng-template>
           <mi-element-popover [popoverTemplate]="valuesPopover"> ... </mi-element-popover>
         </td>
       </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedAttributeColumns.length">
+          <div class="example-element-detail"
+               [class.expanded]="expandedElement === element"
+               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <b>Values</b>
+            <table mat-table [dataSource]="element.values" class="attribute-table">
+              <!-- Confidence Column -->
+              <ng-container matColumnDef="confidence">
+                <th mat-header-cell *matHeaderCellDef> Confidence </th>
+                <td mat-cell *matCellDef="let innerElement"> {{innerElement.confidence || '—' }} </td>
+              </ng-container>
+              <!-- Value Column -->
+              <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef> Value </th>
+                <td mat-cell *matCellDef="let innerElement"> {{ getElementValue(innerElement.value) }} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="['confidence', 'value']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['confidence', 'value'];"></tr>
+            </table>
+          </div>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedAttributeColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedAttributeColumns;"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedAttributeColumns;"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
+          class="example-detail-row"></tr>
     </table>
   </mat-expansion-panel>
 </ng-template>

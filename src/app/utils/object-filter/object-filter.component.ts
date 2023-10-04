@@ -22,7 +22,6 @@ export class ObjectFilterComponent implements OnChanges {
   constructor() {
     this.namespaceControl.valueChanges
       .subscribe((value: { namespace: string; label: string}[]) => {
-        console.log(value);
         this.namespaces.forEach(namespace => {
           this.isAllLabelsSelected[namespace] = this.labels
             .every(label => value.length && value?.find(_ => _.label === label && _.namespace === namespace))
@@ -50,7 +49,6 @@ export class ObjectFilterComponent implements OnChanges {
   }
 
   toggleAllLabelsInNamespace(namespace: string, isChecked: boolean) {
-    console.log(isChecked);
     if (isChecked) {
       this.namespaceControl.setValue(
         this.labels.map(label => ({ namespace, label }))

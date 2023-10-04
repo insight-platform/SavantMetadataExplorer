@@ -5,7 +5,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { getValue, IAttributes, IFrameJson } from '../../api/models/span';
+import { getArrayValue, getValue, IAttributes, IFrameJson } from '../../api/models/span';
 import { isNil, isObject, uniq } from 'lodash';
 import { FrameDifference, getFrameDifference } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -70,6 +70,10 @@ export class FrameDetailsComponent implements OnChanges {
 
   getElementValue(value: any): string {
     return getValue(value);
+  }
+
+  getElementValueAsArray(value: any): string[] {
+    return getArrayValue(value);
   }
 
   getJson(value: any) {

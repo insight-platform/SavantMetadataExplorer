@@ -84,6 +84,22 @@ export const getValue = (v): string => {
       return getValue(vItem)
     }).join(', ') + ']';
   }
-  return Object.keys(v).map(key => `${key}: ${getValue(v[key])}`).join('; ');
+  const res = Object.keys(v).map(key => `${key}: ${getValue(v[key])}`).join('; ')
+  return Object.keys(v).length > 1 ? '{ ' + res + ' }' : res;
 };
 
+export const getArrayValue = (v): string[] => {
+  if (isNil(v) || ['string', 'number'].indexOf(typeof v) !== -1) {
+    return [getValue(v)]
+  }
+  if (Array.isArray(v)) {
+    if (v.length === 0) {
+      return ['—'];
+    }
+    if (!isNil(v[0]) && ['string', 'number'].includes(typeof v[0])) {
+      return [getValue(v)];
+    }
+    return v.map(vItem => getValue(vItem));
+  }
+  return Object.keys(v).map(key => `${key}: ${getValue(v[key])}`);
+}

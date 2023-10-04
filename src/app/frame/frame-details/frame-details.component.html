@@ -33,7 +33,9 @@
           </div>
         </ng-template>
         <mi-element-popover [popoverTemplate]="valuesPopover">
-          <span>{{ getElementValue(element.value) }}</span>
+          <ul class="no-bullets">
+            <li *ngFor="let str of getElementValueAsArray(element.value)">{{ str }}</li>
+          </ul>
         </mi-element-popover>
       </td>
     </ng-container>
@@ -98,7 +100,11 @@
               <!-- Value Column -->
               <ng-container matColumnDef="value">
                 <th mat-header-cell *matHeaderCellDef> Value </th>
-                <td mat-cell *matCellDef="let innerElement"> {{ getElementValue(innerElement.value) }} </td>
+                <td mat-cell *matCellDef="let innerElement">
+                  <ul class="no-bullets">
+                    <li *ngFor="let str of getElementValueAsArray(innerElement.value)">{{ str }}</li>
+                  </ul>
+                </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="['confidence', 'value']"></tr>

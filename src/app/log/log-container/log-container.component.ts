@@ -9,6 +9,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class LogContainerComponent implements OnChanges {
   @Input() spans: ISpan[] = [];
+  @Input() logFilter: { level: string[]; target: string[] } = { level: [], target: [] };
   safeLogs: ILog[] = [];
 
   private _logLevels = ['Info', 'Warn', 'Debug', 'Error', 'Fatal', 'Critical', 'Warning', 'Trace'];
@@ -17,10 +18,17 @@ export class LogContainerComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-   if ('spans' in changes && this.spans) {
+   if (('spans' in changes || 'logFilter' in changes) && this.spans) {
      this.safeLogs = this.spans.reduce<ILog[]>((res, span) => [
        ...res,
-       ...span.logs.map(log => ({
+       ...span.logs
+         .filter(log =>
+           !(this.logFilter.level && this.logFilter.level.length) ||
+           log.fields.some(field => field.key === 'log.level' && this.logFilter.level.indexOf(field.value) !== -1))
+         .filter(log =>
+           !(this.logFilter.target && this.logFilter.target.length) ||
+           log.fields.some(field => field.key === 'log.target' && this.logFilter.target.indexOf(field.value) !== -1))
+         .map(log => ({
          timestamp: (new Date(log.timestamp)).toUTCString(),
          lines: this._decorateLines(getLogValue(log.fields)),
        } as ILog)),

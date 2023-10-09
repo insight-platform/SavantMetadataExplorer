@@ -63,7 +63,7 @@
                           [comparedFrame]="comparedFrame"></sf-frame-container>
     </ng-container>
     <ng-container *ngIf="selectedView === 'log'">
-      <sf-log-container [spans]="spansWithLog"></sf-log-container>
+      <sf-log-container [spans]="spansWithLog" [logFilter]="logFilter"></sf-log-container>
     </ng-container>
   </div>
 </div>

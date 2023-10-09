@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { getLogValue, IFrameJson, ISpan, ISpanLog } from '../api/models/span';
 import { data } from '../api/models/data';
-import { uniq } from 'lodash';
+import { isNil, uniq } from 'lodash';
 
 @Component({
   selector: 'sf-trace-container',
@@ -22,7 +22,18 @@ export class TraceContainerComponent {
   namespaces: string[] = [];
   labels: string[] = [];
   objectFilter: { namespace: string; label: string}[] = [];
-  logTargets: string[] = [];
+  logFilter: { level: string[]; target: string[] } = { level: [], target: [] };
+  logTargets: string[] = uniq(
+    data.spans.filter(span => span.logs && span.logs.length)
+      .reduce<string[]>((res, span) => [
+        ...res,
+        ...span.logs.reduce<string[]>((r, log) => [
+          ...r,
+          log.fields.find(field => field.key === 'log.target')?.value || '',
+        ], []),
+      ], [])
+      .filter(t => t !== '')
+  ).sort((t1,t2) => t1.localeCompare(t2));
 
   selectedView: 'span'|'log' = 'span';
 
@@ -30,8 +41,8 @@ export class TraceContainerComponent {
     this.selectedView = view;
   }
 
-  setLogFilter(logFilter) {
-
+  setLogFilter(logFilter: { level: string[]; target: string[] }) {
+    this.logFilter = logFilter;
   }
 
   setObjectFilter(objectFilter: { namespace: string; label: string}[]) {

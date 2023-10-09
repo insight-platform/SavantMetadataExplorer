@@ -1,4 +1,5 @@
 import { isNil } from 'lodash';
+import { AnsiUp } from 'ansi_up'
 
 export interface IAttributes {
   name: string;
@@ -121,16 +122,19 @@ export const getArrayValue = (v): string[] => {
 }
 
 export const logFunctionKeys = ['log.level', 'log.target'];
-export const logEventKeys = ['event', 'event.name', 'event.domain'];
+export const logEventKeys = ['event.name', 'event.domain'];
+
+export const ansi_up = new AnsiUp();
 export const getLogValue = (v: ISpanLogField[]): string[] => {
   const [level, target] = logFunctionKeys.map(key => v.find(field => field.key === key )?.value);
-  const [event, eventName, eventDomain] = logEventKeys.map(key => v.find(field => field.key === key )?.value);
+  const [eventName, eventDomain] = logEventKeys.map(key => v.find(field => field.key === key )?.value);
+  const event = ansi_up.ansi_to_html(v.find(field => field.key === 'event' )?.value || '');
 
   const attributes = v.filter(field => [...logFunctionKeys, ...logEventKeys].indexOf(field.key) === -1)
     .map(field => `${field.key} = ${field.value.toString()}`);
 
   return [
-    `| [${level}] [${target}] ${event}\n`,
+    (level ? ('[' + level +'] ') : '') + (target ? ('[' + target +'] ') : '') + event,
     '',
     ...(attributes.length ? attributes.map(attr => `| ${attr}`) : []),
   ];

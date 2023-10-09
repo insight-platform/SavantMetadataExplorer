@@ -1530,7 +1530,7 @@ export const data: IData = {
             {
               key: 'event',
               type: 'string',
-              value: 'Holding GIL (__exit__, savant_python/src/utils/otlp.rs, 181)',
+              value: 'Holding \u001b[0m\u001b[4m\u001b[42m\u001b[31mGIL\u001b[0m (__exit__, savant_python/src/utils/otlp.rs, 181)',
             },
             {
               key: 'duration',
@@ -1606,7 +1606,7 @@ export const data: IData = {
             {
               key: 'event',
               type: 'string',
-              value: 'Holding GIL (__exit__, savant_python/src/utils/otlp.rs, 181)',
+              value: 'Holding \u001b[35mGIL\u001b[0m (__exit__, savant_python/src/utils/otlp.rs, 181)',
             },
             {
               key: 'duration',

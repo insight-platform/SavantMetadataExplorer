@@ -51,12 +51,23 @@ export interface ISpanTag {
   value: IFrameJson | string;
 }
 
+export interface ISpanLogField {
+  key: string;
+  type: string;
+  value: string;
+}
+
+export interface ISpanLog {
+  timestamp: number;
+  fields: ISpanLogField[];
+}
+
 export interface ISpan {
   traceID: string;
   spanID: string;
   operationName: string
   tags: ISpanTag[];
-  logs: string[];
+  logs: ISpanLog[];
   processID: string;
   startTime: number;
   [key: string]: any;
@@ -67,6 +78,11 @@ export interface IData {
   spans: ISpan[];
   processes: any,
   [key: string]: any;
+}
+
+export interface ILog {
+  timestamp: string;
+  lines: string[];
 }
 
 export const getValue = (v): string => {
@@ -102,4 +118,20 @@ export const getArrayValue = (v): string[] => {
     return v.map(vItem => getValue(vItem));
   }
   return Object.keys(v).map(key => `${key}: ${getValue(v[key])}`);
+}
+
+export const logFunctionKeys = ['log.level', 'log.target'];
+export const logEventKeys = ['event', 'event.name', 'event.domain'];
+export const getLogValue = (v: ISpanLogField[]): string[] => {
+  const [level, target] = logFunctionKeys.map(key => v.find(field => field.key === key )?.value);
+  const [event, eventName, eventDomain] = logEventKeys.map(key => v.find(field => field.key === key )?.value);
+
+  const attributes = v.filter(field => [...logFunctionKeys, ...logEventKeys].indexOf(field.key) === -1)
+    .map(field => `${field.key} = ${field.value.toString()}`);
+
+  return [
+    `| [${level}] [${target}] ${event}\n`,
+    '',
+    ...(attributes.length ? attributes.map(attr => `| ${attr}`) : []),
+  ];
 }

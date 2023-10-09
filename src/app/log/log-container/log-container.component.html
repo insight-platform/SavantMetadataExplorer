@@ -1,0 +1,8 @@
+<div id="log-viewer" class="log-viewer">
+  <div class="log-item" *ngFor="let item of safeLogs">
+    <div class="item-timestamp">{{ item.timestamp }}</div>
+    <div class="item-message">
+      <span *ngFor="let line of item.lines" [innerHTML]="line"></span>
+    </div>
+  </div>
+</div>

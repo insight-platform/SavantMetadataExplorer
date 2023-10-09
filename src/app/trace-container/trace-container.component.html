@@ -17,34 +17,53 @@
         </button>
       </mat-form-field>
     </div>
-<!--    <h3 class="trace-id">TraceId: {{ traceId }}</h3>-->
-    <sf-object-filter [labels]="labels"
-                      [namespaces]="namespaces"
-                      (valueChange)="setObjectFilter($event)"></sf-object-filter>
-    <sf-span-list [spans]="spans"
-                  [selectedIndex]="selectedFrameIndex"
-                  (compareSpan)="setComparedFrame($event)"
-                  (selectedSpan)="setFrame($event)"></sf-span-list>
-  </div>
-  <div class="main" tabindex="0"
-       (keydown.arrowRight)="selectSpan(1)"
-       (keydown.arrowLeft)="selectSpan(-1)">
-    <div *ngIf="selectedFrameIndex !== -1"
-         class="frame-actions">
-      <button mat-icon-button
-              [disabled]="selectedFrameIndex < 1"
-              (click)="selectSpan(-1)">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-      <button mat-icon-button
-              [disabled]="selectedFrameIndex >= spans.length - 1"
-              (click)="selectSpan(1)">
-        <mat-icon>chevron_right</mat-icon>
-      </button>
+
+    <div class="content">
+      <mat-button-toggle-group [value]="selectedView" (change)="setView($event.value)">
+        <mat-button-toggle [value]="'span'">
+          <mat-icon>account_tree</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle [value]="'log'">
+          <mat-icon>reorder</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
-    <sf-frame-container *ngIf="!!frame"
-                        [frame]="frame"
-                        [objectFilter]="objectFilter"
-                        [comparedFrame]="comparedFrame"></sf-frame-container>
+    <div *ngIf="selectedView === 'span'" class="content vertical">
+      <sf-object-filter [labels]="labels"
+                        [namespaces]="namespaces"
+                        (valueChange)="setObjectFilter($event)"></sf-object-filter>
+      <sf-span-list [spans]="spansWithFrame"
+                    [selectedIndex]="selectedFrameIndex"
+                    (compareSpan)="setComparedFrame($event)"
+                    (selectedSpan)="setFrame($event)"></sf-span-list>
+    </div>
+    <div *ngIf="selectedView === 'log'" class="content vertical">
+      <sf-log-filter [targets]="logTargets"
+                     (valueChange)="setLogFilter($event)"></sf-log-filter>
+    </div>
+  </div>
+  <div class="main">
+    <ng-container *ngIf="selectedView === 'span'">
+      <div *ngIf="selectedFrameIndex !== -1"
+           class="frame-actions">
+        <button mat-icon-button
+                [disabled]="selectedFrameIndex < 1"
+                (click)="selectSpan(-1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-icon-button
+                [disabled]="selectedFrameIndex >= spansWithFrame.length - 1"
+                (click)="selectSpan(1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      <sf-frame-container *ngIf="!!frame"
+                          [frame]="frame"
+                          [objectFilter]="objectFilter"
+                          [comparedFrame]="comparedFrame"></sf-frame-container>
+    </ng-container>
+    <ng-container *ngIf="selectedView === 'log'">
+      <sf-log-container [spans]="spansWithLog"></sf-log-container>
+    </ng-container>
   </div>
 </div>

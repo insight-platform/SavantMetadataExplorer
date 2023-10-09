@@ -16,12 +16,16 @@ import { ObjectFilterComponent } from './utils/object-filter/object-filter.compo
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { LogFilterComponent } from './utils/log-filter/log-filter.component';
+import { LogModule } from './log/log.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     TraceContainerComponent,
-    ObjectFilterComponent
+    ObjectFilterComponent,
+    LogFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +42,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
+    MatButtonToggleModule,
+    LogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

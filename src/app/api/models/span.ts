@@ -1,5 +1,6 @@
 import { isNil } from 'lodash';
 import { AnsiUp } from 'ansi_up'
+import { SafeHtml } from '@angular/platform-browser';
 
 export interface IAttributes {
   name: string;
@@ -83,7 +84,14 @@ export interface IData {
 
 export interface ILog {
   timestamp: string;
+  startTimestampDelta?: string;
   lines: string[];
+}
+export interface ISafeLog {
+  timestamp: string;
+  startTimestampDelta: string;
+  previousTimestampDelta: string;
+  lines: SafeHtml[];
 }
 
 export const getValue = (v): string => {

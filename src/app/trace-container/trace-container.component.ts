@@ -22,7 +22,7 @@ export class TraceContainerComponent {
   namespaces: string[] = [];
   labels: string[] = [];
   objectFilter: { namespace: string; label: string}[] = [];
-  logFilter: { level: string[]; target: string[] } = { level: [], target: [] };
+  logFilter: { level: string[]; target: string[]; search: string } = { level: [], target: [], search: '' };
   logTargets: string[] = uniq(
     data.spans.filter(span => span.logs && span.logs.length)
       .reduce<string[]>((res, span) => [
@@ -41,7 +41,7 @@ export class TraceContainerComponent {
     this.selectedView = view;
   }
 
-  setLogFilter(logFilter: { level: string[]; target: string[] }) {
+  setLogFilter(logFilter: { level: string[]; target: string[]; search: string }) {
     this.logFilter = logFilter;
   }
 

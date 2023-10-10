@@ -20,9 +20,17 @@
     font-family: Lucida Console, Courier, monospace;
 
     .item-timestamp {
+      display: flex;
       margin-right: 10px;
-      white-space: nowrap;
+      // white-space: nowrap;
+      justify-content: end;
       color: #4caf50;
+      width: 260px;
+      flex-shrink: 0;
+       & > * {
+         margin-left: 10px;
+         text-align: end;
+       }
     }
     .item-message {
       span {
@@ -34,6 +42,9 @@
   }
 }
 ::ng-deep {
+  .highlighted {
+    background-color: #fbe02dbb;
+  }
   .time {
     color: #86d489;
   }

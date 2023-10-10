@@ -1,7 +1,8 @@
 <div class="filters">
   <mat-form-field>
-    <mat-label>Namespace & Label</mat-label>
+    <mat-label for="namespace">Namespace & Label</mat-label>
     <mat-select #matSelect
+                id="namespace"
                 multiple
                 [compareWith]="compareGroups"
                 [formControl]="namespaceControl">

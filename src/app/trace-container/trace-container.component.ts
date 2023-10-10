@@ -19,6 +19,7 @@ export class TraceContainerComponent {
   frame: IFrameJson | undefined;
   comparedFrame: IFrameJson | undefined;
   selectedFrameIndex = -1;
+  selectedComparedFrameIndex = -1;
   namespaces: string[] = [];
   labels: string[] = [];
   objectFilter: { namespace: string; label: string}[] = [];
@@ -58,14 +59,19 @@ export class TraceContainerComponent {
 
       this.namespaces = uniq(this.frame.objects.map(_ => _.namespace));
       this.labels = uniq(this.frame.objects.map(_ => _.label));
-    }, 500);
+    }, 100);
   }
 
   setComparedFrame(index: number) {
     this.comparedFrame = undefined;
-    setTimeout(() => {
-      this.comparedFrame = this.spansWithFrame[index].tags.find(tag => tag.key === 'frame_json')?.value as IFrameJson;
-    }, 500);
+    if (this.selectedComparedFrameIndex !== index) {
+      setTimeout(() => {
+        this.selectedComparedFrameIndex = index;
+        this.comparedFrame = this.spansWithFrame[index].tags.find(tag => tag.key === 'frame_json')?.value as IFrameJson;
+      }, 100);
+    } else {
+      this.selectedComparedFrameIndex = -1;
+    }
   }
 
   selectSpan(direction: number) {

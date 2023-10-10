@@ -24,7 +24,9 @@
   </div>
   <div class="main">
     <sf-frame-tree [frame]="frame"
+                   [comparedFrame]="comparedFrame"
                    [objectFilter]="objectFilter"
+                   [frameObjectsDifference]="frameObjectsDifference"
                    (onNodeSelected)="displaySide($event)"></sf-frame-tree>
   </div>
 </div>

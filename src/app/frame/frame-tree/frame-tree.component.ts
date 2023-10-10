@@ -5,15 +5,18 @@ import { HierarchyNode } from 'd3';
 import * as d3 from 'd3';
 import { deepPurple, getColor } from '../../utils/color';
 import { INodeObject } from '../node-object';
+import { FrameObjectsDifference } from '../../utils/get-difference';
 
 @Component({
   selector: 'sf-frame-tree',
   templateUrl: './frame-tree.component.html',
-  styleUrls: ['./frame-tree.component.scss']
+  styleUrls: ['./frame-tree.component.scss'],
 })
 export class FrameTreeComponent implements OnChanges {
-  @Input() frame: IFrameJson;
-  @Input() objectFilter: { namespace: string; label: string}[]
+  @Input() frame: IFrameJson | undefined;
+  @Input() comparedFrame: IFrameJson | undefined;
+  @Input() objectFilter: { namespace: string; label: string }[]
+  @Input() frameObjectsDifference: FrameObjectsDifference | undefined
   @Output() onNodeSelected = new EventEmitter<INodeObject>();
   objectGroups: { namespace: string, label: string }[] = [];
   selectedNode: INodeObject | undefined = undefined;
@@ -26,16 +29,20 @@ export class FrameTreeComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (this.frame && 'frame' in changes) {
       this.objectGroups = uniq(this.frame.objects.map(_ => _.namespace))
+        .sort((g1,g2) => g1.localeCompare(g2))
         .reduce((res: any[], namespace: string) => [
           ...res,
-          ...uniq(this.frame.objects.map(_ => _.label)).map(label => ({namespace, label})),
+          // @ts-ignore
+          ...uniq(this.frame?.objects.map(_ => _.label)).map(label => ({namespace, label})),
         ], [])
       this._clearSvg();
       this._createSvg(...this._createTree(this._createDataNode(this.frame)));
     }
-    if ('objectFilter' in changes && this.objectFilter) {
-      this._clearSvg();
-      this._createSvg(...this._createTree(this._createDataNode(this.frame)));
+    if ('objectFilter' in changes && this.objectFilter || 'frameObjectsDifference' in changes) {
+      if (this.frame) {
+        this._clearSvg();
+        this._createSvg(...this._createTree(this._createDataNode(this.frame)));
+      }
     }
   }
 
@@ -67,8 +74,31 @@ export class FrameTreeComponent implements OnChanges {
         }
       });
 
+    if (this.frameObjectsDifference && this.frameObjectsDifference.addedObjectIds.length && this.comparedFrame) {
+      // @ts-ignore
+      const addedObjects = this.comparedFrame.objects.filter(object => this.frameObjectsDifference.addedObjectIds.indexOf(object.id) !== -1);
+      addedObjects.map(object => ({...object, children: []}))
+        .forEach(object => {
+          if (!isNil(object.parent)) {
+            findObject(objectTreeData, object)?.children.push(object);
+          }
+        });
+    }
+
+    if (this.frameObjectsDifference && this.frameObjectsDifference.deletedObjectIds.length && this.comparedFrame) {
+      // @ts-ignore
+      const addedObjects = this.comparedFrame.objects.filter(object => this.frameObjectsDifference.deletedObjectIds.indexOf(object.id) !== -1);
+      addedObjects.map(object => ({...object, children: []}))
+        .forEach(object => {
+          if (!isNil(object.parent)) {
+            findObject(objectTreeData, object)?.children.push(object);
+          }
+        });
+    }
+
+    // @ts-ignore
     return {
-      attributes: this.frame.attributes,
+      attributes: this.frame ? this.frame.attributes : [],
       frame: '',
       isFrame: true,
       frameValue: this.frame,
@@ -94,11 +124,12 @@ export class FrameTreeComponent implements OnChanges {
       levelNodeCounts[d.depth] = levelNodeCounts[d.depth] ? levelNodeCounts[d.depth] + 1 : 1;
     });
     treemapNode.eachBefore<HierarchyNode<INodeObject>>(d => {
-      d.x = (d.depth - treemapNode.depth) * this.nodeWidth + (levelNodeCounts[d.depth] - 1) * this.nodeWidth;
+      d.y = 5 + d.y;
+      d.x = 5 + (d.depth - treemapNode.depth) * this.nodeWidth / 2 + (levelNodeCounts[d.depth] - 1) * this.nodeWidth;
       maxX = d.x > maxX ? d.x : maxX;
       levelNodeCounts[d.depth] -= 1;
     })
-    return [ treemapNode, maxX ];
+    return [treemapNode, maxX];
   }
 
   private _clearSvg() {
@@ -108,7 +139,7 @@ export class FrameTreeComponent implements OnChanges {
   private _createSvg(treemapNodes: HierarchyNode<INodeObject>, treeWidth: number): void {
     const svg = d3.select('#treeChart')
       .append('svg')
-      .attr('height',(treemapNodes.height + 1) * this.nodeHeight + 'px')
+      .attr('height', (treemapNodes.height + 1) * this.nodeHeight + 'px')
       .attr('width', (treeWidth + this.nodeWidth) + 'px');
     const g = svg.append('g');
     g.selectAll('.link')
@@ -133,7 +164,7 @@ export class FrameTreeComponent implements OnChanges {
     const node = g.selectAll('.node')
       .data(treemapNodes.descendants())
       .enter().append('g')
-      .attr('class', d => 'node' + (d.children ? ' node--internal' : ' node--leaf') + (d.data.id != -1 ? ' object': ' frame'))
+      .attr('class', d => 'node' + (d.children ? ' node--internal' : ' node--leaf') + (d.data.id != -1 ? ' object' : ' frame'))
       .attr('id', d => 'node' + d.data.id)
       .attr('transform', d => {
         return 'translate(' + d['x'] + ',' + d['y'] + ')';
@@ -166,15 +197,69 @@ export class FrameTreeComponent implements OnChanges {
       d3.select('#circle' + d.data.id).style('fill', currentColor);
       this.onNodeSelected.emit(this.selectedNode);
     };
+
+    const defs = svg.append('defs');
+    const filterRemoved = defs.append('filter')
+      .attr('id', 'removedShadow')
+    filterRemoved.append('feGaussianBlur')
+      .attr('in', 'SourceAlpha')
+      .attr('stdDeviation', 6)
+      .attr('result', 'blur');
+    filterRemoved.append('feOffset')
+      .attr('in', 'blur')
+      .attr('dx', 0)
+      .attr('dy', 0)
+      .attr('result', 'offsetBlur')
+    filterRemoved.append('feFlood')
+      .attr('in', 'offsetBlur')
+      .attr('flood-color', '#c20303')
+      .attr('result', 'offsetColor');
+    filterRemoved.append('feComposite')
+      .attr('in', 'offsetColor')
+      .attr('in2', 'offsetBlur')
+      .attr('operator', 'in')
+      .attr('result', 'offsetBlur');
+    const feMergeRemoved = filterRemoved.append('feMerge');
+    feMergeRemoved.append('feMergeNode')
+      .attr('in', 'offsetBlur')
+    feMergeRemoved.append('feMergeNode')
+      .attr('in', 'SourceGraphic');
+    const filterAdded = defs.append('filter')
+      .attr('id', 'addedShadow')
+    filterAdded.append('feGaussianBlur')
+      .attr('in', 'SourceAlpha')
+      .attr('stdDeviation', 6)
+      .attr('result', 'blur');
+    filterAdded.append('feOffset')
+      .attr('in', 'blur')
+      .attr('dx', 0)
+      .attr('dy', 0)
+      .attr('result', 'offsetBlur')
+    filterAdded.append('feFlood')
+      .attr('in', 'offsetBlur')
+      .attr('flood-color', '#02a636')
+      .attr('result', 'offsetColor');
+    filterAdded.append('feComposite')
+      .attr('in', 'offsetColor')
+      .attr('in2', 'offsetBlur')
+      .attr('operator', 'in')
+      .attr('result', 'offsetBlur');
+    const feMergeAdded = filterAdded.append('feMerge');
+    feMergeAdded.append('feMergeNode')
+      .attr('in', 'offsetBlur')
+    feMergeAdded.append('feMergeNode')
+      .attr('in', 'SourceGraphic');
+
     node
       .append('rect')
       .attr('width', this._rectWidth)
       .attr('height', this._rectHeight)
       .attr('rx', 5)
       .attr('ry', 5)
+      .attr('filter', d => this._getShadow(d.data))
       .on('click', toggleColor)
       .attr('id', d => 'circle' + d.data.id)
-      .style('stroke', d => this._getColor(d.data, this._getAlfa([d.data]), false))
+      .style('stroke', d => this._getLineColor(d.data, this._getAlfa([d.data])))
       .style('stroke-width', '2px')
       .style('fill', d => this._getColor(d.data));
 
@@ -239,14 +324,14 @@ export class FrameTreeComponent implements OnChanges {
     return 1;
   }
 
-  private _getColor(data: INodeObject, alfa = 0.5, applyFilter = true): string {
+  private _getColor(data: INodeObject, alfa = 1, applyFilter = true): string {
     const groupIndex = this.objectGroups
       .findIndex(group => group.namespace === data.namespace && data.label === group.label);
     if (
       applyFilter &&
       this.objectFilter && this.objectFilter.length &&
       this.objectFilter.some(filter => filter.label === data.label && filter.namespace === data.namespace)) {
-      return '#dddddd50'
+      return '#96949450'
     }
 
     if (groupIndex === -1) {
@@ -254,5 +339,29 @@ export class FrameTreeComponent implements OnChanges {
     }
 
     return getColor((groupIndex + 1) / this.objectGroups.length, alfa);
+  }
+
+  private _getLineColor(data: INodeObject, alfa = 1): string {
+    if (this.frameObjectsDifference) {
+      if (this.frameObjectsDifference.addedObjectIds.indexOf(data.id) !== -1) {
+        return '#018804'
+      }
+      if (this.frameObjectsDifference.deletedObjectIds.indexOf(data.id) !== -1) {
+        return '#ce0000'
+      }
+    }
+    return this._getColor(data, alfa, false);
+  }
+
+  private _getShadow(data: INodeObject): string {
+    if (this.frameObjectsDifference) {
+      if (this.frameObjectsDifference.addedObjectIds.indexOf(data.id) !== -1) {
+        return 'url(#addedShadow)'
+      }
+      if (this.frameObjectsDifference.deletedObjectIds.indexOf(data.id) !== -1) {
+        return 'url(#removedShadow)'
+      }
+    }
+    return '';
   }
 }

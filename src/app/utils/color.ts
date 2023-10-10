@@ -33,12 +33,12 @@ export const colorHeatMap = [
 ];
 
 export const amberHeatMap = [
-  { value: -1, color: [231,1,116,100], hex: '#e70174' },
-  { value: 0, color: [255,215,64,100], hex: '#ffd740' },
-  { value: 0.25, color: [255,184,44,100], hex: '#ffb82c' },
-  { value: 0.5, color: [254,147,21,100], hex: '#fe9315' },
-  { value: 0.75, color: [220,91,26,100], hex: '#dc5b1a' },
-  { value: 1, color: [184,31,31,100], hex: '#b81f1f' },
+  { value: -1, color: [231,1,116,100], hex: '#f187b7' },
+  { value: 0, color: [255,215,64,100], hex: '#fdf1b7' },
+  { value: 0.25, color: [255,184,44,100], hex: '#ffdb9c' },
+  { value: 0.5, color: [254,147,21,100], hex: '#fac790' },
+  { value: 0.75, color: [220,91,26,100], hex: '#f8ae86' },
+  { value: 1, color: [184,31,31,100], hex: '#ff957d' },
 ];
 export const deepPurple = '#673ab7';
 
@@ -47,6 +47,15 @@ export const colorPaletteMap = {
   [Palette.heatMap]: colorHeatMap,
   [Palette.plain]: colorMap,
 };
+
+export const hexToRgb = (hex: string): number[] => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? [
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16)
+  ] : [0, 0, 0];
+}
 
 export const getColor = (weight: number, alfa = 1, paletteName: keyof typeof Palette = 'amber'): string => {
   let colorRange = [0, 0];
@@ -62,13 +71,15 @@ export const getColor = (weight: number, alfa = 1, paletteName: keyof typeof Pal
   }
   const color1 = selectedColorMap[colorRange[0]];
   const color2 = selectedColorMap[colorRange[1]];
+  const colors1 = hexToRgb(color1.hex);
+  const colors2 = hexToRgb(color2.hex);
   const w2 = (color2.value - color1.value) ? (weight - color1.value) / (color2.value - color1.value) : 0;
   const w1 = 1 - w2;
 
   const rgb = [
-    Math.round(color1.color[0] * w1 + color2.color[0] * w2),
-    Math.round(color1.color[1] * w1 + color2.color[1] * w2),
-    Math.round(color1.color[2] * w1 + color2.color[2] * w2),
+    Math.round(colors1[0] * w1 + colors2[0] * w2),
+    Math.round(colors1[1] * w1 + colors2[1] * w2),
+    Math.round(colors1[2] * w1 + colors2[2] * w2),
   ];
   return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alfa})`;
 };

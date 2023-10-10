@@ -57,7 +57,6 @@ export class FrameDetailsComponent implements OnChanges {
     }
     if ('comparedFrame' in changes &&  this.comparedFrame && this.frame) {
       this.frameDifferences = getFrameDifference(this.frame, this.comparedFrame);
-      console.log(this.frameDifferences);
       if (this.frameDifferences.addedKeys?.length) {
         const newData = this.frameDifferences.addedKeys
           // @ts-ignore

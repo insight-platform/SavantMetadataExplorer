@@ -9,6 +9,7 @@ import { ISpan } from '../../api/models/span';
 export class SpanListComponent {
   @Input() spans: ISpan[] = [];
   @Input() selectedIndex = -1;
+  @Input() selectedCompareIndex = -1;
   @Output() selectedSpan: EventEmitter<number> = new EventEmitter<number>();
   @Output() compareSpan: EventEmitter<number> = new EventEmitter<number>();
 }

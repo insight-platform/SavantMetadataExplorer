@@ -3,10 +3,15 @@
     <div class="panel-header">
       <div class="title">{{ span.operationName }}</div>
       <div class="actions">
-        <button (click)="$event.stopPropagation();selectedSpan.emit(i)" mat-icon-button>
+        <button (click)="$event.stopPropagation();selectedSpan.emit(i)"
+                [color]="selectedIndex !== i ? 'basic' : 'primary'"
+                mat-icon-button>
           <mat-icon>open_in_new</mat-icon>
         </button>
-        <button *ngIf="i !== selectedIndex" (click)="$event.stopPropagation();compareSpan.emit(i)" mat-icon-button>
+        <button *ngIf="i !== selectedIndex"
+                (click)="$event.stopPropagation();compareSpan.emit(i)"
+                [color]="selectedCompareIndex !== i ? 'basic' : 'primary'"
+                mat-icon-button>
           <mat-icon>compare</mat-icon>
         </button>
       </div>

@@ -34,6 +34,7 @@
                         (valueChange)="setObjectFilter($event)"></sf-object-filter>
       <sf-span-list [spans]="spansWithFrame"
                     [selectedIndex]="selectedFrameIndex"
+                    [selectedCompareIndex]="selectedComparedFrameIndex"
                     (compareSpan)="setComparedFrame($event)"
                     (selectedSpan)="setFrame($event)"></sf-span-list>
     </div>

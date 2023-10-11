@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { IFrameJson, IFrameJsonObject } from '../../api/models/span';
+import { IFrameJson } from '../../api/models/span';
 import { INodeObject } from '../node-object';
 import { isNil } from 'lodash';
-import { FrameObjectsDifference, getFrameDifference, getFrameObjectsDifference } from '../../utils/get-difference';
 
 @Component({
   selector: 'sf-frame-container',
@@ -15,14 +14,14 @@ export class FrameContainerComponent implements OnChanges {
   @Input() objectFilter: { namespace: string; label: string}[]
   isExpanded = false;
   selectedNode: INodeObject | undefined = undefined;
-  frameObjectsDifference: FrameObjectsDifference | undefined = undefined;
 
   constructor(private _cdr: ChangeDetectorRef) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ('comparedFrame' in changes && this.frame) {
-      this.frameObjectsDifference = this.comparedFrame ? getFrameObjectsDifference(this.frame.objects, this.comparedFrame.objects) : undefined;
+    if ('frame' in changes) {
+      this.isExpanded = false;
+      this.selectedNode = undefined;
     }
   }
 

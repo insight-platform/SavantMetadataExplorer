@@ -5,7 +5,7 @@ import { HierarchyNode } from 'd3';
 import * as d3 from 'd3';
 import { deepPurple, getColor } from '../../utils/color';
 import { INodeObject } from '../node-object';
-import { FrameObjectsDifference } from '../../utils/get-difference';
+import { FrameObjectsDifference, getFrameObjectsDifference } from '../../utils/get-difference';
 
 @Component({
   selector: 'sf-frame-tree',
@@ -16,10 +16,10 @@ export class FrameTreeComponent implements OnChanges {
   @Input() frame: IFrameJson | undefined;
   @Input() comparedFrame: IFrameJson | undefined;
   @Input() objectFilter: { namespace: string; label: string }[]
-  @Input() frameObjectsDifference: FrameObjectsDifference | undefined
   @Output() onNodeSelected = new EventEmitter<INodeObject>();
   objectGroups: { namespace: string, label: string }[] = [];
   selectedNode: INodeObject | undefined = undefined;
+  frameObjectsDifference: FrameObjectsDifference | undefined
   nodeWidth = 220;
   nodeHeight = 200;
 
@@ -38,7 +38,10 @@ export class FrameTreeComponent implements OnChanges {
       this._clearSvg();
       this._createSvg(...this._createTree(this._createDataNode(this.frame)));
     }
-    if ('objectFilter' in changes && this.objectFilter || 'frameObjectsDifference' in changes) {
+    if ('comparedFrame' in changes) {
+      this.frameObjectsDifference = this.comparedFrame && this.frame ? getFrameObjectsDifference(this.frame.objects, this.comparedFrame.objects) : undefined;
+    }
+    if ('objectFilter' in changes && this.objectFilter || 'comparedFrame' in changes) {
       if (this.frame) {
         this._clearSvg();
         this._createSvg(...this._createTree(this._createDataNode(this.frame)));
@@ -212,7 +215,7 @@ export class FrameTreeComponent implements OnChanges {
       .attr('result', 'offsetBlur')
     filterRemoved.append('feFlood')
       .attr('in', 'offsetBlur')
-      .attr('flood-color', '#c20303')
+      .attr('flood-color', '#e85858')
       .attr('result', 'offsetColor');
     filterRemoved.append('feComposite')
       .attr('in', 'offsetColor')
@@ -237,7 +240,7 @@ export class FrameTreeComponent implements OnChanges {
       .attr('result', 'offsetBlur')
     filterAdded.append('feFlood')
       .attr('in', 'offsetBlur')
-      .attr('flood-color', '#02a636')
+      .attr('flood-color', '#21b029')
       .attr('result', 'offsetColor');
     filterAdded.append('feComposite')
       .attr('in', 'offsetColor')
@@ -309,7 +312,7 @@ export class FrameTreeComponent implements OnChanges {
       this.objectFilter && this.objectFilter.length &&
       this.objectFilter.some(filter => filter.label === data.label && filter.namespace === data.namespace)
     ) {
-      return '#dddddd'
+      return '#d3d3d3'
     }
     return '#000';
   }
@@ -331,7 +334,7 @@ export class FrameTreeComponent implements OnChanges {
       applyFilter &&
       this.objectFilter && this.objectFilter.length &&
       this.objectFilter.some(filter => filter.label === data.label && filter.namespace === data.namespace)) {
-      return '#96949450'
+      return '#fff'
     }
 
     if (groupIndex === -1) {
@@ -344,10 +347,10 @@ export class FrameTreeComponent implements OnChanges {
   private _getLineColor(data: INodeObject, alfa = 1): string {
     if (this.frameObjectsDifference) {
       if (this.frameObjectsDifference.addedObjectIds.indexOf(data.id) !== -1) {
-        return '#018804'
+        return '#21b029'
       }
       if (this.frameObjectsDifference.deletedObjectIds.indexOf(data.id) !== -1) {
-        return '#ce0000'
+        return '#e85858'
       }
     }
     return this._getColor(data, alfa, false);

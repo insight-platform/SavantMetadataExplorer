@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { getLogValue, IFrameJson, ISpan, ISpanLog } from '../api/models/span';
 import { data } from '../api/models/data';
 import { isNil, uniq } from 'lodash';
-import { getFrameDifference } from '../utils/get-difference';
+import { getFrameDiff, getFrameDifference } from '../utils/get-difference';
 
 @Component({
   selector: 'sf-trace-container',
@@ -70,9 +70,10 @@ export class TraceContainerComponent {
       setTimeout(() => {
         this.selectedComparedFrameIndex = index;
         this.comparedFrame = this.spansWithFrame[index].tags.find(tag => tag.key === 'frame_json')?.value as IFrameJson;
-        if (this.frame) {
-          console.log(getFrameDifference(this.frame, this.comparedFrame));
-        }
+        // if (this.frame) {
+        //   console.log(this.frame, this.comparedFrame);
+        //   console.log(getFrameDiff(this.frame, this.comparedFrame, ['objects', 'attributes']));
+        // }
       }, 100);
     } else {
       this.selectedComparedFrameIndex = -1;

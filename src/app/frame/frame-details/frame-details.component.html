@@ -33,7 +33,7 @@
           </div>
         </ng-template>
         <mi-element-popover [popoverTemplate]="valuesPopover">
-          <ul class="no-bullets">
+          <ul class="no-bullets" [class.is-updated]="element.state === 'updated'">
             <li *ngFor="let str of getElementValueAsArray(element.value)">{{ str }}</li>
           </ul>
         </mi-element-popover>

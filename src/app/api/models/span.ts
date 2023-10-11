@@ -98,6 +98,9 @@ export const getValue = (v): string => {
   if (isNil(v)) {
     return '—';
   }
+  if (typeof v === 'boolean') {
+    return v.toString();
+  }
   if (typeof v === 'string') {
     return v;
   }
@@ -114,14 +117,14 @@ export const getValue = (v): string => {
 };
 
 export const getArrayValue = (v): string[] => {
-  if (isNil(v) || ['string', 'number'].indexOf(typeof v) !== -1) {
+  if (isNil(v) || ['string', 'number', 'boolean'].indexOf(typeof v) !== -1) {
     return [getValue(v)]
   }
   if (Array.isArray(v)) {
     if (v.length === 0) {
       return ['—'];
     }
-    if (!isNil(v[0]) && ['string', 'number'].includes(typeof v[0])) {
+    if (!isNil(v[0]) && ['string', 'number', 'boolean'].includes(typeof v[0])) {
       return [getValue(v)];
     }
     return v.map(vItem => getValue(vItem));

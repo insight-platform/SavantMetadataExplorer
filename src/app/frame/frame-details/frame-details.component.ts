@@ -6,9 +6,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { getArrayValue, getValue, IAttributes, IFrameJson } from '../../api/models/span';
-import { isNil, isObject, uniq } from 'lodash';
-import { FrameDifference, getFrameDifference } from '../../utils/get-difference';
+import { cloneDeep, isNil, isObject, uniq } from 'lodash';
+import { getFrameDiff, FrameDifference, getFrameDifference } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { IChange } from 'json-diff-ts/lib/jsonDiff';
 
 @Component({
   selector: 'sf-frame-details',
@@ -25,7 +26,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 export class FrameDetailsComponent implements OnChanges {
   @Input() frame: IFrameJson;
   @Input() comparedFrame: IFrameJson | undefined;
-  frameDataSource: any[] = [];
+  frameDataSource: { key: string; value: any; state?: string; }[] = [];
   frameData: any[] = [];
   attributeDataSources: any[] = [];
   attributeNamespaces: string[] = [];
@@ -53,16 +54,31 @@ export class FrameDetailsComponent implements OnChanges {
           .filter(attribute => attribute.namespace === namespace),
         // .map(attribute => Object.keys(attribute).map(key => ({ key, value: attribute[key] }))),
       }))
-      this.frameDataSource = [...this.frameData];
+      this.frameDataSource = cloneDeep(this.frameData);
     }
-    if ('comparedFrame' in changes &&  this.comparedFrame && this.frame) {
-      this.frameDifferences = getFrameDifference(this.frame, this.comparedFrame);
-      console.log(this.frameDifferences);
-      if (this.frameDifferences.addedKeys?.length) {
-        const newData = this.frameDifferences.addedKeys
-          // @ts-ignore
-          .map(key => ({ key, value: this.comparedFrame[key], state: 'new' }));
-        this.frameDataSource = [...this.frameData, ...newData];
+    if ('comparedFrame' in changes && this.frame) {
+      if (this.comparedFrame) {
+        this.frameDifferences = getFrameDifference(this.frame, this.comparedFrame);
+        const changes = getFrameDiff(this.frame, this.comparedFrame, ['objects', 'attributes']);
+        console.log(changes);
+        if (changes.adds.length) {
+          const newData = changes.adds
+            // @ts-ignore
+            .map(change => ({key: change.key, value: change.value, state: 'new'}));
+          this.frameDataSource = [...cloneDeep(this.frameData), ...newData];
+        }
+        if (changes.updates.length) {
+          changes.updates
+            .forEach(change => {
+              const frameDS = this.frameDataSource.find(frameDS => frameDS.key === change.key);
+              if (frameDS) {
+                frameDS.value = change.value;
+                frameDS.state = 'updated';
+              }
+            })
+        }
+      } else {
+        this.frameDataSource = cloneDeep(this.frameData);
       }
       this._cdr.detectChanges();
     }

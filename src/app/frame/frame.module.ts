@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { LocalMiElementPopoverModule } from '../utils/popover/popover-module';
 import { FrameTreeComponent } from './frame-tree/frame-tree.component';
+import { ObjectDetailsComponent } from './object-details/object-details.component';
 
 
 
@@ -17,6 +18,7 @@ import { FrameTreeComponent } from './frame-tree/frame-tree.component';
     FrameContainerComponent,
     FrameDetailsComponent,
     FrameTreeComponent,
+    ObjectDetailsComponent,
   ],
   exports: [
     FrameContainerComponent,

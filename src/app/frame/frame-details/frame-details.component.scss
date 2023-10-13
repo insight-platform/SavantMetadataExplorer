@@ -58,10 +58,13 @@
   text-transform: capitalize;
 }
 .is-new {
-  color: #090;
+  border: 2px solid #090;
 }
 .is-updated {
-  border: 2px solid rgba(15, 123, 248,1);
+  border: 2px solid #0F7BF8;
+}
+.is-removed {
+  border: 2px solid #e85858;
 }
 ul.no-bullets {
   list-style-type: none;

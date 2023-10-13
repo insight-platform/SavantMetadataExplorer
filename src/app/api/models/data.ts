@@ -63,8 +63,8 @@ export const data: IData = {
                     confidence: null,
                     value: {
                       IntegerVector: [
-                        180,
-                        180
+                        200,
+                        200
                       ]
                     }
                   }

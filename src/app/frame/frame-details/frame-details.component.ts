@@ -7,9 +7,10 @@ import {
 } from '@angular/core';
 import { getArrayValue, getValue, IAttributes, IFrameJson } from '../../api/models/span';
 import { cloneDeep, isNil, isObject, uniq } from 'lodash';
-import { getFrameDiff, FrameDifference, getFrameDifference } from '../../utils/get-difference';
+import {
+  getFrameDiff, getValueDiffAsString, getValueDiff, getAttributesDifference,
+} from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { IChange } from 'json-diff-ts/lib/jsonDiff';
 
 @Component({
   selector: 'sf-frame-details',
@@ -26,7 +27,7 @@ import { IChange } from 'json-diff-ts/lib/jsonDiff';
 export class FrameDetailsComponent implements OnChanges {
   @Input() frame: IFrameJson;
   @Input() comparedFrame: IFrameJson | undefined;
-  frameDataSource: { key: string; value: any; state?: string; }[] = [];
+  frameDataSource: { key: string; value: any; state?: string; oldValue?: any }[] = [];
   frameData: any[] = [];
   attributeDataSources: any[] = [];
   attributeNamespaces: string[] = [];
@@ -35,7 +36,6 @@ export class FrameDetailsComponent implements OnChanges {
   nonDisplayedFields = [
     'objects', 'attributes',
   ];
-  frameDifferences: FrameDifference;
   showJson = false;
   expandedElement: IAttributes | null;
 
@@ -58,9 +58,7 @@ export class FrameDetailsComponent implements OnChanges {
     }
     if ('comparedFrame' in changes && this.frame) {
       if (this.comparedFrame) {
-        this.frameDifferences = getFrameDifference(this.frame, this.comparedFrame);
         const changes = getFrameDiff(this.frame, this.comparedFrame, ['objects', 'attributes']);
-        console.log(changes);
         if (changes.adds.length) {
           const newData = changes.adds
             // @ts-ignore
@@ -73,9 +71,34 @@ export class FrameDetailsComponent implements OnChanges {
               const frameDS = this.frameDataSource.find(frameDS => frameDS.key === change.key);
               if (frameDS) {
                 frameDS.value = change.value;
+                frameDS.oldValue = change.oldValue;
                 frameDS.state = 'updated';
               }
             })
+        }
+
+        const attributeChanges = getAttributesDifference(this.frame.attributes, this.comparedFrame.attributes);
+        if (attributeChanges.addedNamespaces) {
+          attributeChanges.addedNamespaces.forEach(namespace => {
+            // @ts-ignore
+            this.attributeDataSources.push({
+              namespace,
+              state: 'new',
+              // @ts-ignore
+              attributes: this.comparedFrame.attributes.filter(attribute => attribute.namespace === namespace),
+            })
+          });
+        }
+        if (attributeChanges.removedNamespaces) {
+          attributeChanges.removedNamespaces.forEach(namespace => {
+            this.attributeDataSources.find(dataSource => dataSource.namespace === namespace).state = 'removed';
+          })
+        }
+        if (attributeChanges.updatedNamespaces) {
+          attributeChanges.updatedNamespaces.forEach(namespace => {
+            const attributeDS = this.attributeDataSources.find(dataSource => dataSource.namespace === namespace);
+            attributeDS.state = 'updated';
+          })
         }
       } else {
         this.frameDataSource = cloneDeep(this.frameData);
@@ -94,6 +117,10 @@ export class FrameDetailsComponent implements OnChanges {
 
   getJson(value: any) {
     return JSON.stringify(value, null, 2);
+  }
+
+  getJsonDiff(value1: any, value2: any) {
+    return JSON.stringify(getValueDiffAsString(value1, value2), null, 2);
   }
 
   getJsonData() {

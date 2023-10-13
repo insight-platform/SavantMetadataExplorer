@@ -1,4 +1,4 @@
-import { IFrameJson, IFrameJsonObject } from '../api/models/span';
+import { getValue, IAttributes, IFrameJson, IFrameJsonObject } from '../api/models/span';
 import { cloneDeep, isEqual, isNil, uniq } from 'lodash';
 import { diff, Operation } from 'json-diff-ts'
 import { IChange } from 'json-diff-ts/lib/jsonDiff';
@@ -15,7 +15,7 @@ export type FrameObjectsDifference = {
   addedObjectIds: number[];
   objectUpdates: { [key: number]: { [key: string]: any }};
 }
-
+/* deprecated */
 export const getFrameDifference = (firstFrame: IFrameJson, secondFrame: IFrameJson): FrameDifference => {
   const firstKeys = Object.keys(firstFrame).filter(key => key !== 'objects' && key !== 'attributes');
   const secondKeys = Object.keys(secondFrame).filter(key => key !== 'objects' && key !== 'attributes');
@@ -35,7 +35,8 @@ export const getFrameDifference = (firstFrame: IFrameJson, secondFrame: IFrameJs
     updatedValues,
   };
 };
-export const getFrameDiff = (firstFrame: IFrameJson, secondFrame: IFrameJson, omitKeys?: string[]) => {
+
+export const getFrameDiffOriginal = (firstFrame: IFrameJson, secondFrame: IFrameJson, omitKeys?: string[]) => {
   const first = cloneDeep(firstFrame);
   const second = cloneDeep(secondFrame);
   if (omitKeys && omitKeys.length) {
@@ -44,7 +45,10 @@ export const getFrameDiff = (firstFrame: IFrameJson, secondFrame: IFrameJson, om
       delete second[key];
     })
   }
-  const res: IChange[] = diff(first, second);
+  return diff(first, second);
+}
+export const getFrameDiff = (firstFrame: IFrameJson, secondFrame: IFrameJson, omitKeys?: string[]) => {
+  const res: IChange[] = getFrameDiffOriginal(firstFrame, secondFrame, omitKeys);
   const keys = uniq(res.map(change => change.key));
   keys.forEach(key => {
     const keyChanges = res.filter(change => change.key === key);
@@ -60,8 +64,8 @@ export const getFrameDiff = (firstFrame: IFrameJson, secondFrame: IFrameJson, om
   const updates = res.filter(change => change.type === Operation.UPDATE)
     .map(change => {
       if (isNil(change.value)) {
-        change.value = second[change.key];
-        change.oldValue = first[change.key];
+        change.value = secondFrame[change.key];
+        change.oldValue = firstFrame[change.key];
       }
       return change;
     });
@@ -69,6 +73,41 @@ export const getFrameDiff = (firstFrame: IFrameJson, secondFrame: IFrameJson, om
   const removes = res.filter(change => change.type === Operation.REMOVE);
 
   return { adds, updates, removes};
+}
+
+export const stringify = (change: IChange, withKey = true) => {
+  if (change.type === Operation.ADD) {
+    return withKey && change.key !== '$root'? { key: '+ ' + change.key, value: getValue(change.value) } : '+ ' + getValue(change.value);
+  }
+  if (change.type === Operation.REMOVE) {
+    return withKey && change.key !== '$root' ? { key: '- ' + change.key, value: getValue(change.value) } : '- ' + getValue(change.value);
+  }
+  if (change.type === Operation.UPDATE) {
+    if (change.changes) {
+      if (change.embeddedKey) {
+        return {
+          key: change.key,
+          value: [
+            ...change.changes.map(c => stringify(c, false))
+          ],
+        };
+      }
+      return {
+        key: change.key,
+        value: change.changes.map(c => stringify(c))
+            .reduce((res, c) => ({ ...res, [c['key']]: c['value'] }), {}),
+      }
+    }
+    return withKey ? { key: change.key, value: getValue(change.oldValue) + ' -> ' + getValue(change.value) } :
+      getValue(change.oldValue) + ' -> ' + getValue(change.value);
+  }
+  return { key: '', value: '' };
+}
+
+export const getFrameDiffAsString = (firstFrame: IFrameJson, secondFrame: IFrameJson, omitKeys?: string[]) => {
+  const res: IChange[] = getFrameDiffOriginal(firstFrame, secondFrame, omitKeys);
+  const resAsString = res.map(change => stringify(change));
+  return resAsString.reduce((res, c) => ({ ...res, [c['key']]: c['value'] }), {});
 }
 
 export const getFrameObjectsDifference = (firstFrameObjects: IFrameJsonObject[], secondFrameObjects: IFrameJsonObject[]): FrameObjectsDifference => {
@@ -100,4 +139,43 @@ export const getFrameObjectsDifference = (firstFrameObjects: IFrameJsonObject[],
     addedObjectIds,
     objectUpdates,
   };
+}
+
+export const getValueDiff = (firstValue: any, secondValue: any) => {
+  return diff(firstValue, secondValue);
+}
+
+export const getValueDiffAsString = (firstValue: any, secondValue: any) => {
+  const res: IChange[] = diff(firstValue, secondValue);
+  if (res.length === 2 && res.find(change => change.key === '$root')) {
+    return getValue(res.find(c => c.type === Operation.REMOVE)?.value) + ' -> ' + getValue(res.find(c => c.type === Operation.ADD)?.value);
+  }
+  if (res.length === 1 && res.find(change => change.key === '$root')) {
+    if (res[0].changes) {
+      if (res[0].embeddedKey) {
+        return [
+          ...res[0].changes.map(c => stringify(c, false))
+        ];
+      }
+      return res[0].changes.map(c => stringify(c, false))
+          .reduce((res, c) => ({ ...res, [c['key']]: c['value'] }), {});
+    }
+    return stringify(res[0], false);
+  }
+  return res.map(change => stringify(change)).reduce((res, c) => ({ ...res, [c['key']]: c['value'] }), {});
+}
+
+export const getAttributesDifference = (firstAttributes: IAttributes[], secondAttributes: IAttributes[]) => {
+  const firstAttributeNamespaces = uniq(firstAttributes.map(attribute => attribute.namespace));
+  const secondAttributeNamespaces = uniq(secondAttributes.map(attribute => attribute.namespace));
+
+  const removedNamespaces = firstAttributeNamespaces.filter(namespace => secondAttributeNamespaces.indexOf(namespace) === -1);
+  const updatedNamespaces = firstAttributeNamespaces.filter(namespace => secondAttributeNamespaces.indexOf(namespace) !== -1)
+    .filter(namespace => getValueDiff(
+      firstAttributes.filter(a => a.namespace === namespace),
+      secondAttributes.filter(a => a.namespace === namespace)
+    ).length);
+  const addedNamespaces = secondAttributeNamespaces.filter(namespace => firstAttributeNamespaces.indexOf(namespace) === -1);
+
+  return { removedNamespaces, updatedNamespaces, addedNamespaces };
 }

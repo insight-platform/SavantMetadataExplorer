@@ -16,36 +16,47 @@
   </div>
 </ng-container>
 <ng-template #tableView>
-  <table mat-table [dataSource]="frameDataSource" class="main-table">
-    <!-- Key Column -->
-    <ng-container matColumnDef="key">
-      <th mat-header-cell *matHeaderCellDef> Field </th>
-      <td mat-cell *matCellDef="let element" class="field-key" [class.is-new]="element.state === 'new'">{{element.key}}</td>
-    </ng-container>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      Frame details
+    </mat-expansion-panel-header>
+    <table mat-table [dataSource]="frameDataSource" class="main-table">
+      <!-- Key Column -->
+      <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef> Field </th>
+        <td mat-cell *matCellDef="let element" class="field-key">{{element.key}}</td>
+      </ng-container>
 
-    <!-- Value Column -->
-    <ng-container matColumnDef="value">
-      <th mat-header-cell *matHeaderCellDef> Value </th>
-      <td mat-cell *matCellDef="let element">
-        <ng-template #valuesPopover>
-          <div class="json-value">
-            <pre>{{ getJson(element.value) }}</pre>
-          </div>
-        </ng-template>
-        <mi-element-popover [popoverTemplate]="valuesPopover">
-          <ul class="no-bullets" [class.is-updated]="element.state === 'updated'">
-            <li *ngFor="let str of getElementValueAsArray(element.value)">{{ str }}</li>
-          </ul>
-        </mi-element-popover>
-      </td>
-    </ng-container>
+      <!-- Value Column -->
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef> Value </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-template #valuesPopover>
+            <div class="json-value">
+              <pre>{{ element.state === 'updated' ? getJsonDiff(element.oldValue, element.value) : getJson(element.value) }}</pre>
+<!--              <pre>{{ getJson(element.value) }}</pre>-->
+            </div>
+          </ng-template>
+          <mi-element-popover [popoverTemplate]="valuesPopover">
+            <ul class="no-bullets"
+                [class.is-updated]="element.state === 'updated'"
+                [class.is-new]="element.state === 'new'">
+              <li *ngFor="let str of getElementValueAsArray(element.value)">{{ str }}</li>
+            </ul>
+          </mi-element-popover>
+        </td>
+      </ng-container>
 
-    <tr mat-row *matRowDef="let row; columns: displayedFrameColumns;"></tr>
-  </table>
+      <tr mat-row *matRowDef="let row; columns: displayedFrameColumns;"></tr>
+    </table>
+  </mat-expansion-panel>
 
   <h4>Attributes</h4>
 
-  <mat-expansion-panel *ngFor="let namespace of attributeDataSources; let i = index">
+  <mat-expansion-panel *ngFor="let namespace of attributeDataSources; let i = index"
+                       [class.is-updated]="namespace.state === 'updated'"
+                       [class.is-removed]="namespace.state === 'removed'"
+                       [class.is-new]="namespace.state === 'new'">
     <mat-expansion-panel-header>
       Namespace "{{ namespace.namespace }}"
     </mat-expansion-panel-header>

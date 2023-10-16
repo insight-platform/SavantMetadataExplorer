@@ -22,6 +22,9 @@ export class FrameTreeComponent implements OnChanges {
   frameObjectsDifference: FrameObjectsDifference | undefined
   nodeWidth = 220;
   nodeHeight = 200;
+  private _addIcon: SVGElement;
+  private _removeIcon;
+  private _updateIcon;
 
   private _rectWidth = 200;
   private _rectHeight = 65;
@@ -275,6 +278,14 @@ export class FrameTreeComponent implements OnChanges {
         console.log(event)
       })
       .text('FRAME');
+    g.selectAll('.node.object')
+      .data(treemapNodes.descendants().slice(1))
+      .append('image')
+      .attr('xlink:href', d => this._getIcon(d.data))
+      .attr('width', '24')
+      .attr('height', '24')
+      .attr('x', 160)
+      .attr('y', 5)
     const text = g.selectAll('.node.object')
       .data(treemapNodes.descendants().slice(1))
       .append('text')
@@ -363,6 +374,21 @@ export class FrameTreeComponent implements OnChanges {
       }
       if (this.frameObjectsDifference.deletedObjectIds.indexOf(data.id) !== -1) {
         return 'url(#removedShadow)'
+      }
+    }
+    return '';
+  }
+
+  private _getIcon(data: INodeObject): string {
+    if (this.frameObjectsDifference) {
+      if (this.frameObjectsDifference.addedObjectIds.indexOf(data.id) !== -1) {
+        return '/assets/icons/add_circle_outline.svg';
+      }
+      if (this.frameObjectsDifference.deletedObjectIds.indexOf(data.id) !== -1) {
+        return '/assets/icons/cancel.svg';
+      }
+      if (!isNil(this.frameObjectsDifference.objectUpdates[data.id])) {
+        return '/assets/icons/swap_horizontal_circle.svg';
       }
     }
     return '';

@@ -57,6 +57,19 @@
   font-weight: bold;
   text-transform: capitalize;
 }
+::ng-deep {
+  .json-key {
+    color: #005dc8;
+  }
+
+  .green {
+    color: #090;
+  }
+
+  .red {
+    color: #e85858;
+  }
+}
 .is-new {
   border: 2px solid #090;
 }

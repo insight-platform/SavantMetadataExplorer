@@ -1,8 +1,13 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getArrayValue, IAttributes, IFrameJsonObject } from '../../api/models/span';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { getArrayValue, IAttributes, IFrameJson, IFrameJsonObject } from '../../api/models/span';
 import { cloneDeep, uniq } from 'lodash';
-import { getAttributesDifference, getFrameDiff, getValueDiffAsString } from '../../utils/get-difference';
+import {
+  getAttributesDifference, getFrameDiffAsString,
+  getFrameObjectDiff, getFrameObjectDiffAsString, getFrameObjectDiffAsString1,
+  getValueDiffAsString,
+} from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { jsonColorPrint } from '../../utils/json-color-print';
 
 @Component({
   selector: 'sf-object-details',
@@ -18,6 +23,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class ObjectDetailsComponent implements OnChanges {
   @Input() frameObject: IFrameJsonObject
+  @Input() comparedFrame: IFrameJson | undefined
   showJson = false;
   expandedElement: IAttributes | null;
   frameObjectDataSource: { key: string; value: any; state?: string; oldValue?: any }[] = [];
@@ -28,8 +34,11 @@ export class ObjectDetailsComponent implements OnChanges {
   displayedFrameColumns = ['key', 'value'];
   displayedAttributeColumns = ['name', 'hint', 'values', 'is_persistent'];
 
+  constructor(private _cdr: ChangeDetectorRef) {
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    if ('frameObject' in changes && this.frameObject) {
+    if ('frameObject' in changes && this.frameObject || 'comparedFrame' in changes && this.frameObject) {
       this.frameObjectData = Object.keys(this.frameObject)
         .filter(key => !['attributes', 'children'].includes(key))
         .map(key => ({key, value: this.frameObject[key]}));
@@ -41,60 +50,68 @@ export class ObjectDetailsComponent implements OnChanges {
         // .map(attribute => Object.keys(attribute).map(key => ({ key, value: attribute[key] }))),
       }))
       this.frameObjectDataSource = cloneDeep(this.frameObjectData);
+
+      if (this.comparedFrame) {
+        const comparedFrameObject = this.comparedFrame.objects.find(object => object.id === this.frameObject.id);
+        if (comparedFrameObject) {
+          const changes = getFrameObjectDiff(this.frameObject, comparedFrameObject, ['attributes', 'children']);
+          if (changes.adds.length) {
+            const newData = changes.adds
+              // @ts-ignore
+              .map(change => ({key: change.key, value: change.value, state: 'new'}));
+            this.frameObjectDataSource = [...cloneDeep(this.frameObjectData), ...newData];
+          }
+          if (changes.updates.length) {
+            changes.updates
+              .forEach(change => {
+                const frameDS = this.frameObjectDataSource.find(frameDS => frameDS.key === change.key);
+                if (frameDS) {
+                  frameDS.value = change.value;
+                  frameDS.oldValue = change.oldValue;
+                  frameDS.state = 'updated';
+                }
+              })
+          }
+
+          const attributeChanges = getAttributesDifference(this.frameObject.attributes, comparedFrameObject.attributes);
+          if (attributeChanges.addedNamespaces) {
+            attributeChanges.addedNamespaces.forEach(namespace => {
+              // @ts-ignore
+              this.attributeDataSources.push({
+                namespace,
+                state: 'new',
+                // @ts-ignore
+                attributes: this.comparedFrame.attributes.filter(attribute => attribute.namespace === namespace),
+              })
+            });
+          }
+          if (attributeChanges.removedNamespaces) {
+            attributeChanges.removedNamespaces.forEach(namespace => {
+              this.attributeDataSources.find(dataSource => dataSource.namespace === namespace).state = 'removed';
+            })
+          }
+          if (attributeChanges.updatedNamespaces) {
+            attributeChanges.updatedNamespaces.forEach(namespace => {
+              const attributeDS = this.attributeDataSources.find(dataSource => dataSource.namespace === namespace);
+              attributeDS.state = 'updated';
+            })
+          }
+        }
+      }
+      this._cdr.detectChanges();
     }
-    // if ('comparedFrame' in changes && this.frame) {
-    //   if (this.comparedFrame) {
-    //     const changes = getFrameDiff(this.frame, this.comparedFrame, ['objects', 'attributes']);
-    //     if (changes.adds.length) {
-    //       const newData = changes.adds
-    //         // @ts-ignore
-    //         .map(change => ({key: change.key, value: change.value, state: 'new'}));
-    //       this.frameDataSource = [...cloneDeep(this.frameData), ...newData];
-    //     }
-    //     if (changes.updates.length) {
-    //       changes.updates
-    //         .forEach(change => {
-    //           const frameDS = this.frameDataSource.find(frameDS => frameDS.key === change.key);
-    //           if (frameDS) {
-    //             frameDS.value = change.value;
-    //             frameDS.oldValue = change.oldValue;
-    //             frameDS.state = 'updated';
-    //           }
-    //         })
-    //     }
-    //
-    //     const attributeChanges = getAttributesDifference(this.frame.attributes, this.comparedFrame.attributes);
-    //     if (attributeChanges.addedNamespaces) {
-    //       attributeChanges.addedNamespaces.forEach(namespace => {
-    //         // @ts-ignore
-    //         this.attributeDataSources.push({
-    //           namespace,
-    //           state: 'new',
-    //           // @ts-ignore
-    //           attributes: this.comparedFrame.attributes.filter(attribute => attribute.namespace === namespace),
-    //         })
-    //       });
-    //     }
-    //     if (attributeChanges.removedNamespaces) {
-    //       attributeChanges.removedNamespaces.forEach(namespace => {
-    //         this.attributeDataSources.find(dataSource => dataSource.namespace === namespace).state = 'removed';
-    //       })
-    //     }
-    //     if (attributeChanges.updatedNamespaces) {
-    //       attributeChanges.updatedNamespaces.forEach(namespace => {
-    //         const attributeDS = this.attributeDataSources.find(dataSource => dataSource.namespace === namespace);
-    //         attributeDS.state = 'updated';
-    //       })
-    //     }
-    //   } else {
-    //     this.frameDataSource = cloneDeep(this.frameData);
-    //   }
-    //   this._cdr.detectChanges();
-    // }
   }
 
   getJsonData() {
-    return JSON.stringify(this.frameObject, null, 2);
+    return jsonColorPrint(this.frameObject);
+  }
+
+  getJsonDataDiff() {
+    if (this.comparedFrame) {
+      const comparedFrameObject = this.comparedFrame.objects.find(object => object.id === this.frameObject.id);
+      return comparedFrameObject && jsonColorPrint(getFrameObjectDiffAsString1(this.frameObject, comparedFrameObject, ['children']))
+    }
+    return '';
   }
 
   getElementValueAsArray(value: any): string[] {
@@ -106,6 +123,6 @@ export class ObjectDetailsComponent implements OnChanges {
   }
 
   getJson(value: any) {
-    return JSON.stringify(value, null, 2);
+    return jsonColorPrint(value);
   }
 }

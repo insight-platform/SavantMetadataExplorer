@@ -188,8 +188,8 @@ export const data: IData = {
                 attributes: [],
                 bbox: {
                   angle: null,
-                  height: 0,
-                  width: 0,
+                  height: 10,
+                  width: 10,
                   xc: 0,
                   yc: 0,
                 },
@@ -208,8 +208,8 @@ export const data: IData = {
                 attributes: [],
                 bbox: {
                   angle: null,
-                  height: 0,
-                  width: 0,
+                  height: 40,
+                  width: 40,
                   xc: 0,
                   yc: 0,
                 },
@@ -460,8 +460,8 @@ export const data: IData = {
                 attributes: [],
                 bbox: {
                   angle: null,
-                  height: 0,
-                  width: 0,
+                  height: 10,
+                  width: 10,
                   xc: 0,
                   yc: 0,
                 },

@@ -8,9 +8,15 @@ import {
 import { getArrayValue, getValue, IAttributes, IFrameJson } from '../../api/models/span';
 import { cloneDeep, isNil, isObject, uniq } from 'lodash';
 import {
-  getFrameDiff, getValueDiffAsString, getValueDiff, getAttributesDifference,
+  getFrameDiff,
+  getValueDiffAsString,
+  getValueDiff,
+  getAttributesDifference,
+  getFrameDiffAsString,
+  getFrameDiffAsString1,
 } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { jsonColorPrint } from '../../utils/json-color-print';
 
 @Component({
   selector: 'sf-frame-details',
@@ -116,14 +122,19 @@ export class FrameDetailsComponent implements OnChanges {
   }
 
   getJson(value: any) {
-    return JSON.stringify(value, null, 2);
+    return jsonColorPrint(value);
   }
 
   getJsonDiff(value1: any, value2: any) {
-    return JSON.stringify(getValueDiffAsString(value1, value2), null, 2);
+    return jsonColorPrint(getValueDiffAsString(value1, value2));
   }
 
   getJsonData() {
-    return JSON.stringify(this.frame, null, 2);
+    return jsonColorPrint(this.frame);
+  }
+
+  getJsonDataDiff(frame, comparedFrame) {
+    return jsonColorPrint(getFrameDiffAsString1(frame, comparedFrame))
+    // JSON.stringify(getFrameDiffAsString(frame, comparedFrame), null, 2);
   }
 }

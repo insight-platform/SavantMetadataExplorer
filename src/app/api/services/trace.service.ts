@@ -19,10 +19,12 @@ export class TraceService {
       .pipe(
         map((data) => data.data[0]),
         catchError((data) => {
-          console.log(data.error.errors);
-          data.error.errors.forEach(error => {
-            this._snackBar.open(`${error.code}: ${error.msg}`, 'Close');
-          });
+          console.log(data);
+          if (data.error && data.error.errors) {
+            data.error.errors.forEach(error => {
+              this._snackBar.open(`${error.code}: ${error.msg}`, 'Close');
+            });
+          }
           return of({ spans: [], traceID: '', processes: {} } as ITrace);
         }),
       );

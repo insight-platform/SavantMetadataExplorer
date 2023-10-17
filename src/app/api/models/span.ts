@@ -75,11 +75,19 @@ export interface ISpan {
   [key: string]: any;
 }
 
-export interface IData {
+export interface ITrace {
   traceID: string;
   spans: ISpan[];
   processes: any,
   [key: string]: any;
+}
+
+export interface IData {
+  data: ITrace[];
+  errors: any;
+  limit: number;
+  offset: number;
+  total: number;
 }
 
 export interface ILog {

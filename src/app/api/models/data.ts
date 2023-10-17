@@ -1,6 +1,6 @@
-import { IData } from './span';
+import { ITrace } from './span';
 
-export const data: IData = {
+export const data: ITrace = {
   traceID: 'cb8b182cff2f87b73b5d1fcbe0bb846d',
   spans: [
     {
@@ -7743,4 +7743,4 @@ export const data: IData = {
     },
   },
   warnings: null,
-} as IData;
+} as ITrace;

@@ -5,7 +5,7 @@ import { HierarchyNode } from 'd3';
 import * as d3 from 'd3';
 import { deepPurple, getColor } from '../../utils/color';
 import { INodeObject } from '../node-object';
-import { FrameObjectsDifference, getFrameObjectsDifference } from '../../utils/get-difference';
+import { FrameObjectsDifference, getFrameDiff, getFrameObjectsDifference } from '../../utils/get-difference';
 
 @Component({
   selector: 'sf-frame-tree',
@@ -42,6 +42,9 @@ export class FrameTreeComponent implements OnChanges {
       this._createSvg(...this._createTree(this._createDataNode(this.frame)));
     }
     if ('comparedFrame' in changes) {
+      // @ts-ignore
+      const changes = this.comparedFrame && this.frame && getFrameDiff(this.frame, this.comparedFrame, ['objects', 'attributes']);
+      console.log(changes);
       this.frameObjectsDifference = this.comparedFrame && this.frame ? getFrameObjectsDifference(this.frame.objects, this.comparedFrame.objects) : undefined;
     }
     if ('objectFilter' in changes && this.objectFilter || 'comparedFrame' in changes) {

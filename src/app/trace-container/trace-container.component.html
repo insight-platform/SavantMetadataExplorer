@@ -11,15 +11,18 @@
     <div class="trace-id-search">
       <mat-form-field>
         <mat-label>TraceId</mat-label>
-        <input matInput [value]="traceId"/>
-        <button matSuffix mat-icon-button>
+        <input matInput [formControl]="traceIdFormControl"/>
+        <button (click)="searchTrace()" matSuffix mat-icon-button>
           <mat-icon>start</mat-icon>
         </button>
       </mat-form-field>
     </div>
 
+    <ng-container *ngIf="noSpanWithFrames">
+      <div class="no-span-message">There no spans with frames</div>
+    </ng-container>
     <div class="content">
-      <mat-button-toggle-group [value]="selectedView" (change)="setView($event.value)">
+      <mat-button-toggle-group [disabled]="noSpanWithFrames" [value]="selectedView" (change)="setView($event.value)">
         <mat-button-toggle [value]="'span'">
           <mat-icon>account_tree</mat-icon>
         </mat-button-toggle>

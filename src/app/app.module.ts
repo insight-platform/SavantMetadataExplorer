@@ -20,6 +20,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LogFilterComponent } from './utils/log-filter/log-filter.component';
 import { LogModule } from './log/log.module';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     MatButtonToggleModule,
     LogModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

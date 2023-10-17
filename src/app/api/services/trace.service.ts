@@ -1,0 +1,30 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { IData, ITrace } from '../models/span';
+import { catchError, map, Observable, of } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TraceService {
+  constructor(
+    protected httpClient: HttpClient,
+    private _snackBar: MatSnackBar,
+  ) {
+  }
+
+  get(id: string): Observable<ITrace> {
+    return this.httpClient.get<IData>('/api/traces/' + id)
+      .pipe(
+        map((data) => data.data[0]),
+        catchError((data) => {
+          console.log(data.error.errors);
+          data.error.errors.forEach(error => {
+            this._snackBar.open(`${error.code}: ${error.msg}`, 'Close');
+          });
+          return of({ spans: [], traceID: '', processes: {} } as ITrace);
+        }),
+      );
+  }
+}

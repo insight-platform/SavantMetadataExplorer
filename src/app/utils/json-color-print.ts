@@ -17,7 +17,7 @@ export const replacer = (match, pIndent, pKey, pVal) => {
       v.indexOf('-') === 0 ? removeKey : value;
     r = r + prefix + v + '</span>';
   }
-  return r; // + (pEnd || '');
+  return r;
 };
 export const jsonColorPrint = (obj) => {
   const jsonLine = /^( *)("[\w\s+-]+": )?("[^"]*"|[\w.+-]*)?/mg;

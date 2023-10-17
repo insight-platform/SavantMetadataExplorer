@@ -119,7 +119,7 @@ export class ObjectDetailsComponent implements OnChanges {
   }
 
   getJsonDiff(value1: any, value2: any) {
-    return JSON.stringify(getValueDiffAsString(value1, value2), null, 2);
+    return jsonColorPrint(getValueDiffAsString(value1, value2));
   }
 
   getJson(value: any) {

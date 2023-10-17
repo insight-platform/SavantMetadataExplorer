@@ -262,7 +262,7 @@ export class FrameTreeComponent implements OnChanges {
       .attr('height', this._rectHeight)
       .attr('rx', 5)
       .attr('ry', 5)
-      .attr('filter', d => this._getShadow(d.data))
+      // .attr('filter', d => this._getShadow(d.data))
       .on('click', toggleColor)
       .attr('id', d => 'circle' + d.data.id)
       .style('stroke', d => this._getLineColor(d.data, this._getAlfa([d.data])))

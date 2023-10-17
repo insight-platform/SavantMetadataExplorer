@@ -1,11 +1,16 @@
 <div class="actions">
-  <button mat-icon-button (click)="showJson = false" [color]="showJson? 'basic' : 'primary'">
+  <button mat-icon-button
+          matTooltip="Show data as table"
+          (click)="showJson = false" [color]="showJson? 'basic' : 'primary'">
     <mat-icon class="material-symbols-outlined">lists</mat-icon>
   </button>
-  <button mat-icon-button (click)="showJson = true" [color]="!showJson? 'basic' : 'primary'">
+  <button mat-icon-button
+          matTooltip="Show data as JSON"
+          (click)="showJson = true" [color]="!showJson? 'basic' : 'primary'">
     <mat-icon class="material-symbols-outlined">description</mat-icon>
   </button>
-  <button mat-icon-button>
+  <button mat-icon-button matTooltip="Copy data as JSON"
+          (click)="copyFrame()">
     <mat-icon>content_copy</mat-icon>
   </button>
 </div>
@@ -54,7 +59,7 @@
     </table>
   </mat-expansion-panel>
 
-  <h4>Attributes</h4>
+  <h4 *ngIf="attributeDataSources && attributeDataSources.length">Attributes</h4>
 
   <mat-expansion-panel *ngFor="let namespace of attributeDataSources; let i = index"
                        [class.is-updated]="namespace.state === 'updated'"

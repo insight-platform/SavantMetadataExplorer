@@ -32,11 +32,14 @@ export class TraceContainerComponent {
   }
 
   searchTrace() {
+    this.frame = undefined;
+    this.comparedFrame = undefined;
+    this.selectedComparedFrameIndex = -1;
+    this.selectedFrameIndex = -1;
     const traceId = this.traceIdFormControl.value;
     if (traceId) {
       this._traceService.get(traceId)
         .subscribe(trace => {
-          console.log(trace);
           if (!trace.traceID) {
             this.noSpanWithFrames = false;
             this.spansWithFrame = [];
@@ -44,8 +47,6 @@ export class TraceContainerComponent {
             this.logTargets = [];
             return;
           }
-          this.selectedFrameIndex = -1;
-          this.selectedComparedFrameIndex = -1;
           this.spansWithFrame = trace.spans.filter(span => span.tags &&
             span.tags.length &&
             span.tags.find(tag => tag.key === 'frame_json'))
@@ -63,7 +64,6 @@ export class TraceContainerComponent {
               ], [])
               .filter(t => t !== '')
           ).sort((t1,t2) => t1.localeCompare(t2));
-          console.log(this.spansWithFrame);
           this.noSpanWithFrames = !this.spansWithFrame || this.spansWithFrame.length === 0;
         })
     }

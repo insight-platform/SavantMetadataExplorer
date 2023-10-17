@@ -10,13 +10,13 @@ import { cloneDeep, isNil, isObject, uniq } from 'lodash';
 import {
   getFrameDiff,
   getValueDiffAsString,
-  getValueDiff,
   getAttributesDifference,
-  getFrameDiffAsString,
   getFrameDiffAsString1,
 } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { jsonColorPrint } from '../../utils/json-color-print';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'sf-frame-details',
@@ -45,7 +45,9 @@ export class FrameDetailsComponent implements OnChanges {
   showJson = false;
   expandedElement: IAttributes | null;
 
-  constructor(private _cdr: ChangeDetectorRef) {
+  constructor(private _cdr: ChangeDetectorRef,
+              private _clipboard: Clipboard,
+              private _snackBar: MatSnackBar) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -111,6 +113,12 @@ export class FrameDetailsComponent implements OnChanges {
       }
       this._cdr.detectChanges();
     }
+  }
+
+  copyFrame() {
+    this._clipboard.copy(JSON.stringify(this.frame));
+    this._snackBar.open('Data copied',
+        'Close', { duration: 5000 });
   }
 
   getElementValue(value: any): string {

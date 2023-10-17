@@ -5,10 +5,12 @@
       <div class="actions">
         <button (click)="$event.stopPropagation();selectedSpan.emit(i)"
                 [color]="selectedIndex !== i ? 'basic' : 'primary'"
+                matTooltip="Show frame"
                 mat-icon-button>
           <mat-icon>open_in_new</mat-icon>
         </button>
         <button *ngIf="i !== selectedIndex"
+                matTooltip="Compare with selected frame"
                 (click)="$event.stopPropagation();compareSpan.emit(i)"
                 [color]="selectedCompareIndex !== i ? 'basic' : 'primary'"
                 mat-icon-button>

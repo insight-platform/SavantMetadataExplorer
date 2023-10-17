@@ -54,7 +54,7 @@
     </table>
   </mat-expansion-panel>
 
-  <h4>Attributes</h4>
+  <h4 *ngIf="attributeDataSources && attributeDataSources.length">Attributes</h4>
 
   <mat-expansion-panel *ngFor="let namespace of attributeDataSources; let i = index"
                        [class.is-updated]="namespace.state === 'updated'"

@@ -5,7 +5,7 @@ import { HierarchyNode } from 'd3';
 import * as d3 from 'd3';
 import { deepPurple, getColor } from '../../utils/color';
 import { INodeObject } from '../node-object';
-import { FrameObjectsDifference, getFrameDiff, getFrameObjectsDifference } from '../../utils/get-difference';
+import { FrameObjectsDifference, getFrameObjectsDifference } from '../../utils/get-difference';
 
 @Component({
   selector: 'sf-frame-tree',
@@ -30,21 +30,22 @@ export class FrameTreeComponent implements OnChanges {
   private _rectHeight = 65;
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.frame && 'frame' in changes) {
-      this.objectGroups = uniq(this.frame.objects.map(_ => _.namespace))
-        .sort((g1,g2) => g1.localeCompare(g2))
-        .reduce((res: any[], namespace: string) => [
-          ...res,
-          // @ts-ignore
-          ...uniq(this.frame?.objects.map(_ => _.label)).map(label => ({namespace, label})),
-        ], [])
-      this._clearSvg();
-      this._createSvg(...this._createTree(this._createDataNode(this.frame)));
+    if ('frame' in changes) {
+      if (this.frame) {
+        this.objectGroups = uniq(this.frame.objects.map(_ => _.namespace))
+          .sort((g1, g2) => g1.localeCompare(g2))
+          .reduce((res: any[], namespace: string) => [
+            ...res,
+            // @ts-ignore
+            ...uniq(this.frame?.objects.map(_ => _.label)).map(label => ({namespace, label})),
+          ], [])
+        this._clearSvg();
+        this._createSvg(...this._createTree(this._createDataNode(this.frame)));
+      } else {
+        this._clearSvg();
+      }
     }
     if ('comparedFrame' in changes) {
-      // @ts-ignore
-      const changes = this.comparedFrame && this.frame && getFrameDiff(this.frame, this.comparedFrame, ['objects', 'attributes']);
-      console.log(changes);
       this.frameObjectsDifference = this.comparedFrame && this.frame ? getFrameObjectsDifference(this.frame.objects, this.comparedFrame.objects) : undefined;
     }
     if ('objectFilter' in changes && this.objectFilter || 'comparedFrame' in changes) {
@@ -277,9 +278,6 @@ export class FrameTreeComponent implements OnChanges {
       .attr('x', 100)
       .attr('y', 35)
       .style('text-anchor', 'middle')
-      .on('click', (event) => {
-        console.log(event)
-      })
       .text('FRAME');
     g.selectAll('.node.object')
       .data(treemapNodes.descendants().slice(1))
@@ -295,9 +293,6 @@ export class FrameTreeComponent implements OnChanges {
       .attr('x', 20)
       .attr('y', 20)
       .style('text-anchor', 'start')
-      .on('click', (event) => {
-        console.log(event)
-      });
     text
       .append('tspan')
       //.style('text-anchor', 'middle')

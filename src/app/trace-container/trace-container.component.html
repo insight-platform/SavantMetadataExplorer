@@ -1,9 +1,9 @@
 <mat-toolbar color="primary">
   <span>Savant Metadata Explorer</span>
   <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-    <mat-icon>close</mat-icon>
-  </button>
+<!--  <button mat-icon-button class="example-icon">-->
+<!--    <mat-icon>close</mat-icon>-->
+<!--  </button>-->
 </mat-toolbar>
 
 <div class="root-page">
@@ -12,7 +12,9 @@
       <mat-form-field>
         <mat-label>TraceId</mat-label>
         <input matInput [formControl]="traceIdFormControl"/>
-        <button (click)="searchTrace()" matSuffix mat-icon-button>
+        <button (click)="searchTrace()"
+                matTooltip="Search Trace"
+                matSuffix mat-icon-button>
           <mat-icon>start</mat-icon>
         </button>
       </mat-form-field>
@@ -23,10 +25,10 @@
     </ng-container>
     <div class="content">
       <mat-button-toggle-group [disabled]="noSpanWithFrames" [value]="selectedView" (change)="setView($event.value)">
-        <mat-button-toggle [value]="'span'">
+        <mat-button-toggle [value]="'span'" matTooltip="Show spans">
           <mat-icon>account_tree</mat-icon>
         </mat-button-toggle>
-        <mat-button-toggle [value]="'log'">
+        <mat-button-toggle [value]="'log'" matTooltip="Show logs">
           <mat-icon>reorder</mat-icon>
         </mat-button-toggle>
       </mat-button-toggle-group>
@@ -51,11 +53,13 @@
       <div *ngIf="selectedFrameIndex !== -1"
            class="frame-actions">
         <button mat-icon-button
+                matTooltip="Previous span"
                 [disabled]="selectedFrameIndex < 1"
                 (click)="selectSpan(-1)">
           <mat-icon>chevron_left</mat-icon>
         </button>
         <button mat-icon-button
+                matTooltip="Next spab"
                 [disabled]="selectedFrameIndex >= spansWithFrame.length - 1"
                 (click)="selectSpan(1)">
           <mat-icon>chevron_right</mat-icon>

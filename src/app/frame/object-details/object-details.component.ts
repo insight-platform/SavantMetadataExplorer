@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@
 import { getArrayValue, IAttributes, IFrameJson, IFrameJsonObject } from '../../api/models/span';
 import { cloneDeep, uniq } from 'lodash';
 import {
-  getAttributesDifference, getFrameDiffAsString,
-  getFrameObjectDiff, getFrameObjectDiffAsString, getFrameObjectDiffAsString1,
+  getAttributesDifference,
+  getFrameObjectDiff, getFrameObjectDiffAsString1,
   getValueDiffAsString,
 } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';

@@ -1,0 +1,153 @@
+<div class="actions">
+  <button mat-icon-button (click)="showJson = false" [color]="showJson? 'basic' : 'primary'">
+    <mat-icon class="material-symbols-outlined">lists</mat-icon>
+  </button>
+  <button mat-icon-button (click)="showJson = true" [color]="!showJson? 'basic' : 'primary'">
+    <mat-icon class="material-symbols-outlined">description</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>content_copy</mat-icon>
+  </button>
+</div>
+
+<ng-container *ngIf="showJson; else tableView">
+  <div class="json">
+    <pre *ngIf="comparedFrame; else frameData"
+         [innerHTML]="getJsonDataDiff()"></pre>
+    <ng-template #frameData>
+      <pre [innerHTML]="getJsonData()"></pre>
+    </ng-template>
+  </div>
+</ng-container>
+<ng-template #tableView>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      Object details
+    </mat-expansion-panel-header>
+    <table mat-table [dataSource]="frameObjectDataSource" class="main-table">
+      <!-- Key Column -->
+      <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef> Field </th>
+        <td mat-cell *matCellDef="let element" class="field-key">{{element.key}}</td>
+      </ng-container>
+
+      <!-- Value Column -->
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef> Value </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-template #valuesPopover>
+            <div class="json-value">
+              <pre [innerHTML]="element.state === 'updated' ? getJsonDiff(element.oldValue, element.value) : getJson(element.value)"></pre>
+            </div>
+          </ng-template>
+          <mi-element-popover [popoverTemplate]="valuesPopover">
+            <ul class="no-bullets"
+                [class.is-updated]="element.state === 'updated'"
+                [class.is-new]="element.state === 'new'">
+              <li *ngFor="let str of getElementValueAsArray(element.value)">{{ str }}</li>
+            </ul>
+          </mi-element-popover>
+        </td>
+      </ng-container>
+
+      <tr mat-row *matRowDef="let row; columns: displayedFrameColumns;"></tr>
+    </table>
+  </mat-expansion-panel>
+
+  <h4 *ngIf="attributeDataSources && attributeDataSources.length">Attributes</h4>
+
+  <mat-expansion-panel *ngFor="let namespace of attributeDataSources; let i = index"
+                       [class.is-updated]="namespace.state === 'updated'"
+                       [class.is-removed]="namespace.state === 'removed'"
+                       [class.is-new]="namespace.state === 'new'">
+    <mat-expansion-panel-header>
+      Namespace "{{ namespace.namespace }}"
+    </mat-expansion-panel-header>
+
+    <table mat-table
+           [dataSource]="namespace.attributes" multiTemplateDataRows
+           class="attribute-table">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Hint Column -->
+      <ng-container matColumnDef="hint">
+        <th mat-header-cell *matHeaderCellDef> Hint </th>
+        <td mat-cell *matCellDef="let element"> {{element.hint}} </td>
+      </ng-container>
+
+      <!-- Is_persistent Column -->
+      <ng-container matColumnDef="is_persistent">
+        <th mat-header-cell *matHeaderCellDef> Is persistent </th>
+        <td mat-cell *matCellDef="let element"> {{element.is_persistent}} </td>
+      </ng-container>
+
+      <!-- Values Column -->
+      <ng-container matColumnDef="values">
+        <th mat-header-cell *matHeaderCellDef> Values </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-template #valuesPopover>
+            <div class="json-value">
+              <pre [innerHTML]="getJson(element.values)"></pre>
+            </div>
+          </ng-template>
+          <mi-element-popover [popoverTemplate]="valuesPopover"> ... </mi-element-popover>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedAttributeColumns.length">
+          <div class="example-element-detail"
+               [class.expanded]="expandedElement === element"
+               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <b>Values</b>
+            <table mat-table [dataSource]="element.values" class="attribute-table">
+              <!-- Index Column -->
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef> Index </th>
+                <td mat-cell *matCellDef="let innerElement; let i = index"> {{ i }} </td>
+              </ng-container>
+              <!-- Confidence Column -->
+              <ng-container matColumnDef="confidence">
+                <th mat-header-cell *matHeaderCellDef> Confidence </th>
+                <td mat-cell *matCellDef="let innerElement"> {{innerElement.confidence || '—' }} </td>
+              </ng-container>
+              <!-- Value Column -->
+              <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef> Value </th>
+                <td mat-cell *matCellDef="let innerElement">
+                  <ng-template #valuesPopover>
+                    <div class="json-value">
+                      <pre [innerHTML]="getJson(innerElement.value)"></pre>
+                    </div>
+                  </ng-template>
+                  <mi-element-popover [popoverTemplate]="valuesPopover">
+                    <ul class="no-bullets">
+                      <li *ngFor="let str of getElementValueAsArray(innerElement.value)">{{ str }}</li>
+                    </ul>
+                  </mi-element-popover>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="['index', 'confidence', 'value']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['index', 'confidence', 'value'];"></tr>
+            </table>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedAttributeColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedAttributeColumns;"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
+          class="example-detail-row"></tr>
+    </table>
+  </mat-expansion-panel>
+</ng-template>

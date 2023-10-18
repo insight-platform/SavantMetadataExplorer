@@ -1,0 +1,63 @@
+.log-viewer {
+  display: flex;
+  flex-direction: column;
+  background-color: #222;
+  color: white;
+  padding: 10px;
+  min-height: 200px;
+  overflow-y: auto;
+  @media screen and (max-width: 850px) {
+    height: 90%;
+  }
+
+  .log-item {
+    display: flex;
+    flex-direction: row;
+    margin: 0 0 5px;
+    padding: 0;
+    height: auto;
+    font-size: 16px;
+    font-family: Lucida Console, Courier, monospace;
+
+    .item-timestamp {
+      display: flex;
+      margin-right: 10px;
+      // white-space: nowrap;
+      justify-content: flex-end;
+      color: #4caf50;
+      width: 260px;
+      flex-shrink: 0;
+       & > * {
+         margin-left: 10px;
+         text-align: end;
+       }
+    }
+    .item-message {
+      span {
+        display: block;
+        white-space: pre-wrap;
+        min-height: 16px;
+      }
+    }
+  }
+}
+::ng-deep {
+  .highlighted {
+    background-color: #fbe02dbb;
+  }
+  .time {
+    color: #86d489;
+  }
+  .error, .fatal, .critical {
+    color: #ff3939;
+  }
+  .warn, .warning {
+    color: #ff7930;
+  }
+  .info {
+    color: #44a3fd;
+  }
+  .debug, .trace {
+    color: #fcc134;
+  }
+}

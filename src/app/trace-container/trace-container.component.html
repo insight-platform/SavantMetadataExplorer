@@ -1,0 +1,76 @@
+<mat-toolbar color="primary">
+  <span>Savant Metadata Explorer</span>
+  <span class="example-spacer"></span>
+<!--  <button mat-icon-button class="example-icon">-->
+<!--    <mat-icon>close</mat-icon>-->
+<!--  </button>-->
+</mat-toolbar>
+
+<div class="root-page">
+  <div class="side">
+    <div class="trace-id-search">
+      <mat-form-field>
+        <mat-label>TraceId</mat-label>
+        <input matInput [formControl]="traceIdFormControl"/>
+        <button (click)="searchTrace()"
+                matTooltip="Search Trace"
+                matSuffix mat-icon-button>
+          <mat-icon>start</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <ng-container *ngIf="noSpanWithFrames">
+      <div class="no-span-message">There no spans with frames</div>
+    </ng-container>
+    <div class="content">
+      <mat-button-toggle-group [disabled]="noSpanWithFrames" [value]="selectedView" (change)="setView($event.value)">
+        <mat-button-toggle [value]="'span'" matTooltip="Show spans">
+          <mat-icon>account_tree</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle [value]="'log'" matTooltip="Show logs">
+          <mat-icon>reorder</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div *ngIf="selectedView === 'span'" class="content vertical">
+      <sf-object-filter [labels]="labels"
+                        [namespaces]="namespaces"
+                        (valueChange)="setObjectFilter($event)"></sf-object-filter>
+      <sf-span-list [spans]="spansWithFrame"
+                    [selectedIndex]="selectedFrameIndex"
+                    [selectedCompareIndex]="selectedComparedFrameIndex"
+                    (compareSpan)="setComparedFrame($event)"
+                    (selectedSpan)="setFrame($event)"></sf-span-list>
+    </div>
+    <div *ngIf="selectedView === 'log'" class="content vertical">
+      <sf-log-filter [targets]="logTargets"
+                     (valueChange)="setLogFilter($event)"></sf-log-filter>
+    </div>
+  </div>
+  <div class="main">
+    <ng-container *ngIf="selectedView === 'span'">
+      <div *ngIf="selectedFrameIndex !== -1"
+           class="frame-actions">
+        <button mat-icon-button
+                matTooltip="Previous span"
+                [disabled]="selectedFrameIndex < 1"
+                (click)="selectSpan(-1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-icon-button
+                matTooltip="Next spab"
+                [disabled]="selectedFrameIndex >= spansWithFrame.length - 1"
+                (click)="selectSpan(1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      <sf-frame-container [frame]="frame"
+                          [objectFilter]="objectFilter"
+                          [comparedFrame]="comparedFrame"></sf-frame-container>
+    </ng-container>
+    <ng-container *ngIf="selectedView === 'log'">
+      <sf-log-container [spans]="spansWithLog" [logFilter]="logFilter"></sf-log-container>
+    </ng-container>
+  </div>
+</div>

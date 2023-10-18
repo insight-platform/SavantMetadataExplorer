@@ -1,0 +1,22 @@
+<ng-container *ngIf="popoverTemplate">
+  <span [miPopoverTrigger]="popoverWithTemplate"
+        [fixedPopoverPosition]="popoverPosition"
+        class="content"
+        popoverPosition="above"
+        arrowPosition="before"
+        triggerEvent="hover">
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+    </span>
+</ng-container>
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>
+
+<mi-popover #popoverWithTemplate="miPopover"
+            [yPosition]="'above'"
+            [disableCloseOnMouseLeave]="disableCloseOnMouseLeave"
+            (closed)="closed.emit()"
+            [closeOnBackdropClick]="true">
+    <ng-container [ngTemplateOutlet]="popoverTemplate"></ng-container>
+</mi-popover>

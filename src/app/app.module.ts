@@ -22,13 +22,16 @@ import { LogModule } from './log/log.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SpanSelectorComponent } from './utils/span-selector/span-selector.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
     AppComponent,
     TraceContainerComponent,
     ObjectFilterComponent,
-    LogFilterComponent
+    LogFilterComponent,
+    SpanSelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     LogModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IFrameJson, ISpan } from '../api/models/span';
+import { IFrameJson, ISpan, ITreeSpan, ReferenceType } from '../api/models/span';
 import { isNil, uniq } from 'lodash';
 import { FormControl } from '@angular/forms';
 import { TraceService } from '../api/services/trace.service';
-import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'sf-trace-container',
@@ -11,7 +10,7 @@ import { catchError, of } from 'rxjs';
   styleUrls: ['./trace-container.component.scss']
 })
 export class TraceContainerComponent {
-  traceId = 'cb8b182cff2f87b73b5d1fcbe0bb846d';
+  traceId = '4a413f96acb57ab8d739a0d7ed61047d';
   traceIdFormControl = new FormControl<string>('', {nonNullable: true});
   spansWithFrame: ISpan[] = [];
   spansWithLog: ISpan[] = [];
@@ -22,13 +21,14 @@ export class TraceContainerComponent {
   namespaces: string[] = [];
   labels: string[] = [];
   objectFilter: { namespace: string; label: string}[] = [];
-  logFilter: { level: string[]; target: string[]; search: string } = { level: [], target: [], search: '' };
+  logFilter: { level: string[]; target: string[]; search: string; spans: string[] } = { level: [], target: [], search: '', spans: [] };
   logTargets: string[] = [];
+  spanTree: ITreeSpan[] = [];
   noSpanWithFrames = false;
-  selectedView: 'span'|'log' = 'span';
+  selectedView: 'span'|'log' = 'log';
 
   constructor(private _traceService: TraceService) {
-    this.traceIdFormControl.setValue('573d571712dc976333d4d83676c6c8e4');
+    this.traceIdFormControl.setValue(this.traceId);
   }
 
   searchTrace() {
@@ -53,6 +53,37 @@ export class TraceContainerComponent {
             .sort((span1,span2 ) => span1.startTime - span2.startTime);
           this.spansWithLog = trace.spans.filter(span => span.logs && span.logs.length)
             .sort((span1,span2 ) => span1.startTime - span2.startTime);
+
+          const spanWithLogTreeData = trace.spans.filter(span => span.references.length === 0)
+            .map(span => ({...span, children: []}));
+
+          const findParentSpan = (spans: ITreeSpan[], span: ITreeSpan): ITreeSpan | null => {
+            const parentObject = spans.find(_ => span.references[0].refType === ReferenceType.ChildOf && span.references[0].spanID === _.spanID);
+            if (parentObject) {
+              return parentObject
+            } else {
+              for (const object of spans) {
+                const foundObject = findParentSpan(object.children, span);
+                if (foundObject) {
+                  return foundObject;
+                }
+              }
+              return null;
+            }
+          };
+
+          trace.spans
+            .sort((a, b) =>
+              (b.references[0] && b.references[0].refType === ReferenceType.ChildOf && b.references[0].spanID || '').localeCompare(
+              (a.references[0] && a.references[0].refType === ReferenceType.ChildOf && a.references[0].spanID || ''))
+            )
+            .map(span => ({...span, children: []}))
+            .forEach(span => {
+              if (!isNil(span.references[0])) {
+                findParentSpan(spanWithLogTreeData, span)?.children.push(span);
+              }
+            });
+          this.spanTree = spanWithLogTreeData;
           this.logTargets = uniq(
             trace.spans.filter(span => span.logs && span.logs.length)
               .reduce<string[]>((res, span) => [
@@ -73,7 +104,7 @@ export class TraceContainerComponent {
     this.selectedView = view;
   }
 
-  setLogFilter(logFilter: { level: string[]; target: string[]; search: string }) {
+  setLogFilter(logFilter: { level: string[]; target: string[]; search: string; spans: string[] }) {
     this.logFilter = logFilter;
   }
 

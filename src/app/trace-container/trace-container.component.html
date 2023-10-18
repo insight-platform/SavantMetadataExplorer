@@ -45,6 +45,7 @@
     </div>
     <div *ngIf="selectedView === 'log'" class="content vertical">
       <sf-log-filter [targets]="logTargets"
+                     [spans]="spanTree"
                      (valueChange)="setLogFilter($event)"></sf-log-filter>
     </div>
   </div>

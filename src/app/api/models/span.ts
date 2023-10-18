@@ -64,6 +64,17 @@ export interface ISpanLog {
   fields: ISpanLogField[];
 }
 
+export enum ReferenceType {
+  ChildOf = 'CHILD_OF',
+  FollowsFrom = 'FOLLOWS_FROM',
+}
+
+export interface IReference {
+  traceID: string;
+  spanID: string;
+  refType: ReferenceType;
+}
+
 export interface ISpan {
   traceID: string;
   spanID: string;
@@ -72,7 +83,12 @@ export interface ISpan {
   logs: ISpanLog[];
   processID: string;
   startTime: number;
+  references: IReference[];
   [key: string]: any;
+}
+
+export interface ITreeSpan extends ISpan {
+  children: ITreeSpan[];
 }
 
 export interface ITrace {

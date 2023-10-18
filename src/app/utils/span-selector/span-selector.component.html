@@ -1,0 +1,42 @@
+<div [hidden]="!showSelector">
+<form *ngIf="spanFormGroup && showSelector" [formGroup]="spanFormGroup">
+  <mat-expansion-panel *ngFor="let span of spans" [disabled]="!span.children.length">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ span.operationName }} {{ span.children.length }}
+      </mat-panel-title>
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="check($event.checked, span.spanID, spanFormGroup.get(span.spanID + '_group'))"
+                    [formControlName]="span.spanID" color="primary"></mat-checkbox>
+    </mat-expansion-panel-header>
+    <ng-container *ngIf="span.children.length">
+      <ng-container [ngTemplateOutlet]="childSpans"
+                    [ngTemplateOutletContext]="{ spans: span.children, form: spanFormGroup.get(span.spanID + '_group') }"></ng-container>
+    </ng-container>
+
+  </mat-expansion-panel>
+
+  <ng-template #childSpans let-spans="spans" let-form="form">
+    <div [formGroup]="form">
+      <mat-expansion-panel *ngFor="let span of spans"
+                           [disabled]="!span.children.length"
+                           class="mat-elevation-z0">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon *ngIf="hasIcon(span)" matPrefix>cancel</mat-icon>
+            {{ span.operationName }} {{ span.children.length }}
+          </mat-panel-title>
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="check($event.checked, span.spanID, form.get(span.spanID + '_group'))"
+                        [formControlName]="span.spanID" color="primary"></mat-checkbox>
+        </mat-expansion-panel-header>
+        <ng-container *ngIf="span.children.length">
+          <ng-container [ngTemplateOutlet]="childSpans"
+                        [ngTemplateOutletContext]="{ spans: span.children, form: form.get(span.spanID + '_group') }"></ng-container>
+        </ng-container>
+      </mat-expansion-panel>
+    </div>
+  </ng-template>
+
+</form>
+</div>

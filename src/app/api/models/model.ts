@@ -117,6 +117,12 @@ export interface ISafeLog {
   previousTimestampDelta: string;
   lines: SafeHtml[];
 }
+export interface ILogFilter {
+  level: string[];
+  target: string[];
+  search: string;
+  spans: string[];
+}
 
 export const getValue = (v): string => {
   if (isNil(v)) {
@@ -159,11 +165,11 @@ export const getArrayValue = (v): string[] => {
 export const logFunctionKeys = ['log.level', 'log.target'];
 export const logEventKeys = ['event.name', 'event.domain'];
 
-export const ansi_up = new AnsiUp();
+export const ansiUp = new AnsiUp();
 export const getLogValue = (v: ISpanLogField[]): string[] => {
   const [level, target] = logFunctionKeys.map(key => v.find(field => field.key === key )?.value);
-  const [eventName, eventDomain] = logEventKeys.map(key => v.find(field => field.key === key )?.value);
-  const event = ansi_up.ansi_to_html(v.find(field => field.key === 'event' )?.value || '');
+  // const [eventName, eventDomain] = logEventKeys.map(key => v.find(field => field.key === key )?.value);
+  const event = ansiUp.ansi_to_html(v.find(field => field.key === 'event' )?.value || '');
 
   const attributes = v.filter(field => [...logFunctionKeys, ...logEventKeys].indexOf(field.key) === -1)
     .map(field => `${field.key} = ${field.value.toString()}`);

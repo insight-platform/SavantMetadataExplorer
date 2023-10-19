@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getLogValue, ILog, ISafeLog, ISpan, ISpanLog } from '../../api/models/span';
+import { getLogValue, ILogFilter, ISafeLog, ISpan, ISpanLog } from '../../api/models/model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { translateMicroSecondsToTimeString } from '../../utils/translate-seconds-to-time-string';
 
@@ -10,7 +10,7 @@ import { translateMicroSecondsToTimeString } from '../../utils/translate-seconds
 })
 export class LogContainerComponent implements OnChanges {
   @Input() spans: ISpan[] = [];
-  @Input() logFilter: { level: string[]; target: string[]; search: string; spans: string[] } = { level: [], target: [], search: '', spans: [] };
+  @Input() logFilter: ILogFilter = { level: [], target: [], search: '', spans: [] };
   safeLogs: ISafeLog[] = [];
 
   private _logLevels = ['Info', 'Warn', 'Debug', 'Error', 'Fatal', 'Critical', 'Warning', 'Trace'];

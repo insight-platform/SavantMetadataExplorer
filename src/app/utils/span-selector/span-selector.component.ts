@@ -1,7 +1,6 @@
 import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ITreeSpan } from '../../api/models/span';
+import { ITreeSpan } from '../../api/models/model';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { isNil } from 'lodash';
 
 @Component({
   selector: 'sf-span-selector',
@@ -82,12 +81,13 @@ export class SpanSelectorComponent implements OnChanges, ControlValueAccessor {
     this._onChange = fn;
   }
 
+  // eslint-disable-next-line
   registerOnTouched(fn: any): void {
   }
-
+  // eslint-disable-next-line
   writeValue(obj: any): void {
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line
   private _onChange = (_: string[]) => {};
 }

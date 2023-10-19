@@ -1,4 +1,4 @@
-import { getValue, IAttributes, IFrameJson, IFrameJsonObject } from '../api/models/span';
+import { getValue, IAttributes, IFrameJson, IFrameJsonObject } from '../api/models/model';
 import { cloneDeep, isEqual, isNil, uniq } from 'lodash';
 import { diff, Operation } from 'json-diff-ts'
 import { IChange } from 'json-diff-ts/lib/jsonDiff';
@@ -222,7 +222,7 @@ export const getFrameObjectsDifference = (firstFrameObjects: IFrameJsonObject[],
     .forEach(firstObject => {
       const secondObject = secondFrameObjects.find(_ => _.id === firstObject.id);
       if (!isNil(secondObject)) {
-        let differences = { };
+        const differences = { };
         Object.keys(secondObject).forEach(key => {
           if (!isEqual(firstObject[key], secondObject[key])) {
             differences[key] = secondObject[key];

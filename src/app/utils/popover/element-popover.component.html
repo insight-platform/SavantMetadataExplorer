@@ -1,5 +1,5 @@
 <ng-container *ngIf="popoverTemplate">
-  <span [miPopoverTrigger]="popoverWithTemplate"
+  <span [sfPopoverTrigger]="popoverWithTemplate"
         [fixedPopoverPosition]="popoverPosition"
         class="content"
         popoverPosition="above"
@@ -13,10 +13,10 @@
   <ng-content></ng-content>
 </ng-template>
 
-<mi-popover #popoverWithTemplate="miPopover"
+<sf-popover #popoverWithTemplate="sf-popover"
             [yPosition]="'above'"
             [disableCloseOnMouseLeave]="disableCloseOnMouseLeave"
             (closed)="closed.emit()"
             [closeOnBackdropClick]="true">
     <ng-container [ngTemplateOutlet]="popoverTemplate"></ng-container>
-</mi-popover>
+</sf-popover>

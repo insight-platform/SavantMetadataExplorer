@@ -17,25 +17,25 @@ import { ESCAPE } from '@angular/cdk/keycodes';
 import { Directionality } from '@angular/cdk/bidi';
 
 import {
-  MiPopoverPositionX,
-  MiPopoverPositionY,
-  MiPopoverTriggerEvent,
-  MiPopoverScrollStrategy,
+  PopoverPositionX,
+  PopoverPositionY,
+  PopoverTriggerEvent,
+  PopoverScrollStrategy,
 } from './popover-types';
-import { throwMiPopoverInvalidPositionX, throwMiPopoverInvalidPositionY } from './popover-errors';
-import { IMiPopoverPanel } from './popover-interfaces';
+import { throwPopoverInvalidPositionX, throwPopoverInvalidPositionY } from './popover-errors';
+import { IPopoverPanel } from './popover-interfaces';
 import { transformPopover } from './popover-animations';
 
 @Component({
-  selector: 'mi-popover',
+  selector: 'sf-popover',
   templateUrl: './popover.html',
   styleUrls: ['./popover.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   animations: [transformPopover],
-  exportAs: 'miPopover',
+  exportAs: 'sf-popover',
 })
-export class MiPopoverComponent implements IMiPopoverPanel, OnDestroy {
+export class PopoverComponent implements IPopoverPanel, OnDestroy {
   /** Popover close on container click */
   @Input({ transform: booleanAttribute }) closeOnPanelClick = false;
   /** Popover close on backdrop click */
@@ -58,10 +58,10 @@ export class MiPopoverComponent implements IMiPopoverPanel, OnDestroy {
   public popoverArrowStyles: any;
 
   /** Settings for popover, view setters and getters for more detail */
-  private _xPosition: MiPopoverPositionX = 'after';
-  private _yPosition: MiPopoverPositionY = 'below';
-  private _triggerEvent: MiPopoverTriggerEvent = 'hover';
-  private _scrollStrategy: MiPopoverScrollStrategy = 'reposition';
+  private _xPosition: PopoverPositionX = 'after';
+  private _yPosition: PopoverPositionY = 'below';
+  private _triggerEvent: PopoverTriggerEvent = 'hover';
+  private _scrollStrategy: PopoverScrollStrategy = 'reposition';
   private _enterDelay = 100;
   private _leaveDelay = 100;
   private _panelOffsetX = 0;
@@ -74,9 +74,9 @@ export class MiPopoverComponent implements IMiPopoverPanel, OnDestroy {
   get xPosition() {
     return this._xPosition;
   }
-  set xPosition(value: MiPopoverPositionX) {
+  set xPosition(value: PopoverPositionX) {
     if (value !== 'before' && value !== 'after' && value !== 'center') {
-      throwMiPopoverInvalidPositionX();
+      throwPopoverInvalidPositionX();
     }
     this._xPosition = value;
     this.setPositionClasses();
@@ -87,9 +87,9 @@ export class MiPopoverComponent implements IMiPopoverPanel, OnDestroy {
   get yPosition() {
     return this._yPosition;
   }
-  set yPosition(value: MiPopoverPositionY) {
+  set yPosition(value: PopoverPositionY) {
     if (value !== 'above' && value !== 'below') {
-      throwMiPopoverInvalidPositionY();
+      throwPopoverInvalidPositionY();
     }
     this._yPosition = value;
     this.setPositionClasses();
@@ -97,19 +97,19 @@ export class MiPopoverComponent implements IMiPopoverPanel, OnDestroy {
 
   /** Popover trigger event */
   @Input()
-  get triggerEvent(): MiPopoverTriggerEvent {
+  get triggerEvent(): PopoverTriggerEvent {
     return this._triggerEvent;
   }
-  set triggerEvent(value: MiPopoverTriggerEvent) {
+  set triggerEvent(value: PopoverTriggerEvent) {
     this._triggerEvent = value;
   }
 
   /** Popover scroll strategy */
   @Input()
-  get scrollStrategy(): MiPopoverScrollStrategy {
+  get scrollStrategy(): PopoverScrollStrategy {
     return this._scrollStrategy;
   }
-  set scrollStrategy(value: MiPopoverScrollStrategy) {
+  set scrollStrategy(value: PopoverScrollStrategy) {
     this._scrollStrategy = value;
   }
 
@@ -233,6 +233,6 @@ export class MiPopoverComponent implements IMiPopoverPanel, OnDestroy {
   }
 
   setPositionClasses(posX = this.xPosition, posY = this.yPosition): void {
-    this.classList = ['mi-popover-' + posX, 'mi-popover-' + posY].join(' ');
+    this.classList = ['popover-' + posX, 'popover-' + posY].join(' ');
   }
 }

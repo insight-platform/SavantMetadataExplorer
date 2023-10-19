@@ -1,28 +1,28 @@
 /**
- * Throws an exception for the case when popover trigger doesn't have a valid mi-popover instance
+ * Throws an exception for the case when popover trigger doesn't have a valid popover instance
  */
-export const throwMiPopoverMissingError = () => {
-  throw Error(`mi-popover-trigger: must pass in an mi-popover instance.
+export const throwPopoverMissingError = () => {
+  throw Error(`sf-popover-trigger: must pass in an sf-popover instance.
 
     Example:
-      <mi-popover #popover="miPopover"></mi-popover>
-      <button [miPopoverTrigger]="popover"></button>`);
+      <sf-popover #popover="sf-popover"></sf-popover>
+      <button [sfPopoverTrigger]="popover"></button>`);
 };
 
 /**
- * Throws an exception for the case when popover's miPopoverPositionX value isn't valid.
+ * Throws an exception for the case when popover's PopoverPositionX value isn't valid.
  * In other words, it doesn't match 'before' or 'after'.
  */
-export const throwMiPopoverInvalidPositionX = () => {
+export const throwPopoverInvalidPositionX = () => {
   throw Error(`xPosition value must be either 'before', 'center' or after'.
-      Example: <mi-popover xPosition="before" #popover="miPopover"></mi-popover>`);
+      Example: <sf-popover xPosition="before" #popover="sf-popover"></sf-popover>`);
 };
 
 /**
- * Throws an exception for the case when popover's miPopoverPositionY value isn't valid.
+ * Throws an exception for the case when popover's PopoverPositionY value isn't valid.
  * In other words, it doesn't match 'above' or 'below'.
  */
-export const throwMiPopoverInvalidPositionY = () => {
+export const throwPopoverInvalidPositionY = () => {
   throw Error(`yPosition value must be either 'above' or below'.
-      Example: <mi-popover yPosition="above" #popover="miPopover"></mi-popover>`);
+      Example: <sf-popover yPosition="above" #popover="sf-popover"></sf-popover>`);
 };

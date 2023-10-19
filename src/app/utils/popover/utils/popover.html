@@ -1,5 +1,5 @@
 <ng-template>
-  <div class="mi-popover-panel" role="dialog"
+  <div class="popover-panel" role="dialog"
        [ngClass]="classList"
        [ngStyle]="popoverPanelStyles"
        (keydown)="handleKeydown($event)"
@@ -7,9 +7,9 @@
        (mouseover)="onMouseOver()"
        (mouseleave)="onMouseLeave()"
        [@transformPopover]="'enter'">
-    <div class="mi-popover-direction-arrow" [ngStyle]="popoverArrowStyles">
+    <div class="popover-direction-arrow" [ngStyle]="popoverArrowStyles">
     </div>
-    <div class="mi-popover-content"
+    <div class="popover-content"
          [cdkTrapFocus]="focusTrapEnabled"
          [cdkTrapFocusAutoCapture]="focusTrapAutoCaptureEnabled">
       <ng-content></ng-content>

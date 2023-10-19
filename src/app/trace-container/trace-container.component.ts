@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IFrameJson, ISpan, ITreeSpan, ReferenceType } from '../api/models/span';
+import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType } from '../api/models/model';
 import { isNil, uniq } from 'lodash';
 import { FormControl } from '@angular/forms';
 import { TraceService } from '../api/services/trace.service';
@@ -21,11 +21,11 @@ export class TraceContainerComponent {
   namespaces: string[] = [];
   labels: string[] = [];
   objectFilter: { namespace: string; label: string}[] = [];
-  logFilter: { level: string[]; target: string[]; search: string; spans: string[] } = { level: [], target: [], search: '', spans: [] };
+  logFilter: ILogFilter = { level: [], target: [], search: '', spans: [] };
   logTargets: string[] = [];
   spanTree: ITreeSpan[] = [];
   noSpanWithFrames = false;
-  selectedView: 'span'|'log' = 'log';
+  selectedView: 'span'|'log' = 'span';
 
   constructor(private _traceService: TraceService) {
     this.traceIdFormControl.setValue(this.traceId);
@@ -104,7 +104,7 @@ export class TraceContainerComponent {
     this.selectedView = view;
   }
 
-  setLogFilter(logFilter: { level: string[]; target: string[]; search: string; spans: string[] }) {
+  setLogFilter(logFilter: ILogFilter) {
     this.logFilter = logFilter;
   }
 

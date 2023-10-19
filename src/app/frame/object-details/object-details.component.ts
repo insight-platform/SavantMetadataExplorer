@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getArrayValue, IAttributes, IFrameJson, IFrameJsonObject } from '../../api/models/span';
+import { getArrayValue, IAttributes, IFrameJson, IFrameJsonObject } from '../../api/models/model';
 import { cloneDeep, uniq } from 'lodash';
 import {
   getAttributesDifference,
@@ -57,7 +57,7 @@ export class ObjectDetailsComponent implements OnChanges {
           const changes = getFrameObjectDiff(this.frameObject, comparedFrameObject, ['attributes', 'children']);
           if (changes.adds.length) {
             const newData = changes.adds
-              // @ts-ignore
+              // eslint-disable-next-line
               .map(change => ({key: change.key, value: change.value, state: 'new'}));
             this.frameObjectDataSource = [...cloneDeep(this.frameObjectData), ...newData];
           }
@@ -76,7 +76,7 @@ export class ObjectDetailsComponent implements OnChanges {
           const attributeChanges = getAttributesDifference(this.frameObject.attributes, comparedFrameObject.attributes);
           if (attributeChanges.addedNamespaces) {
             attributeChanges.addedNamespaces.forEach(namespace => {
-              // @ts-ignore
+              // eslint-disable-next-line
               this.attributeDataSources.push({
                 namespace,
                 state: 'new',

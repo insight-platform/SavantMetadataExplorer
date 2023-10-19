@@ -1,15 +1,15 @@
 import { EventEmitter, NgZone, TemplateRef } from '@angular/core';
 import {
-  MiPopoverPositionX,
-  MiPopoverPositionY,
-  MiPopoverTriggerEvent,
-  MiPopoverScrollStrategy,
+  PopoverPositionX,
+  PopoverPositionY,
+  PopoverTriggerEvent,
+  PopoverScrollStrategy,
 } from './popover-types';
 
-export interface IMiPopoverPanel {
-  triggerEvent: MiPopoverTriggerEvent;
-  xPosition: MiPopoverPositionX;
-  yPosition: MiPopoverPositionY;
+export interface IPopoverPanel {
+  triggerEvent: PopoverTriggerEvent;
+  xPosition: PopoverPositionX;
+  yPosition: PopoverPositionY;
   xOffset: number;
   yOffset: number;
   enterDelay: number;
@@ -18,13 +18,13 @@ export interface IMiPopoverPanel {
   arrowWidth: number;
   closeOnPanelClick: boolean;
   closeOnBackdropClick: boolean;
-  scrollStrategy: MiPopoverScrollStrategy;
+  scrollStrategy: PopoverScrollStrategy;
   containerPositioning: boolean;
   closeDisabled: boolean;
   templateRef: TemplateRef<any>;
   zone: NgZone;
   closed: EventEmitter<void>;
   setCurrentStyles: () => void;
-  setPositionClasses: (x: MiPopoverPositionX, y: MiPopoverPositionY) => void;
+  setPositionClasses: (x: PopoverPositionX, y: PopoverPositionY) => void;
   emitCloseEvent: () => void;
 }

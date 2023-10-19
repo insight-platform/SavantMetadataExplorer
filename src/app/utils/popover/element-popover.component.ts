@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'mi-element-popover',
+  selector: 'sf-element-popover',
   templateUrl: 'element-popover.component.html',
   styleUrls: ['element-popover.component.scss'],
 })

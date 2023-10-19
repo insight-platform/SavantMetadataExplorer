@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ITreeSpan } from '../../api/models/span';
+import { ILogFilter, ITreeSpan } from '../../api/models/model';
 
 @Component({
   selector: 'sf-log-filter',
@@ -10,7 +10,7 @@ import { ITreeSpan } from '../../api/models/span';
 export class LogFilterComponent {
   @Input() targets: string[] = [];
   @Input() spans: ITreeSpan[] = [];
-  @Output() valueChange = new EventEmitter<{ level: string[]; target: string[]; search: string; spans: string[]}>();
+  @Output() valueChange = new EventEmitter<ILogFilter>();
 
   readonly filters = new FormGroup<{
     level: FormControl<string[]>,

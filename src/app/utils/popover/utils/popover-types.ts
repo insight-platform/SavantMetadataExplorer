@@ -1,7 +1,7 @@
-export type MiPopoverPositionX = 'before' | 'after' | 'center';
+export type PopoverPositionX = 'before' | 'after' | 'center';
 
-export type MiPopoverPositionY = 'above' | 'below';
+export type PopoverPositionY = 'above' | 'below';
 
-export type MiPopoverTriggerEvent = 'click' | 'hover' | 'none';
+export type PopoverTriggerEvent = 'click' | 'hover' | 'none';
 
-export type MiPopoverScrollStrategy = 'noop' | 'close' | 'block' | 'reposition';
+export type PopoverScrollStrategy = 'noop' | 'close' | 'block' | 'reposition';

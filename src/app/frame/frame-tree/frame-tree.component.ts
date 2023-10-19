@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { IFrameJson, IFrameJsonObject } from '../../api/models/span';
+import { IFrameJson, IFrameJsonObject } from '../../api/models/model';
 import { isNil, uniq } from 'lodash';
 import { HierarchyNode } from 'd3';
 import * as d3 from 'd3';
@@ -16,7 +16,7 @@ export class FrameTreeComponent implements OnChanges {
   @Input() frame: IFrameJson | undefined;
   @Input() comparedFrame: IFrameJson | undefined;
   @Input() objectFilter: { namespace: string; label: string }[]
-  @Output() onNodeSelected = new EventEmitter<INodeObject>();
+  @Output() nodeSelected = new EventEmitter<INodeObject>();
   objectGroups: { namespace: string, label: string }[] = [];
   selectedNode: INodeObject | undefined = undefined;
   frameObjectsDifference: FrameObjectsDifference | undefined
@@ -36,7 +36,7 @@ export class FrameTreeComponent implements OnChanges {
           .sort((g1, g2) => g1.localeCompare(g2))
           .reduce((res: any[], namespace: string) => [
             ...res,
-            // @ts-ignore
+            // eslint-disable-next-line
             ...uniq(this.frame?.objects.map(_ => _.label)).map(label => ({namespace, label})),
           ], [])
         this._clearSvg();
@@ -106,7 +106,7 @@ export class FrameTreeComponent implements OnChanges {
         });
     }
 
-    // @ts-ignore
+    // eslint-disable-next-line
     return {
       attributes: this.frame ? this.frame.attributes : [],
       frame: '',
@@ -205,7 +205,7 @@ export class FrameTreeComponent implements OnChanges {
       // this._cdr.detectChanges();
       d3.select('#node' + d.data.id).style('fill', textColor);
       d3.select('#circle' + d.data.id).style('fill', currentColor);
-      this.onNodeSelected.emit(this.selectedNode);
+      this.nodeSelected.emit(this.selectedNode);
     };
 
     const defs = svg.append('defs');

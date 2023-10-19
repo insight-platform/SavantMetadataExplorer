@@ -10,7 +10,7 @@ import { TraceService } from '../api/services/trace.service';
   styleUrls: ['./trace-container.component.scss']
 })
 export class TraceContainerComponent {
-  traceId = '4a413f96acb57ab8d739a0d7ed61047d';
+  traceId = '566293635d0eebfa891701d5c4cc69f8';
   traceIdFormControl = new FormControl<string>('', {nonNullable: true});
   spansWithFrame: ISpan[] = [];
   spansWithLog: ISpan[] = [];
@@ -73,10 +73,7 @@ export class TraceContainerComponent {
           };
 
           trace.spans
-            .sort((a, b) =>
-              (b.references[0] && b.references[0].refType === ReferenceType.ChildOf && b.references[0].spanID || '').localeCompare(
-              (a.references[0] && a.references[0].refType === ReferenceType.ChildOf && a.references[0].spanID || ''))
-            )
+            .sort((a, b) => (a.startTime - b.startTime))
             .map(span => ({...span, children: []}))
             .forEach(span => {
               if (!isNil(span.references[0])) {

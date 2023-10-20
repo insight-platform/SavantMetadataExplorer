@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FrameDetailsComponent } from './frame-details/frame-details.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { LocalMiElementPopoverModule } from '../utils/popover/popover-module';
+import { LocalMiElementPopoverModule } from '../utils/shared/popover/popover-module';
 import { FrameTreeComponent } from './frame-tree/frame-tree.component';
 import { ObjectDetailsComponent } from './object-details/object-details.component';
 import { MatTooltipModule } from '@angular/material/tooltip';

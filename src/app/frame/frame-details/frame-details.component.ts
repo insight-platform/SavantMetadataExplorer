@@ -11,7 +11,7 @@ import {
   getFrameDiff,
   getValueDiffAsString,
   getAttributesDifference,
-  getFrameDiffAsString1,
+  getFullFrameDiffAsString,
 } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { jsonColorPrint } from '../../utils/json-color-print';
@@ -142,7 +142,7 @@ export class FrameDetailsComponent implements OnChanges {
   }
 
   getJsonDataDiff(frame, comparedFrame) {
-    return jsonColorPrint(getFrameDiffAsString1(frame, comparedFrame))
+    return jsonColorPrint(getFullFrameDiffAsString(frame, comparedFrame))
     // JSON.stringify(getFrameDiffAsString(frame, comparedFrame), null, 2);
   }
 }

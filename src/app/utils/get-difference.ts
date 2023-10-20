@@ -157,7 +157,7 @@ export const getFrameDiffAsString = (firstFrame: IFrameJson, secondFrame: IFrame
   return resAsString.reduce((res, c) => ({ ...res, ...c }), {});
 }
 
-export const getFrameDiffAsString1 = (firstFrame: IFrameJson, secondFrame: IFrameJson, omitKeys?: string[]) => {
+export const getFullFrameDiffAsString = (firstFrame: IFrameJson, secondFrame: IFrameJson, omitKeys?: string[]) => {
   const res: IChange[] = getFrameDiffOriginal(firstFrame, secondFrame, omitKeys);
   const resAsString = res.map(change => stringifyWithOther(change, firstFrame));
   const keys = Object.keys(firstFrame).filter(key => !omitKeys || !omitKeys.includes(key))
@@ -246,7 +246,7 @@ export const getFrameObjectDiffAsString = (firstFrameObject: IFrameJsonObject, s
   const resAsString = res.map(change => stringify(change));
   return resAsString.reduce((res, c) => ({ ...res, ...c }), {});
 }
-export const getFrameObjectDiffAsString1 = (firstFrameObject: IFrameJsonObject, secondFrameObject: IFrameJsonObject, omitKeys?: string[]) => {
+export const getFullFrameObjectDiffAsString = (firstFrameObject: IFrameJsonObject, secondFrameObject: IFrameJsonObject, omitKeys?: string[]) => {
   const res: IChange[] = getFrameObjectDiffOriginal(firstFrameObject, secondFrameObject, omitKeys);
   const keys = Object.keys(firstFrameObject).filter(key => !omitKeys || !omitKeys.includes(key))
     .filter(key => res.map(c => c.key).indexOf(key) === -1);

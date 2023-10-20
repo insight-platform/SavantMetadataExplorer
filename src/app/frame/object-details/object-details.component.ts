@@ -3,7 +3,7 @@ import { getArrayValue, IAttributes, IFrameJson, IFrameJsonObject } from '../../
 import { cloneDeep, uniq } from 'lodash';
 import {
   getAttributesDifference,
-  getFrameObjectDiff, getFrameObjectDiffAsString1,
+  getFrameObjectDiff, getFullFrameObjectDiffAsString,
   getValueDiffAsString,
 } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -109,7 +109,7 @@ export class ObjectDetailsComponent implements OnChanges {
   getJsonDataDiff() {
     if (this.comparedFrame) {
       const comparedFrameObject = this.comparedFrame.objects.find(object => object.id === this.frameObject.id);
-      return comparedFrameObject && jsonColorPrint(getFrameObjectDiffAsString1(this.frameObject, comparedFrameObject, ['children']))
+      return comparedFrameObject && jsonColorPrint(getFullFrameObjectDiffAsString(this.frameObject, comparedFrameObject, ['children']))
     }
     return '';
   }

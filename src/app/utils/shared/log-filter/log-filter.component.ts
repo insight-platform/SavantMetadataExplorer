@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ILogFilter, ITreeSpan } from '../../api/models/model';
+import { ILogFilter, ITreeSpan } from '../../../api/models/model';
 
 @Component({
   selector: 'sf-log-filter',

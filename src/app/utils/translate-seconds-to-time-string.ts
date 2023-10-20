@@ -3,7 +3,6 @@ export const secConverter = (number: number, unit: string | null = null) => {
   let h;
   let m;
   let s;
-  let ms;
   let fullMcs;
 
   if (isNaN(number)) {
@@ -14,10 +13,8 @@ export const secConverter = (number: number, unit: string | null = null) => {
     s = number;
   } else if (unit === 'ms' || unit === 'milliseconds' || !unit) {
     s = Math.floor(number / 1000);
-    ms = number % 1000;
   } else if (unit === 'mcs' || unit === 'microseconds' || !unit) {
     s = Math.floor(number / 1000000);
-    ms = Math.floor((number % 1000000) / 1000);
     fullMcs = number -  s * 1000000;
 
   } else {

@@ -15,6 +15,8 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "@typescript-eslint/no-loss-of-precision": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -87,6 +89,9 @@
         "plugin:@angular-eslint/template/accessibility"
       ],
       "rules": {
+        "@angular-eslint/template/click-events-have-key-events": "off",
+        "@angular-eslint/template/interactive-supports-focus": "off",
+        "@angular-eslint/template/mouse-events-have-key-events": "off"
       }
     }
   ]

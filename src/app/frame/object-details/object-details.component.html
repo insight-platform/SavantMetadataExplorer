@@ -40,13 +40,13 @@
               <pre [innerHTML]="element.state === 'updated' ? getJsonDiff(element.oldValue, element.value) : getJson(element.value)"></pre>
             </div>
           </ng-template>
-          <mi-element-popover [popoverTemplate]="valuesPopover">
+          <sf-element-popover [popoverTemplate]="valuesPopover">
             <ul class="no-bullets"
                 [class.is-updated]="element.state === 'updated'"
                 [class.is-new]="element.state === 'new'">
               <li *ngFor="let str of getElementValueAsArray(element.value)">{{ str }}</li>
             </ul>
-          </mi-element-popover>
+          </sf-element-popover>
         </td>
       </ng-container>
 
@@ -94,7 +94,7 @@
               <pre [innerHTML]="getJson(element.values)"></pre>
             </div>
           </ng-template>
-          <mi-element-popover [popoverTemplate]="valuesPopover"> ... </mi-element-popover>
+          <sf-element-popover [popoverTemplate]="valuesPopover"> ... </sf-element-popover>
         </td>
       </ng-container>
 
@@ -103,7 +103,7 @@
         <td mat-cell *matCellDef="let element" [attr.colspan]="displayedAttributeColumns.length">
           <div class="example-element-detail"
                [class.expanded]="expandedElement === element"
-               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+               [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'">
             <b>Values</b>
             <table mat-table [dataSource]="element.values" class="attribute-table">
               <!-- Index Column -->
@@ -125,11 +125,11 @@
                       <pre [innerHTML]="getJson(innerElement.value)"></pre>
                     </div>
                   </ng-template>
-                  <mi-element-popover [popoverTemplate]="valuesPopover">
+                  <sf-element-popover [popoverTemplate]="valuesPopover">
                     <ul class="no-bullets">
                       <li *ngFor="let str of getElementValueAsArray(innerElement.value)">{{ str }}</li>
                     </ul>
-                  </mi-element-popover>
+                  </sf-element-popover>
                 </td>
               </ng-container>
 

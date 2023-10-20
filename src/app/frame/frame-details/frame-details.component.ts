@@ -5,13 +5,13 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { getArrayValue, getValue, IAttributes, IFrameJson } from '../../api/models/span';
-import { cloneDeep, isNil, isObject, uniq } from 'lodash';
+import { getArrayValue, getValue, IAttributes, IFrameJson } from '../../api/models/model';
+import { cloneDeep, uniq } from 'lodash';
 import {
   getFrameDiff,
   getValueDiffAsString,
   getAttributesDifference,
-  getFrameDiffAsString1,
+  getFullFrameDiffAsString,
 } from '../../utils/get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { jsonColorPrint } from '../../utils/json-color-print';
@@ -69,7 +69,7 @@ export class FrameDetailsComponent implements OnChanges {
         const changes = getFrameDiff(this.frame, this.comparedFrame, ['objects', 'attributes']);
         if (changes.adds.length) {
           const newData = changes.adds
-            // @ts-ignore
+            // eslint-disable-next-line
             .map(change => ({key: change.key, value: change.value, state: 'new'}));
           this.frameDataSource = [...cloneDeep(this.frameData), ...newData];
         }
@@ -88,7 +88,7 @@ export class FrameDetailsComponent implements OnChanges {
         const attributeChanges = getAttributesDifference(this.frame.attributes, this.comparedFrame.attributes);
         if (attributeChanges.addedNamespaces) {
           attributeChanges.addedNamespaces.forEach(namespace => {
-            // @ts-ignore
+            // eslint-disable-next-line
             this.attributeDataSources.push({
               namespace,
               state: 'new',
@@ -142,7 +142,7 @@ export class FrameDetailsComponent implements OnChanges {
   }
 
   getJsonDataDiff(frame, comparedFrame) {
-    return jsonColorPrint(getFrameDiffAsString1(frame, comparedFrame))
+    return jsonColorPrint(getFullFrameDiffAsString(frame, comparedFrame))
     // JSON.stringify(getFrameDiffAsString(frame, comparedFrame), null, 2);
   }
 }

@@ -1,4 +1,4 @@
-import { IFrameJson, IFrameJsonObject } from '../api/models/span';
+import { IFrameJson, IFrameJsonObject } from '../api/models/model';
 
 export interface INodeObject extends IFrameJsonObject {
   children: INodeObject | any;

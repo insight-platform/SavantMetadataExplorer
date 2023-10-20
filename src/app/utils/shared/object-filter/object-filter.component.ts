@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { isNil } from 'lodash';
 import { MatSelect } from '@angular/material/select';
@@ -26,12 +26,12 @@ export class ObjectFilterComponent implements OnChanges {
           this.isAllLabelsSelected[namespace] = this.labels
             .every(label => value.length && value?.find(_ => _.label === label && _.namespace === namespace))
         })
-        // @ts-ignore
+        // eslint-disable-next-line
         this.valueChange.emit(value);
       })
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (!this.namespaces || !this.namespaces.length) {
       this.namespaceControl.disable();
     } else {
@@ -54,7 +54,7 @@ export class ObjectFilterComponent implements OnChanges {
         this.labels.map(label => ({ namespace, label }))
       )
     } else {
-      // @ts-ignore
+      // eslint-disable-next-line
       const value = !isNil(this.namespaceControl.value) && this.namespaceControl.value.length ?
         this.namespaceControl.value.filter((v) => v.namespace !== namespace) : [];
       this.namespaceControl.setValue(value);

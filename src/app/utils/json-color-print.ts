@@ -1,23 +1,23 @@
-export const replacer = (match, pIndent, pKey, pVal) => {
-  const key = '<span class=json-key>';
-  const value = '<span class=json-value>';
+export const replacer = (match, indent, keySubStr, valueSubStr) => {
+  const plainKey = '<span class=json-key>';
+  const plainValue = '<span class=json-value>';
   const addKey = '<span class=green>';
   const removeKey = '<span class=red>';
 
-  let r = pIndent || '';
-  if (pKey) {
-    const k = pKey.replace(/[":]/g, '');
-    const prefix = k.indexOf('+') === 0 ? addKey :
-      k.indexOf('-') === 0 ? removeKey : key;
-    r = r + prefix + k + '</span>: ';
+  let result = indent || '';
+  if (keySubStr) {
+    const key = keySubStr.replace(/[":]/g, '');
+    const prefix = key.indexOf('+') === 0 ? addKey :
+      key.indexOf('-') === 0 ? removeKey : plainKey;
+    result = result + prefix + key + '</span>: ';
   }
-  if (pVal) {
-    const v = pVal.replace(/[":]/g, '');
-    const prefix = v.indexOf('+') === 0 ? addKey :
-      v.indexOf('-') === 0 ? removeKey : value;
-    r = r + prefix + v + '</span>';
+  if (valueSubStr) {
+    const value = valueSubStr.replace(/[":]/g, '');
+    const prefix = value.indexOf('+') === 0 ? addKey :
+      value.indexOf('-') === 0 ? removeKey : plainValue;
+    result = result + prefix + value + '</span>';
   }
-  return r;
+  return result;
 };
 export const jsonColorPrint = (obj) => {
   const jsonLine = /^( *)("[\w\s+-]+": )?("[^"]*"|[\w.+-]*)?/mg;

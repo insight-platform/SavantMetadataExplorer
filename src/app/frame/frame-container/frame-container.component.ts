@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { IFrameJson } from '../../api/models/span';
+import { IFrameJson } from '../../api/models/model';
 import { INodeObject } from '../node-object';
 import { isNil } from 'lodash';
 

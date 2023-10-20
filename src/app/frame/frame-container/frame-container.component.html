@@ -3,9 +3,13 @@
     <div class="side-content">
       <div *ngIf="selectedNode" class="title">
         <div *ngIf="selectedNode.isFrame; else objectTemplate">
-          <div>FRAME</div>
+          <div><span *ngIf="comparedFrame; else frameTitle">COMPARE FRAMES</span>
+            <ng-template #frameTitle>FRAME</ng-template></div>
         </div>
-        <ng-template #objectTemplate>Object</ng-template>
+        <ng-template #objectTemplate>
+          <span *ngIf="comparedFrame; else frameTitle">COMPARE OBJECTS</span>
+          <ng-template #frameTitle>OBJECT</ng-template>
+        </ng-template>
         <button matTooltip="Close" mat-icon-button (click)="isExpanded = false">
           <mat-icon>chevron_right</mat-icon>
         </button>
@@ -24,6 +28,6 @@
     <sf-frame-tree [frame]="frame"
                    [comparedFrame]="comparedFrame"
                    [objectFilter]="objectFilter"
-                   (onNodeSelected)="displaySide($event)"></sf-frame-tree>
+                   (nodeSelected)="displaySide($event)"></sf-frame-tree>
   </div>
 </div>

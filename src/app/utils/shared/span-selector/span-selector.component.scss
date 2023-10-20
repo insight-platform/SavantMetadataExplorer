@@ -1,0 +1,14 @@
+::ng-deep {
+  .mat-expansion-panel-body {
+    padding: 0 0 16px 24px !important;
+  }
+  .mat-expansion-panel-header[aria-disabled=true] {
+    color: inherit !important;
+  }
+  .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+    word-break: break-all;
+  }
+  .title-text {
+    margin-left: 5px;
+  }
+}

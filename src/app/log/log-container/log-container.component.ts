@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getLogValue, ILog, ISafeLog, ISpan, ISpanLog } from '../../api/models/span';
+import { getLogValue, ILogFilter, ISafeLog, ISpan, ISpanLog } from '../../api/models/model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { translateMicroSecondsToTimeString } from '../../utils/translate-seconds-to-time-string';
 
@@ -10,7 +10,7 @@ import { translateMicroSecondsToTimeString } from '../../utils/translate-seconds
 })
 export class LogContainerComponent implements OnChanges {
   @Input() spans: ISpan[] = [];
-  @Input() logFilter: { level: string[]; target: string[]; search: string } = { level: [], target: [], search: '' };
+  @Input() logFilter: ILogFilter = { level: [], target: [], search: '', spans: [] };
   safeLogs: ISafeLog[] = [];
 
   private _logLevels = ['Info', 'Warn', 'Debug', 'Error', 'Fatal', 'Critical', 'Warning', 'Trace'];
@@ -22,16 +22,20 @@ export class LogContainerComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
    if (('spans' in changes || 'logFilter' in changes) && this.spans) {
-     this.safeLogs = this.spans.reduce<ISpanLog[]>((res, span) => [
-       ...res,
-       ...span.logs
-         .filter(log =>
-           !(this.logFilter.level && this.logFilter.level.length) ||
-           log.fields.some(field => field.key === 'log.level' && this.logFilter.level.indexOf(field.value) !== -1))
-         .filter(log =>
-           !(this.logFilter.target && this.logFilter.target.length) ||
-           log.fields.some(field => field.key === 'log.target' && this.logFilter.target.indexOf(field.value) !== -1)),
-     ], [])
+     this.safeLogs = this.spans
+       .filter(span => !this.logFilter.spans.length || this.logFilter.spans.includes(span.spanID))
+       .reduce<ISpanLog[]>((res, span) => [
+           ...res,
+           ...span.logs
+             .filter(log =>
+               !(this.logFilter.level && this.logFilter.level.length) ||
+               log.fields.some(field => field.key === 'log.level' && this.logFilter.level.indexOf(field.value) !== -1))
+             .filter(log =>
+               !(this.logFilter.target && this.logFilter.target.length) ||
+               log.fields.some(field => field.key === 'log.target' && this.logFilter.target.indexOf(field.value) !== -1)),
+         ],
+         []
+       )
        .sort((l1, l2) => l1.timestamp - l2.timestamp)
        .map(log => ({
          timestamp: log.timestamp,

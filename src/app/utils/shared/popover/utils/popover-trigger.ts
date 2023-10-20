@@ -26,31 +26,31 @@ import {
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IMiPopoverPanel } from './popover-interfaces';
+import { IPopoverPanel } from './popover-interfaces';
 import {
-  MiPopoverPositionX,
-  MiPopoverPositionY,
-  MiPopoverTriggerEvent,
-  MiPopoverScrollStrategy,
+  PopoverPositionX,
+  PopoverPositionY,
+  PopoverTriggerEvent,
+  PopoverScrollStrategy,
 } from './popover-types';
-import { throwMiPopoverMissingError } from './popover-errors';
+import { throwPopoverMissingError } from './popover-errors';
 
 /**
- * This directive is intended to be used in conjunction with an mi-popover tag. It is
+ * This directive is intended to be used in conjunction with sf-popover tag. It is
  * responsible for toggling the display of the provided popover instance.
  */
 @Directive({
-  selector: '[miPopoverTrigger]',
-  exportAs: 'miPopoverTrigger',
+  selector: '[sfPopoverTrigger]',
+  exportAs: 'sfPopoverTrigger',
 })
-export class MiPopoverTriggerDirective implements AfterViewInit, OnChanges, OnDestroy {
+export class PopoverTriggerDirective implements AfterViewInit, OnChanges, OnDestroy {
   /** References the popover instance that the trigger is associated with. */
-  @Input('miPopoverTrigger') popover: IMiPopoverPanel;
-  @Input() popoverPosition: MiPopoverPositionY;
+  @Input('sfPopoverTrigger') popover: IPopoverPanel;
+  @Input() popoverPosition: PopoverPositionY;
   @Input() fixedPopoverPosition: [number, number];
-  @Input() arrowPosition: MiPopoverPositionX;
+  @Input() arrowPosition: PopoverPositionX;
   /** Popover trigger event */
-  @Input() triggerEvent: MiPopoverTriggerEvent;
+  @Input() triggerEvent: PopoverTriggerEvent;
   /** Event emitted when the associated popover is opened. */
   @Output() popoverOpened = new EventEmitter<void>();
   /** Event emitted when the associated popover is closed. */
@@ -266,7 +266,7 @@ export class MiPopoverTriggerDirective implements AfterViewInit, OnChanges, OnDe
 
   private _checkPopover() {
     if (!this.popover) {
-      throwMiPopoverMissingError();
+      throwPopoverMissingError();
     }
   }
 
@@ -297,7 +297,7 @@ export class MiPopoverTriggerDirective implements AfterViewInit, OnChanges, OnDe
     return overlayState;
   }
 
-  private _getOverlayScrollStrategy(strategy: MiPopoverScrollStrategy): ScrollStrategy {
+  private _getOverlayScrollStrategy(strategy: PopoverScrollStrategy): ScrollStrategy {
     switch (strategy) {
       case 'noop':
         return this._overlay.scrollStrategies.noop();
@@ -313,13 +313,13 @@ export class MiPopoverTriggerDirective implements AfterViewInit, OnChanges, OnDe
 
   private _subscribeToPositions(position: FlexibleConnectedPositionStrategy): void {
     this._positionSubscription = position.positionChanges.subscribe(change => {
-      const positionX: MiPopoverPositionX =
+      const positionX: PopoverPositionX =
         change.connectionPair.overlayX === 'start'
           ? 'after'
           : change.connectionPair.overlayX === 'end'
           ? 'before'
           : 'center';
-      const positionY: MiPopoverPositionY =
+      const positionY: PopoverPositionY =
         change.connectionPair.overlayY === 'top' ? 'below' : 'above';
 
       // required for ChangeDetectionStrategy.OnPush

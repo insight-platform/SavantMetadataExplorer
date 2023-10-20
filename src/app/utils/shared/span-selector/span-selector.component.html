@@ -3,8 +3,10 @@
   <mat-expansion-panel *ngFor="let span of spans" [disabled]="!span.children.length">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <mat-icon *ngIf="hasIcon(span)" matPrefix>cancel</mat-icon>
         <div class="title-text">{{ span.operationName }}</div>
+        <mat-icon *ngIf="hasIcon(span)"
+                  color="warn"
+                  class="material-symbols-outlined" matSuffix>error</mat-icon>
       </mat-panel-title>
       <mat-checkbox (click)="$event.stopPropagation()"
                     (change)="check($event.checked, span.spanID, spanFormGroup.get(span.spanID + '_group'))"
@@ -24,8 +26,10 @@
                            class="mat-elevation-z0">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <mat-icon *ngIf="hasIcon(span)" matPrefix>cancel</mat-icon>
             <div class="title-text">{{ span.operationName }}</div>
+            <mat-icon *ngIf="hasIcon(span)"
+                      color="warn"
+                      class="material-symbols-outlined" matSuffix>error</mat-icon>
           </mat-panel-title>
           <mat-checkbox (click)="$event.stopPropagation()"
                         (change)="check($event.checked, span.spanID, form.get(span.spanID + '_group'))"

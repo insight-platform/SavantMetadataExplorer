@@ -2,11 +2,15 @@ import { isNil } from 'lodash';
 import { AnsiUp } from 'ansi_up'
 import { SafeHtml } from '@angular/platform-browser';
 
+export interface IAttributeValue {
+  value: any;
+  confidence: number | null;
+}
 export interface IAttributes {
   name: string;
   namespace: string;
   is_persistent: boolean;
-  values: { value: any; confidence: number | null }[];
+  values: IAttributeValue[];
   [key: string]: any;
 }
 

@@ -21,7 +21,8 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "allowedCommonJsDependencies": [
-              "lodash"
+              "lodash",
+              "json-diff-ts"
             ],
             "polyfills": [
               "zone.js"

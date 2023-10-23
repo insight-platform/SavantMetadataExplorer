@@ -185,7 +185,22 @@ export const data: ITrace = {
                 track_id: null,
               },
               {
-                attributes: [],
+                attributes: [
+                  {
+                    hint: 'PlatformConfig',
+                    is_persistent: true,
+                    name: 'CamMode',
+                    namespace: 'Configuration',
+                    values: [
+                      {
+                        confidence: null,
+                        value: {
+                          String: 'fisheye'
+                        }
+                      },
+                    ]
+                  }
+                ],
                 bbox: {
                   angle: null,
                   height: 10,

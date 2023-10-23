@@ -1,128 +1,52 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getArrayValue, IAttributes, IFrameJson, IFrameJsonObject } from '../../api/models/model';
-import { cloneDeep, uniq } from 'lodash';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { IFrameJson, IFrameJsonObject } from '../../api/models/model';
 import {
-  getAttributesDifference,
-  getFrameObjectDiff, getFullFrameObjectDiffAsString,
-  getValueDiffAsString,
+  getFullFrameObjectDiffAsString,
 } from '../../utils/get-difference';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { jsonColorPrint } from '../../utils/json-color-print';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'sf-object-details',
   templateUrl: './object-details.component.html',
   styleUrls: ['./object-details.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
 })
 export class ObjectDetailsComponent implements OnChanges {
-  @Input() frameObject: IFrameJsonObject
-  @Input() comparedFrame: IFrameJson | undefined
+  @Input() frameObject: IFrameJsonObject;
+  @Input() comparedFrame: IFrameJson | undefined;
+  comparedFrameObject: IFrameJsonObject | undefined;
   showJson = false;
-  expandedElement: IAttributes | null;
-  frameObjectDataSource: { key: string; value: any; state?: string; oldValue?: any }[] = [];
-  frameObjectData: any[] = [];
-  attributeDataSources: any[] = [];
-  attributeNamespaces: string[] = [];
 
-  displayedFrameColumns = ['key', 'value'];
-  displayedAttributeColumns = ['name', 'hint', 'values', 'is_persistent'];
-
-  constructor(private _cdr: ChangeDetectorRef) {
+  constructor(private _clipboard: Clipboard,
+              private _snackBar: MatSnackBar) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ('frameObject' in changes && this.frameObject || 'comparedFrame' in changes && this.frameObject) {
-      this.frameObjectData = Object.keys(this.frameObject)
-        .filter(key => !['attributes', 'children'].includes(key))
-        .map(key => ({key, value: this.frameObject[key]}));
-      this.attributeNamespaces = uniq(this.frameObject.attributes.map(attribute => attribute.namespace));
-      this.attributeDataSources = this.attributeNamespaces.map((namespace) => ({
-        namespace,
-        attributes: this.frameObject.attributes
-          .filter(attribute => attribute.namespace === namespace),
-        // .map(attribute => Object.keys(attribute).map(key => ({ key, value: attribute[key] }))),
-      }))
-      this.frameObjectDataSource = cloneDeep(this.frameObjectData);
-
-      if (this.comparedFrame) {
-        const comparedFrameObject = this.comparedFrame.objects.find(object => object.id === this.frameObject.id);
-        if (comparedFrameObject) {
-          const changes = getFrameObjectDiff(this.frameObject, comparedFrameObject, ['attributes', 'children']);
-          if (changes.adds.length) {
-            const newData = changes.adds
-              // eslint-disable-next-line
-              .map(change => ({key: change.key, value: change.value, state: 'new'}));
-            this.frameObjectDataSource = [...cloneDeep(this.frameObjectData), ...newData];
-          }
-          if (changes.updates.length) {
-            changes.updates
-              .forEach(change => {
-                const frameDS = this.frameObjectDataSource.find(frameDS => frameDS.key === change.key);
-                if (frameDS) {
-                  frameDS.value = change.value;
-                  frameDS.oldValue = change.oldValue;
-                  frameDS.state = 'updated';
-                }
-              })
-          }
-
-          const attributeChanges = getAttributesDifference(this.frameObject.attributes, comparedFrameObject.attributes);
-          if (attributeChanges.addedNamespaces) {
-            attributeChanges.addedNamespaces.forEach(namespace => {
-              // eslint-disable-next-line
-              this.attributeDataSources.push({
-                namespace,
-                state: 'new',
-                // @ts-ignore
-                attributes: this.comparedFrame.attributes.filter(attribute => attribute.namespace === namespace),
-              })
-            });
-          }
-          if (attributeChanges.removedNamespaces) {
-            attributeChanges.removedNamespaces.forEach(namespace => {
-              this.attributeDataSources.find(dataSource => dataSource.namespace === namespace).state = 'removed';
-            })
-          }
-          if (attributeChanges.updatedNamespaces) {
-            attributeChanges.updatedNamespaces.forEach(namespace => {
-              const attributeDS = this.attributeDataSources.find(dataSource => dataSource.namespace === namespace);
-              attributeDS.state = 'updated';
-            })
-          }
-        }
-      }
-      this._cdr.detectChanges();
+    if (this.comparedFrame) {
+      this.comparedFrameObject = this.comparedFrame.objects.find(object => object.id === this.frameObject.id);
+    } else {
+      this.comparedFrameObject = undefined;
     }
+  }
+
+  copyFrameObject() {
+    this._clipboard.copy(JSON.stringify(this.frameObject));
+    this._snackBar.open('Data copied',
+      'Close', { duration: 5000 });
   }
 
   getJsonData() {
-    return jsonColorPrint(this.frameObject);
+    const frameObject = cloneDeep(this.frameObject);
+    delete frameObject['children'];
+    return jsonColorPrint(frameObject);
   }
 
   getJsonDataDiff() {
-    if (this.comparedFrame) {
-      const comparedFrameObject = this.comparedFrame.objects.find(object => object.id === this.frameObject.id);
-      return comparedFrameObject && jsonColorPrint(getFullFrameObjectDiffAsString(this.frameObject, comparedFrameObject, ['children']))
+    if (this.comparedFrameObject) {
+      return jsonColorPrint(getFullFrameObjectDiffAsString(this.frameObject, this.comparedFrameObject, ['children']))
     }
     return '';
-  }
-
-  getElementValueAsArray(value: any): string[] {
-    return getArrayValue(value);
-  }
-
-  getJsonDiff(value1: any, value2: any) {
-    return jsonColorPrint(getValueDiffAsString(value1, value2));
-  }
-
-  getJson(value: any) {
-    return jsonColorPrint(value);
   }
 }

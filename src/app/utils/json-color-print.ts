@@ -12,7 +12,7 @@ export const replacer = (match, indent, keySubStr, valueSubStr) => {
     result = result + prefix + key + '</span>: ';
   }
   if (valueSubStr) {
-    const value = valueSubStr.replace(/[":]/g, '');
+    const value = valueSubStr.replace(/["]/g, '');
     const prefix = value.indexOf('+') === 0 ? addKey :
       value.indexOf('-') === 0 ? removeKey : plainValue;
     result = result + prefix + value + '</span>';

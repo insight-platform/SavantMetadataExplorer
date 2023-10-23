@@ -29,4 +29,9 @@ export class FrameContainerComponent implements OnChanges {
     this.isExpanded = !isNil(node);
     this.selectedNode = node;
   }
+
+  closeSide() {
+    this.isExpanded = false;
+    this.selectedNode = undefined;
+  }
 }

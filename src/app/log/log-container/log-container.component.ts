@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getLogValue, ILogFilter, ISafeLog, ISpan, ISpanLog } from '../../api/models/model';
+import { getLogValue, ILogFilter, ISafeLog, ISpan, ISpanLog } from 'sf';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { translateMicroSecondsToTimeString } from '../../utils/translate-seconds-to-time-string';
 

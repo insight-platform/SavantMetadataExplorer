@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getArrayValue, IFrameJson, IFrameJsonObject } from '../../../api/models/model';
+import { getArrayValue, IFrameJson, IFrameJsonObject } from 'sf';
 import { jsonColorPrint } from '../../json-color-print';
 import { getDataDiff, getValueDiffAsString } from '../../get-difference';
 import { cloneDeep } from 'lodash';

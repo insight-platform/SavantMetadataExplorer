@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ISpan } from '../../api/models/model';
+import { ISpan } from 'sf';
 
 @Component({
   selector: 'sf-span-list',

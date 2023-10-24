@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { IFrameJson } from '../../api/models/model';
 import { INodeObject } from '../node-object';
 import { isNil } from 'lodash';
+import { IFrameJson } from 'sf';
 
 @Component({
   selector: 'sf-frame-container',

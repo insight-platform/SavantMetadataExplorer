@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType } from '../../api/models/model';
+import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType } from 'sf';
 import { isNil, uniq } from 'lodash';
 import { FormControl } from '@angular/forms';
 import { TraceService } from '../../api/services/trace.service';

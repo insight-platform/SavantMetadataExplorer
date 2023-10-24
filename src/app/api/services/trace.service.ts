@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IData, ITrace } from '../models/model';
 import { catchError, map, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { data } from '../models/data';
+import { IData, ITrace } from 'sf';
 
 @Injectable({
   providedIn: 'root',

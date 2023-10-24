@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { IFrameJson, IFrameJsonObject } from '../../api/models/model';
+import { Component, Input, OnChanges } from '@angular/core';
+import { IFrameJson, IFrameJsonObject } from 'sf';
 import {
   getFullFrameObjectDiffAsString,
 } from '../../utils/get-difference';
@@ -23,7 +23,7 @@ export class ObjectDetailsComponent implements OnChanges {
               private _snackBar: MatSnackBar) {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.comparedFrame) {
       this.comparedFrameObject = this.comparedFrame.objects.find(object => object.id === this.frameObject.id);
     } else {

@@ -1,4 +1,4 @@
-import { getValue, IAttributes, IAttributeValue, IFrameJson, IFrameJsonObject } from '../api/models/model';
+import { getValue, IAttributes, IAttributeValue, IFrameJson, IFrameJsonObject } from 'sf';
 import { cloneDeep, isEqual, isNil, uniq } from 'lodash';
 import { diff, Operation } from 'json-diff-ts'
 import { IChange } from 'json-diff-ts/lib/jsonDiff';

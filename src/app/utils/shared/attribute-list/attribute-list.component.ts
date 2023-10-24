@@ -1,13 +1,11 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { getArrayValue, IAttributes } from '../../../api/models/model';
+import { getArrayValue, IAttributes } from 'sf';
 import { uniq } from 'lodash';
 import { jsonColorPrint } from '../../json-color-print';
 import {
-  getAttributesDiff,
   getAttributesDifference,
   getAttributeValuesDiff,
   getValueDiff,
-  getValueDiffAsString,
 } from '../../get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 

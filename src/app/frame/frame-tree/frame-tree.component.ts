@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { IFrameJson, IFrameJsonObject } from '../../api/models/model';
+import { IFrameJson, IFrameJsonObject } from 'sf';
 import { isNil, uniq } from 'lodash';
 import { HierarchyNode } from 'd3';
 import * as d3 from 'd3';

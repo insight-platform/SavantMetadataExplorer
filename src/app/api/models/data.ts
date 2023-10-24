@@ -1,4 +1,4 @@
-import { ITrace } from './model';
+import { ITrace } from 'sf';
 
 export const data: ITrace = {
   traceID: 'cb8b182cff2f87b73b5d1fcbe0bb846d',

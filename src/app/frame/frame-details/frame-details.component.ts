@@ -2,7 +2,7 @@ import {
   Component,
   Input,
 } from '@angular/core';
-import { IFrameJson } from '../../api/models/model';
+import { IFrameJson } from 'sf';
 import {
   getFullFrameDiffAsString,
 } from '../../utils/get-difference';

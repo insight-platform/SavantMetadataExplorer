@@ -5,7 +5,7 @@ import { getDataDiff, getValueDiffAsString } from '../../get-difference';
 import { cloneDeep } from 'lodash';
 
 @Component({
-  selector: 'sf-property-list',
+  selector: 'sf-lib-property-list',
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.scss']
 })

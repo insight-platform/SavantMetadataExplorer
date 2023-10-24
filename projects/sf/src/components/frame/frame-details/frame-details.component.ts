@@ -8,7 +8,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { getFullFrameDiffAsString, jsonColorPrint } from '../../../utils';
 
 @Component({
-  selector: 'sf-frame-details',
+  selector: 'sf-lib-frame-details',
   templateUrl: './frame-details.component.html',
   styleUrls: ['./frame-details.component.scss'],
 })

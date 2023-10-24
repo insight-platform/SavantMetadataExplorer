@@ -34,19 +34,19 @@
       </mat-button-toggle-group>
     </div>
     <div *ngIf="selectedView === 'span'" class="content vertical">
-      <sf-object-filter [labels]="labels"
+      <sf-lib-object-filter [labels]="labels"
                         [namespaces]="namespaces"
-                        (valueChange)="setObjectFilter($event)"></sf-object-filter>
-      <sf-span-list [spans]="spansWithFrame"
+                        (valueChange)="setObjectFilter($event)"></sf-lib-object-filter>
+      <sf-lib-span-list [spans]="spansWithFrame"
                     [selectedIndex]="selectedFrameIndex"
                     [selectedCompareIndex]="selectedComparedFrameIndex"
                     (compareSpan)="setComparedFrame($event)"
-                    (selectedSpan)="setFrame($event)"></sf-span-list>
+                    (selectedSpan)="setFrame($event)"></sf-lib-span-list>
     </div>
     <div *ngIf="selectedView === 'log'" class="content vertical">
-      <sf-log-filter [targets]="logTargets"
+      <sf-lib-log-filter [targets]="logTargets"
                      [spans]="spanTree"
-                     (valueChange)="setLogFilter($event)"></sf-log-filter>
+                     (valueChange)="setLogFilter($event)"></sf-lib-log-filter>
     </div>
   </div>
   <div class="main">
@@ -66,13 +66,13 @@
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>
-      <sf-frame-container [frame]="frame"
+      <sf-lib-frame-container [frame]="frame"
                           [colorPalette]="colorPalette"
                           [objectFilter]="objectFilter"
-                          [comparedFrame]="comparedFrame"></sf-frame-container>
+                          [comparedFrame]="comparedFrame"></sf-lib-frame-container>
     </ng-container>
     <ng-container *ngIf="selectedView === 'log'">
-      <sf-log-container [spans]="spansWithLog" [logFilter]="logFilter"></sf-log-container>
+      <sf-lib-log-container [spans]="spansWithLog" [logFilter]="logFilter"></sf-lib-log-container>
     </ng-container>
   </div>
 </div>

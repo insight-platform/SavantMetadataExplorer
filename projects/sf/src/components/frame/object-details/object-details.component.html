@@ -1,5 +1,5 @@
-<sf-side-actions (copyData)="copyFrameObject()"
-                 (showJson)="showJson = $event"></sf-side-actions>
+<sf-lib-side-actions (copyData)="copyFrameObject()"
+                 (showJson)="showJson = $event"></sf-lib-side-actions>
 
 <ng-container *ngIf="showJson; else tableView">
   <div class="json">
@@ -15,8 +15,8 @@
     <mat-expansion-panel-header>
       Object details
     </mat-expansion-panel-header>
-    <sf-property-list [data]="frameObject" [comparedData]="comparedFrameObject"></sf-property-list>
+    <sf-lib-property-list [data]="frameObject" [comparedData]="comparedFrameObject"></sf-lib-property-list>
   </mat-expansion-panel>
 
-  <sf-attribute-list [attributes]="frameObject.attributes" [comparedAttributes]="comparedFrameObject?.attributes"></sf-attribute-list>
+  <sf-lib-attribute-list [attributes]="frameObject.attributes" [comparedAttributes]="comparedFrameObject?.attributes"></sf-lib-attribute-list>
 </ng-template>

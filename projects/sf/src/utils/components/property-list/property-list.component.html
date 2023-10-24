@@ -14,13 +14,13 @@
           <pre [innerHTML]="element.state === 'updated' ? getJsonDiff(element.oldValue, element.value) : getJson(element.value)"></pre>
         </div>
       </ng-template>
-      <sf-element-popover [popoverTemplate]="valuesPopover">
+      <sf-lib-element-popover [popoverTemplate]="valuesPopover">
         <ul class="no-bullets"
             [class.is-updated]="element.state === 'updated'"
             [class.is-new]="element.state === 'new'">
           <li *ngFor="let str of getElementValueAsArray(element.value)">{{ str }}</li>
         </ul>
-      </sf-element-popover>
+      </sf-lib-element-popover>
     </td>
   </ng-container>
 

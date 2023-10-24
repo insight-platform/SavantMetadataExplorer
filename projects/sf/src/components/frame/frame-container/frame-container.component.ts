@@ -5,7 +5,7 @@ import { IFrameJson } from '../../../models/model';
 import { Palette } from '../../../utils';
 
 @Component({
-  selector: 'sf-frame-container',
+  selector: 'sf-lib-frame-container',
   templateUrl: './frame-container.component.html',
   styleUrls: ['./frame-container.component.scss'],
 })

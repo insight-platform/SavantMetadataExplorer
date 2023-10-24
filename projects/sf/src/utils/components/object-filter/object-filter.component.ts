@@ -4,7 +4,7 @@ import { isNil } from 'lodash';
 import { MatSelect } from '@angular/material/select';
 
 @Component({
-  selector: 'sf-object-filter',
+  selector: 'sf-lib-object-filter',
   templateUrl: './object-filter.component.html',
   styleUrls: ['./object-filter.component.scss']
 })

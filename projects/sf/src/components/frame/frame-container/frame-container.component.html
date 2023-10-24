@@ -16,19 +16,19 @@
       </div>
       <div class="content" *ngIf="selectedNode">
         <ng-container *ngIf="selectedNode.isFrame && selectedNode.frameValue; else objectTemplate">
-          <sf-frame-details [frame]="selectedNode.frameValue" [comparedFrame]="comparedFrame"></sf-frame-details>
+          <sf-lib-frame-details [frame]="selectedNode.frameValue" [comparedFrame]="comparedFrame"></sf-lib-frame-details>
         </ng-container>
         <ng-template #objectTemplate>
-          <sf-object-details [frameObject]="selectedNode" [comparedFrame]="comparedFrame"></sf-object-details>
+          <sf-lib-object-details [frameObject]="selectedNode" [comparedFrame]="comparedFrame"></sf-lib-object-details>
         </ng-template>
       </div>
     </div>
   </div>
   <div class="main">
-    <sf-frame-tree [frame]="frame"
+    <sf-lib-frame-tree [frame]="frame"
                    [comparedFrame]="comparedFrame"
                    [objectFilter]="objectFilter"
                    [colorPalette]="colorPalette"
-                   (nodeSelected)="displaySide($event)"></sf-frame-tree>
+                   (nodeSelected)="displaySide($event)"></sf-lib-frame-tree>
   </div>
 </div>

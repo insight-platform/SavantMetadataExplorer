@@ -13,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "sf-lib",
+            "prefix": "sfLib",
             "style": "camelCase"
           }
         ],

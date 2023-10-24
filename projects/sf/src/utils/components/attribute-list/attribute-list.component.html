@@ -38,7 +38,7 @@
             <pre [innerHTML]="namespace.updatedAttributes[i] ? getJsonDiff(element.values, namespace.updatedAttributes[i].values) : getJson(element.values)"></pre>
           </div>
         </ng-template>
-        <sf-element-popover [popoverTemplate]="valuesPopover"> ... </sf-element-popover>
+        <sf-lib-element-popover [popoverTemplate]="valuesPopover"> ... </sf-lib-element-popover>
       </td>
     </ng-container>
 
@@ -69,11 +69,11 @@
                     <pre [innerHTML]="getJson(innerElement.value)"></pre>
                   </div>
                 </ng-template>
-                <sf-element-popover [popoverTemplate]="valuesPopover">
+                <sf-lib-element-popover [popoverTemplate]="valuesPopover">
                   <ul class="no-bullets">
                     <li *ngFor="let str of getElementValueAsArray(innerElement.value)">{{ str }}</li>
                   </ul>
-                </sf-element-popover>
+                </sf-lib-element-popover>
               </td>
             </ng-container>
 

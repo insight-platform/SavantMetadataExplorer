@@ -13,7 +13,7 @@ import {
 } from '../../../utils';
 
 @Component({
-  selector: 'sf-frame-tree',
+  selector: 'sf-lib-frame-tree',
   templateUrl: './frame-tree.component.html',
   styleUrls: ['./frame-tree.component.scss'],
 })

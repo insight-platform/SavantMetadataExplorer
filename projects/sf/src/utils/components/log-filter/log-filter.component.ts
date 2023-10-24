@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ILogFilter, ITreeSpan } from '../../../models/model';
 
 @Component({
-  selector: 'sf-log-filter',
+  selector: 'sf-lib-log-filter',
   templateUrl: './log-filter.component.html',
   styleUrls: ['./log-filter.component.scss']
 })

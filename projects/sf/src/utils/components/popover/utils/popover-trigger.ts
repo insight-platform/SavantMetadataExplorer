@@ -40,12 +40,12 @@ import { throwPopoverMissingError } from './popover-errors';
  * responsible for toggling the display of the provided popover instance.
  */
 @Directive({
-  selector: '[sfPopoverTrigger]',
+  selector: '[sfLibPopoverTrigger]',
   exportAs: 'sfPopoverTrigger',
 })
 export class PopoverTriggerDirective implements AfterViewInit, OnChanges, OnDestroy {
   /** References the popover instance that the trigger is associated with. */
-  @Input('sfPopoverTrigger') popover: IPopoverPanel;
+  @Input('sfLibPopoverTrigger') popover: IPopoverPanel;
   @Input() popoverPosition: PopoverPositionY;
   @Input() fixedPopoverPosition: [number, number];
   @Input() arrowPosition: PopoverPositionX;

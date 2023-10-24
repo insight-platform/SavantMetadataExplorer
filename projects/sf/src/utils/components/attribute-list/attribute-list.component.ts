@@ -10,7 +10,7 @@ import {
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'sf-attribute-list',
+  selector: 'sf-lib-attribute-list',
   templateUrl: './attribute-list.component.html',
   styleUrls: ['./attribute-list.component.scss'],
   animations: [

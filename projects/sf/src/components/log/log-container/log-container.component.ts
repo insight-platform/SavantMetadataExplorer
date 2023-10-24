@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { translateMicroSecondsToTimeString } from '../../../utils';
 
 @Component({
-  selector: 'sf-log-container',
+  selector: 'sf-lib-log-container',
   templateUrl: './log-container.component.html',
   styleUrls: ['./log-container.component.scss']
 })

@@ -3,7 +3,7 @@ import { ITreeSpan } from '../../../models/model';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'sf-span-selector',
+  selector: 'sf-lib-span-selector',
   templateUrl: './span-selector.component.html',
   styleUrls: ['./span-selector.component.scss'],
   providers: [

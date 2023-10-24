@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 import { getFullFrameObjectDiffAsString, jsonColorPrint } from '../../../utils';
 
 @Component({
-  selector: 'sf-object-details',
+  selector: 'sf-lib-object-details',
   templateUrl: './object-details.component.html',
   styleUrls: ['./object-details.component.scss'],
 })

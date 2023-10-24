@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'sf-side-actions',
+  selector: 'sf-lib-side-actions',
   templateUrl: './side-actions.component.html',
   styleUrls: ['./side-actions.component.scss']
 })

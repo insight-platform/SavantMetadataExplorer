@@ -27,13 +27,13 @@ import { IPopoverPanel } from './popover-interfaces';
 import { transformPopover } from './popover-animations';
 
 @Component({
-  selector: 'sf-popover',
+  selector: 'sf-lib-popover',
   templateUrl: './popover.html',
   styleUrls: ['./popover.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   animations: [transformPopover],
-  exportAs: 'sf-popover',
+  exportAs: 'sf-lib-popover',
 })
 export class PopoverComponent implements IPopoverPanel, OnDestroy {
   /** Popover close on container click */

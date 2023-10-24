@@ -3,6 +3,5 @@
  */
 export * from './models/model';
 
-export * from './lib/sf.service';
-export * from './lib/sf.component';
-export * from './lib/sf.module';
+export * from './utils';
+export * from './components';

@@ -1,0 +1,58 @@
+.root-page {
+  display: flex;
+  flex-direction: row-reverse;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  top: 50px;
+  overflow: auto;
+}
+.side {
+  right: -550px; // 350px;
+  width: 550px;
+  background-color: #fbfbfb;
+  // padding-right: 15px;
+  transition: right 500ms ease-in;
+  &.expanded {
+    right: 0;
+  }
+  border-left: 2px solid #ddd;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 999;
+  overflow: auto;
+}
+.side-content {
+  padding: 10px;
+}
+.content {
+  // padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+.title {
+  // padding-left: 40px;
+  display: flex;
+  align-items: center;
+}
+.main {
+  padding-top: 8px;
+  padding-left: 8px;
+  display: flex;
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+//.wrapper {
+//  width: 100%;
+//  overflow: auto;
+//}
+//#treeChart {
+//  // width: 100%;
+//  overflow: auto;
+//}

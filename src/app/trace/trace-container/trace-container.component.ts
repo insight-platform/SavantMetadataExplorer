@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType } from 'sf';
+import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType, Palette } from 'sf';
 import { isNil, uniq } from 'lodash';
 import { FormControl } from '@angular/forms';
 import { TraceService } from '../../api/services/trace.service';
@@ -11,6 +11,7 @@ import { TraceService } from '../../api/services/trace.service';
 })
 export class TraceContainerComponent {
   traceId = '566293635d0eebfa891701d5c4cc69f8';
+  colorPalette = Palette.amber;
   traceIdFormControl = new FormControl<string>('', {nonNullable: true});
   spansWithFrame: ISpan[] = [];
   spansWithLog: ISpan[] = [];

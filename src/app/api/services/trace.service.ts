@@ -18,7 +18,7 @@ export class TraceService {
   get(id: string): Observable<ITrace> {
     return this.httpClient.get<IData>('/api/traces/' + id)
       .pipe(
-        map((d) => this._getMockData()), // d.data[0]),
+        map((d) => d.data[0]),
         catchError((data) => {
           if (data.error && data.error.errors) {
             data.error.errors.forEach(error => {
@@ -34,7 +34,7 @@ export class TraceService {
       );
   }
 
-  private _getMockData() {
-    return data;
+  getMockData() {
+    return of(data);
   }
 }

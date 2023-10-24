@@ -1,0 +1,16 @@
+<div class="actions">
+  <button mat-icon-button
+          matTooltip="Show data as table"
+          (click)="showJson.emit(false); isJson = false;" [color]="isJson? 'basic' : 'primary'">
+    <mat-icon class="material-symbols-outlined">lists</mat-icon>
+  </button>
+  <button mat-icon-button
+          matTooltip="Show data as JSON"
+          (click)="showJson.emit(true); isJson = true" [color]="!isJson? 'basic' : 'primary'">
+    <mat-icon class="material-symbols-outlined">description</mat-icon>
+  </button>
+  <button mat-icon-button matTooltip="Copy data as JSON"
+          (click)="copyData.emit()">
+    <mat-icon>content_copy</mat-icon>
+  </button>
+</div>

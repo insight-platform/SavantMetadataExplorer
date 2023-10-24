@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { IData, ITrace } from '../models/model';
 import { catchError, map, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { data } from '../models/data';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class TraceService {
   get(id: string): Observable<ITrace> {
     return this.httpClient.get<IData>('/api/traces/' + id)
       .pipe(
-        map((data) => data.data[0]),
+        map((d) => d.data[0]),
         catchError((data) => {
           if (data.error && data.error.errors) {
             data.error.errors.forEach(error => {

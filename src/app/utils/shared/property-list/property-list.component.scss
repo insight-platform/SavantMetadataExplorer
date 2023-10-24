@@ -1,0 +1,49 @@
+.main-table {
+  margin-bottom: 15px;
+}
+::ng-deep {
+
+  .json-key {
+    color: #005dc8;
+  }
+
+  .green {
+    color: #090;
+  }
+
+  .red {
+    color: #e85858;
+  }
+}
+.json-value {
+  display: block;
+  max-height: 300px;
+  width: 350px;
+  overflow: auto;
+  background-color: #cccccc30;
+  margin: 4px;
+}
+.json {
+  display: block;
+  overflow: auto;
+  background-color: #cccccc30;
+  margin: 4px;
+}
+.field-key {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.is-new {
+  border: 2px solid #090;
+}
+.is-updated {
+  border: 2px solid #0F7BF8;
+}
+.is-removed {
+  border: 2px solid #e85858;
+}
+ul.no-bullets {
+  list-style-type: none;
+  padding: 5px;
+  margin: 0;
+}

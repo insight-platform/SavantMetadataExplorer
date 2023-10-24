@@ -10,7 +10,7 @@
           <span *ngIf="comparedFrame; else frameTitle">COMPARE OBJECTS</span>
           <ng-template #frameTitle>OBJECT</ng-template>
         </ng-template>
-        <button matTooltip="Close" mat-icon-button (click)="isExpanded = false">
+        <button matTooltip="Close" mat-icon-button (click)="closeSide()">
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>

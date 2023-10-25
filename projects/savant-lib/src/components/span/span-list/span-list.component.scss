@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :host {
   // padding: 0 8px;
   display: flex;
@@ -15,4 +17,7 @@
 .actions {
   width: 100px;
   display: flex;
+}
+.selected {
+  color: mat.get-color-from-palette(mat.$deep-purple-palette, 500);
 }

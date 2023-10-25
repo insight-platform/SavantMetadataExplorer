@@ -1,12 +1,14 @@
 <div class="actions">
   <button mat-icon-button
           matTooltip="Show data as table"
-          (click)="showJson.emit(false); isJson = false;" [color]="isJson? 'basic' : 'primary'">
+          (click)="showJson.emit(false); isJson = false;"
+          [ngClass]="{ 'selected': !isJson }">
     <mat-icon class="material-symbols-outlined">lists</mat-icon>
   </button>
   <button mat-icon-button
           matTooltip="Show data as JSON"
-          (click)="showJson.emit(true); isJson = true" [color]="!isJson? 'basic' : 'primary'">
+          (click)="showJson.emit(true); isJson = true"
+          [ngClass]="{ 'selected': isJson }">
     <mat-icon class="material-symbols-outlined">description</mat-icon>
   </button>
   <button mat-icon-button matTooltip="Copy data as JSON"

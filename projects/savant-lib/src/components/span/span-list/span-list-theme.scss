@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+
+@mixin span-list-theme($palette) {
+  .selected {
+    & > .mat-icon {
+      color: mat.get-color-from-palette($palette, 500) !important;
+    }
+  }
+}

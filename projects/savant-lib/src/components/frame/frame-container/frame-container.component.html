@@ -1,0 +1,34 @@
+<div class="root-page">
+  <div class="side" [ngClass]="{ 'expanded': isExpanded }">
+    <div class="side-content">
+      <div *ngIf="selectedNode" class="title">
+        <div *ngIf="selectedNode.isFrame; else objectTemplate">
+          <div><span *ngIf="comparedFrame; else frameTitle">COMPARE FRAMES</span>
+            <ng-template #frameTitle>FRAME</ng-template></div>
+        </div>
+        <ng-template #objectTemplate>
+          <span *ngIf="comparedFrame; else frameTitle">COMPARE OBJECTS</span>
+          <ng-template #frameTitle>OBJECT</ng-template>
+        </ng-template>
+        <button matTooltip="Close" mat-icon-button (click)="closeSide()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      <div class="content" *ngIf="selectedNode">
+        <ng-container *ngIf="selectedNode.isFrame && selectedNode.frameValue; else objectTemplate">
+          <savant-lib-frame-details [frame]="selectedNode.frameValue" [comparedFrame]="comparedFrame"></savant-lib-frame-details>
+        </ng-container>
+        <ng-template #objectTemplate>
+          <savant-lib-object-details [frameObject]="selectedNode" [comparedFrame]="comparedFrame"></savant-lib-object-details>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <savant-lib-frame-tree [frame]="frame"
+                   [comparedFrame]="comparedFrame"
+                   [objectFilter]="objectFilter"
+                   [colorPalette]="colorPalette"
+                   (nodeSelected)="displaySide($event)"></savant-lib-frame-tree>
+  </div>
+</div>

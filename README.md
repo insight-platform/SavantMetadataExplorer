@@ -3,7 +3,7 @@
 ### Run locally
 
 1. $ npm install
-2. $ npm run build:sf
+2. $ npm run build:savant-lib
 3. $ npm run start
 
 ### Run in Docker

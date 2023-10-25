@@ -18,8 +18,8 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "paths": {
-      "sf": [
-        "dist/sf"
+      "savant-lib": [
+        "dist/savant-lib"
       ]
     },
     "importHelpers": true,

@@ -1,0 +1,24 @@
+<div class="filters" [formGroup]="filters">
+  <mat-form-field>
+    <mat-label>Log Level</mat-label>
+    <mat-select formControlName="level" multiple>
+      <mat-option [value]="'Info'">Info</mat-option>
+      <mat-option [value]="'Trace'">Trace</mat-option>
+      <mat-option [value]="'Warning'">Warning</mat-option>
+      <mat-option [value]="'Error'">Error</mat-option>
+      <mat-option [value]="'Debug'">Debug</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Target</mat-label>
+    <mat-select formControlName="target" multiple>
+      <mat-option *ngFor="let target of targets" [value]="target">{{ target }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input matInput formControlName="search"/>
+  </mat-form-field>
+
+  <savant-lib-span-selector formControlName="spans" [spans]="spans"></savant-lib-span-selector>
+</div>

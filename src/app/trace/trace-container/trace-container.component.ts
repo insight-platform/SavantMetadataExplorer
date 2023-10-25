@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType, Palette } from 'sf';
+import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType, Palette } from 'savant-lib';
 import { isNil, uniq } from 'lodash';
 import { FormControl } from '@angular/forms';
 import { TraceService } from '../../api/services/trace.service';
 
 @Component({
-  selector: 'sf-trace-container',
+  selector: 'savant-trace-container',
   templateUrl: './trace-container.component.html',
   styleUrls: ['./trace-container.component.scss']
 })

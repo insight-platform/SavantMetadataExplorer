@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IData, ITrace } from 'sf';
+import { IData, ITrace } from 'savant-lib';
 import { data } from '../models/data';
 
 @Injectable({

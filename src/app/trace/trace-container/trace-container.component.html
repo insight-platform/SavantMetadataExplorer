@@ -34,19 +34,19 @@
       </mat-button-toggle-group>
     </div>
     <div *ngIf="selectedView === 'span'" class="content vertical">
-      <sf-lib-object-filter [labels]="labels"
+      <savant-lib-object-filter [labels]="labels"
                         [namespaces]="namespaces"
-                        (valueChange)="setObjectFilter($event)"></sf-lib-object-filter>
-      <sf-lib-span-list [spans]="spansWithFrame"
+                        (valueChange)="setObjectFilter($event)"></savant-lib-object-filter>
+      <savant-lib-span-list [spans]="spansWithFrame"
                     [selectedIndex]="selectedFrameIndex"
                     [selectedCompareIndex]="selectedComparedFrameIndex"
                     (compareSpan)="setComparedFrame($event)"
-                    (selectedSpan)="setFrame($event)"></sf-lib-span-list>
+                    (selectedSpan)="setFrame($event)"></savant-lib-span-list>
     </div>
     <div *ngIf="selectedView === 'log'" class="content vertical">
-      <sf-lib-log-filter [targets]="logTargets"
+      <savant-lib-log-filter [targets]="logTargets"
                      [spans]="spanTree"
-                     (valueChange)="setLogFilter($event)"></sf-lib-log-filter>
+                     (valueChange)="setLogFilter($event)"></savant-lib-log-filter>
     </div>
   </div>
   <div class="main">
@@ -66,13 +66,13 @@
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>
-      <sf-lib-frame-container [frame]="frame"
+      <savant-lib-frame-container [frame]="frame"
                           [colorPalette]="colorPalette"
                           [objectFilter]="objectFilter"
-                          [comparedFrame]="comparedFrame"></sf-lib-frame-container>
+                          [comparedFrame]="comparedFrame"></savant-lib-frame-container>
     </ng-container>
     <ng-container *ngIf="selectedView === 'log'">
-      <sf-lib-log-container [spans]="spansWithLog" [logFilter]="logFilter"></sf-lib-log-container>
+      <savant-lib-log-container [spans]="spansWithLog" [logFilter]="logFilter"></savant-lib-log-container>
     </ng-container>
   </div>
 </div>

@@ -39,7 +39,7 @@ export class TraceContainerComponent {
     this.selectedFrameIndex = -1;
     const traceId = this.traceIdFormControl.value;
     if (traceId) {
-      this._traceService.get(traceId)
+      this._traceService.getMockData() //get(traceId)
         .subscribe(trace => {
           if (!trace.traceID) {
             this.noSpanWithFrames = false;

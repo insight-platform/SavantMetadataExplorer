@@ -2,7 +2,6 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/savant-lib",
   "assets": [
-    "./assets",
     "./src/components/span/span-list/span-list-theme.scss",
     "./src/utils/components/side-actions/side-actions-theme.scss"],
   "lib": {

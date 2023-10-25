@@ -7,15 +7,6 @@
         "./src/components/span/span-list/span-list-theme.scss",
         "./src/utils/components/side-actions/side-actions-theme.scss"
       ]
-    },
-    "./assets/icons/add_circle_outline": {
-      "default": "./assets/icons/add_circle_outline.svg"
-    },
-    "./assets/icons/cancel": {
-      "default": "./assets/icons/cancel.svg"
-    },
-    "./assets/icons/swap_horisontal_circle": {
-      "default": "./assets/icons/swap_horizontal_circle.svg"
     }
   },
   "peerDependencies": {

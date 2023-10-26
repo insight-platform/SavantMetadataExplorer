@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnChanges, Optional, SimpleChanges } from '@angular/core';
 import { getArrayValue, IAttributes } from '../../../models/model';
 import { uniq } from 'lodash';
 import { jsonColorPrint } from '../../json-color-print';
@@ -8,6 +8,14 @@ import {
   getValueDiff,
 } from '../../get-difference';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  ATTRIBUTE_LABELS,
+  AttributeLabels,
+  defaultAttributeLabels,
+  defaultLibLabels,
+  LIB_LABELS,
+  LibLabels,
+} from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-attribute-list',
@@ -34,6 +42,16 @@ export class AttributeListComponent implements OnChanges {
   displayedAttributeColumns = ['name', 'hint', 'values', 'is_persistent'];
 
   expandedElement: IAttributes | null;
+
+  constructor(@Optional() @Inject(ATTRIBUTE_LABELS) public attributeLabels: Record<AttributeLabels, string>,
+              @Optional() @Inject(LIB_LABELS) public libLabels: Record<LibLabels, string>) {
+    if (!this.attributeLabels) {
+      this.attributeLabels = defaultAttributeLabels;
+    }
+    if (!this.libLabels) {
+      this.libLabels = defaultLibLabels;
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if ('comparedAttributes' in changes || 'attributes' in changes) {

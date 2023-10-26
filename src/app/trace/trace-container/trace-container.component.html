@@ -35,13 +35,13 @@
     </div>
     <div *ngIf="selectedView === 'span'" class="content vertical">
       <savant-lib-object-filter [labels]="labels"
-                        [namespaces]="namespaces"
-                        (valueChange)="setObjectFilter($event)"></savant-lib-object-filter>
+                                [namespaces]="namespaces"
+                                (valueChange)="setObjectFilter($event)"></savant-lib-object-filter>
       <savant-lib-span-list [spans]="spansWithFrame"
-                    [selectedIndex]="selectedFrameIndex"
-                    [selectedCompareIndex]="selectedComparedFrameIndex"
-                    (compareSpan)="setComparedFrame($event)"
-                    (selectedSpan)="setFrame($event)"></savant-lib-span-list>
+                            [selectedIndex]="selectedFrameIndex"
+                            [selectedCompareIndex]="selectedComparedFrameIndex"
+                            (compareSpan)="setComparedFrame($event)"
+                            (selectedSpan)="setFrame($event)"></savant-lib-span-list>
     </div>
     <div *ngIf="selectedView === 'log'" class="content vertical">
       <savant-lib-log-filter [targets]="logTargets"
@@ -67,9 +67,9 @@
         </button>
       </div>
       <savant-lib-frame-container [frame]="frame"
-                          [colorPalette]="colorPalette"
-                          [objectFilter]="objectFilter"
-                          [comparedFrame]="comparedFrame"></savant-lib-frame-container>
+                                  [colorPalette]="colorPalette"
+                                  [objectFilter]="objectFilter"
+                                  [comparedFrame]="comparedFrame"></savant-lib-frame-container>
     </ng-container>
     <ng-container *ngIf="selectedView === 'log'">
       <savant-lib-log-container [spans]="spansWithLog" [logFilter]="logFilter"></savant-lib-log-container>

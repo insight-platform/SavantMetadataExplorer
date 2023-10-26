@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, Optional, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { isNil } from 'lodash';
 import { MatSelect } from '@angular/material/select';
+import { defaultLibLabels, LIB_LABELS, LibLabels } from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-object-filter',
   templateUrl: './object-filter.component.html',
-  styleUrls: ['./object-filter.component.scss']
+  styleUrls: ['./object-filter.component.scss'],
 })
 export class ObjectFilterComponent implements OnChanges {
   @Input() namespaces: string[] = [];
@@ -19,7 +20,10 @@ export class ObjectFilterComponent implements OnChanges {
     return this.namespaceControl.value?.length === 0;
   }
 
-  constructor() {
+  constructor(@Optional() @Inject(LIB_LABELS) public libLabels: Record<LibLabels, string>) {
+    if (!this.libLabels) {
+      this.libLabels = defaultLibLabels;
+    }
     this.namespaceControl.valueChanges
       .subscribe((value: { namespace: string; label: string}[]) => {
         this.namespaces.forEach(namespace => {

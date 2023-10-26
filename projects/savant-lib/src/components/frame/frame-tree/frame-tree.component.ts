@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, Optional, Output, SimpleChanges } from '@angular/core';
 import { IFrameJson, IFrameJsonObject } from '../../../models/model';
 import { isNil, uniq } from 'lodash';
 import { HierarchyNode } from 'd3';
@@ -11,6 +11,7 @@ import {
   getFrameObjectsDifference,
   Palette,
 } from '../../../utils';
+import { defaultLibLabels, LIB_LABELS, LibLabels } from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-frame-tree',
@@ -34,6 +35,12 @@ export class FrameTreeComponent implements OnChanges {
 
   private _rectWidth = 200;
   private _rectHeight = 65;
+
+  constructor(@Optional() @Inject(LIB_LABELS) public libLabels: Record<LibLabels, string>) {
+    if (!this.libLabels) {
+      this.libLabels = defaultLibLabels;
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if ('frame' in changes) {
@@ -286,7 +293,7 @@ export class FrameTreeComponent implements OnChanges {
       .attr('x', 100)
       .attr('y', 35)
       .style('text-anchor', 'middle')
-      .text('FRAME');
+      .text(this.libLabels.frame);
     g.selectAll('.node.object')
       .data(treemapNodes.descendants().slice(1))
       .append('image')
@@ -308,21 +315,21 @@ export class FrameTreeComponent implements OnChanges {
       .attr('x', 20)
       .attr('dy', 0)
       .style('fill', d => this._getTextColor(d.data))
-      .text(d => 'ID: ' + d.data.id);
+      .text(d => this.libLabels.id + ': ' + d.data.id);
     text
       .append('tspan')
       //.style('text-anchor', 'middle')
       .attr('x', 20)
       .attr('dy', '1.2em')
       .style('fill', d => this._getTextColor(d.data))
-      .text(d => 'Namespace: ' + d.data.namespace);
+      .text(d => this.libLabels.namespace + ': ' + d.data.namespace);
     text
       .append('tspan')
       //.style('text-anchor', 'middle')
       .attr('x', 20)
       .attr('dy', '1.2em')
       .style('fill', d => this._getTextColor(d.data))
-      .text(d => 'Label: ' + d.data.label);
+      .text(d => this.libLabels.label + ': ' + d.data.label);
   }
 
   private _getTextColor(data: INodeObject) {

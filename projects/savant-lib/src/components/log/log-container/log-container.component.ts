@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnChanges, Optional, SimpleChanges } from '@angular/core';
 import { getLogValue, ILogFilter, ISafeLog, ISpan, ISpanLog } from '../../../models/model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { translateMicroSecondsToTimeString } from '../../../utils';
+import { defaultLogLabels, LOG_LABELS, LogLabels } from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-log-container',
@@ -17,7 +18,11 @@ export class LogContainerComponent implements OnChanges {
   private _dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
 
 
-  constructor(private _domSanitizer: DomSanitizer) {
+  constructor(private _domSanitizer: DomSanitizer,
+              @Optional() @Inject(LOG_LABELS) public logLabels: Record<LogLabels, string>) {
+    if (!this.logLabels) {
+      this.logLabels = defaultLogLabels;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

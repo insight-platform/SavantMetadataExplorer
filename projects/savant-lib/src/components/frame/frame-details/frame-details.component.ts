@@ -1,11 +1,12 @@
 import {
-  Component,
-  Input,
+  Component, Inject,
+  Input, Optional,
 } from '@angular/core';
 import { IFrameJson } from '../../../models/model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { getFullFrameDiffAsString, jsonColorPrint } from '../../../utils';
+import { defaultLibLabels, LIB_LABELS, LibLabels } from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-frame-details',
@@ -18,7 +19,11 @@ export class FrameDetailsComponent {
   showJson = false;
 
   constructor(private _clipboard: Clipboard,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              @Optional() @Inject(LIB_LABELS) public libLabels: Record<LibLabels, string>) {
+    if (!this.libLabels) {
+      this.libLabels = defaultLibLabels;
+    }
   }
 
   copyFrame() {

@@ -1,17 +1,17 @@
 <div class="actions">
   <button mat-icon-button
-          matTooltip="Show data as table"
+          [matTooltip]="tooltipLabels.showDataAsTable"
           (click)="showJson.emit(false); isJson = false;"
           [ngClass]="{ 'selected': !isJson }">
     <mat-icon class="material-symbols-outlined">lists</mat-icon>
   </button>
   <button mat-icon-button
-          matTooltip="Show data as JSON"
+          [matTooltip]="tooltipLabels.showDataAsJson"
           (click)="showJson.emit(true); isJson = true"
           [ngClass]="{ 'selected': isJson }">
     <mat-icon class="material-symbols-outlined">description</mat-icon>
   </button>
-  <button mat-icon-button matTooltip="Copy data as JSON"
+  <button mat-icon-button [matTooltip]="tooltipLabels.copyDataAsJson"
           (click)="copyData.emit()">
     <mat-icon>content_copy</mat-icon>
   </button>

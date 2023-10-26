@@ -5,12 +5,12 @@
       <div class="actions">
         <button (click)="$event.stopPropagation();selectedSpan.emit(i)"
                 [ngClass]="{ 'selected' : selectedIndex === i }"
-                matTooltip="Show frame"
+                [matTooltip]="tooltipLabels.showFrame"
                 mat-icon-button>
           <mat-icon>open_in_new</mat-icon>
         </button>
         <button *ngIf="i !== selectedIndex"
-                matTooltip="Compare with selected frame"
+                [matTooltip]="tooltipLabels.compareFrame"
                 (click)="$event.stopPropagation();compareSpan.emit(i)"
                 [ngClass]="{ 'selected': selectedCompareIndex === i }"
                 mat-icon-button>
@@ -20,8 +20,8 @@
     </div>
   </mat-expansion-panel-header>
   <div class="content">
-    <div>ProcessID: {{ span.startTime | date: 'MMM dd, yyyy \'at\' hh:mm a' }}</div>
-    <div>ProcessID: {{ span.processID }}</div>
-    <div>SpanID: {{ span.spanID }}</div>
+    <div>{{ libLabels.startTime }}: {{ span.startTime | date: 'MMM dd, yyyy \'at\' hh:mm a' }}</div>
+    <div>{{ libLabels.processId }}: {{ span.processID }}</div>
+    <div>{{ libLabels.spanId }}: {{ span.spanID }}</div>
   </div>
 </mat-expansion-panel>

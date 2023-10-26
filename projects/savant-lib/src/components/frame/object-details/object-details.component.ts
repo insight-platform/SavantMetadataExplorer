@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Inject, Input, OnChanges, Optional } from '@angular/core';
 import { IFrameJson, IFrameJsonObject } from '../../../models/model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep } from 'lodash';
 import { getFullFrameObjectDiffAsString, jsonColorPrint } from '../../../utils';
+import { defaultLibLabels, LIB_LABELS, LibLabels } from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-object-details',
@@ -17,7 +18,11 @@ export class ObjectDetailsComponent implements OnChanges {
   showJson = false;
 
   constructor(private _clipboard: Clipboard,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              @Optional() @Inject(LIB_LABELS) public libLabels: Record<LibLabels, string>) {
+    if (!this.libLabels) {
+      this.libLabels = defaultLibLabels;
+    }
   }
 
   ngOnChanges() {

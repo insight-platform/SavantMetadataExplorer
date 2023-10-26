@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Optional, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ILogFilter, ITreeSpan } from '../../../models/model';
+import { defaultLogLabels, LOG_LABELS, LogLabels } from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-log-filter',
@@ -24,7 +25,10 @@ export class LogFilterComponent {
     spans: new FormControl<string[]>([], { nonNullable: true }),
   });
 
-  constructor() {
+  constructor(@Optional() @Inject(LOG_LABELS) public logLabels: Record<LogLabels, string>) {
+    if (!this.logLabels) {
+      this.logLabels = defaultLogLabels;
+    }
     this.filters.valueChanges
       .subscribe(value => {
         // @ts-ignore

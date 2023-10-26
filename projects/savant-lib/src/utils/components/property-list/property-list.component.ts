@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Input, OnChanges, Optional, SimpleChanges } from '@angular/core';
 import { getArrayValue, IFrameJson, IFrameJsonObject } from '../../../models/model';
 import { jsonColorPrint } from '../../json-color-print';
 import { getDataDiff, getValueDiffAsString } from '../../get-difference';
 import { cloneDeep } from 'lodash';
+import { ATTRIBUTE_LABELS, AttributeLabels, defaultAttributeLabels } from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-property-list',
@@ -19,7 +20,12 @@ export class PropertyListComponent implements OnChanges {
     'objects', 'attributes', 'children',
   ];
 
-  constructor(private _cdr: ChangeDetectorRef) {}
+  constructor(private _cdr: ChangeDetectorRef,
+              @Optional() @Inject(ATTRIBUTE_LABELS) public attributeLabels: Record<AttributeLabels, string>) {
+    if (!this.attributeLabels) {
+      this.attributeLabels = defaultAttributeLabels;
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.dataSource = Object.keys(this.data)

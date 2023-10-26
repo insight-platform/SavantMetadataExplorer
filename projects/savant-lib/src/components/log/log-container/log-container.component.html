@@ -3,8 +3,8 @@
     <div *ngIf="isFirst || isLast; else delta" class="item-timestamp">{{ item.timestamp }}</div>
     <ng-template #delta>
       <div class="item-timestamp">
-        <div>From Start|<br/>{{ item.startTimestampDelta }}|</div>
-        <div>From Previous<br/>{{ item.previousTimestampDelta }}</div>
+        <div>{{ logLabels.fromStart }}|<br/>{{ item.startTimestampDelta }}|</div>
+        <div>{{ logLabels.fromPrevious }}<br/>{{ item.previousTimestampDelta }}</div>
       </div>
     </ng-template>
     <div class="item-message">

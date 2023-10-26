@@ -1,8 +1,16 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Input, OnChanges, Optional, SimpleChanges } from '@angular/core';
 import { INodeObject } from '../node-object';
 import { isNil } from 'lodash';
 import { IFrameJson } from '../../../models/model';
 import { Palette } from '../../../utils';
+import {
+  defaultLibLabels,
+  defaultTooltips,
+  LIB_LABELS,
+  LibLabels,
+  TOOLTIP_LABELS,
+  Tooltips,
+} from '../../../lib-labels';
 
 @Component({
   selector: 'savant-lib-frame-container',
@@ -17,7 +25,15 @@ export class FrameContainerComponent implements OnChanges {
   isExpanded = false;
   selectedNode: INodeObject | undefined = undefined;
 
-  constructor(private _cdr: ChangeDetectorRef) {
+  constructor(private _cdr: ChangeDetectorRef,
+              @Optional() @Inject(LIB_LABELS) public libLabels: Record<LibLabels, string>,
+              @Optional() @Inject(TOOLTIP_LABELS) public tooltipLabels: Record<Tooltips, string>) {
+    if (!this.libLabels) {
+      this.libLabels = defaultLibLabels;
+    }
+    if (!this.tooltipLabels) {
+      this.tooltipLabels = defaultTooltips;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

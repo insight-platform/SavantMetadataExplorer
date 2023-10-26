@@ -1,22 +1,22 @@
 <div class="filters" [formGroup]="filters">
   <mat-form-field>
-    <mat-label>Log Level</mat-label>
+    <mat-label>{{ logLabels.logLevel }}</mat-label>
     <mat-select formControlName="level" multiple>
-      <mat-option [value]="'Info'">Info</mat-option>
-      <mat-option [value]="'Trace'">Trace</mat-option>
-      <mat-option [value]="'Warning'">Warning</mat-option>
-      <mat-option [value]="'Error'">Error</mat-option>
-      <mat-option [value]="'Debug'">Debug</mat-option>
+      <mat-option [value]="'Info'">{{ logLabels.info }}</mat-option>
+      <mat-option [value]="'Trace'">{{ logLabels.trace }}</mat-option>
+      <mat-option [value]="'Warning'">{{ logLabels.warning }}</mat-option>
+      <mat-option [value]="'Error'">{{ logLabels.error }}</mat-option>
+      <mat-option [value]="'Debug'">{{ logLabels.debug }}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Target</mat-label>
+    <mat-label>{{ logLabels.target }}</mat-label>
     <mat-select formControlName="target" multiple>
       <mat-option *ngFor="let target of targets" [value]="target">{{ target }}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Search</mat-label>
+    <mat-label>{{ logLabels.search }}</mat-label>
     <input matInput formControlName="search"/>
   </mat-form-field>
 

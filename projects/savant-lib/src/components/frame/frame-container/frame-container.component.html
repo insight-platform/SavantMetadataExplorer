@@ -3,14 +3,14 @@
     <div class="side-content">
       <div *ngIf="selectedNode" class="title">
         <div *ngIf="selectedNode.isFrame; else objectTemplate">
-          <div><span *ngIf="comparedFrame; else frameTitle">COMPARE FRAMES</span>
-            <ng-template #frameTitle>FRAME</ng-template></div>
+          <div><span *ngIf="comparedFrame; else frameTitle">{{ libLabels.compareFrames }}</span>
+            <ng-template #frameTitle>{{ libLabels.frame }}</ng-template></div>
         </div>
         <ng-template #objectTemplate>
-          <span *ngIf="comparedFrame; else frameTitle">COMPARE OBJECTS</span>
-          <ng-template #frameTitle>OBJECT</ng-template>
+          <span *ngIf="comparedFrame; else frameTitle">{{ libLabels.compareObject }}</span>
+          <ng-template #frameTitle>{{ libLabels.object }}</ng-template>
         </ng-template>
-        <button matTooltip="Close" mat-icon-button (click)="closeSide()">
+        <button [matTooltip]="tooltipLabels.close" mat-icon-button (click)="closeSide()">
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>

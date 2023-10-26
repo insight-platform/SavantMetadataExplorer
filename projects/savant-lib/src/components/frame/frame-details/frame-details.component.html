@@ -13,7 +13,7 @@
 <ng-template #tableView>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      Frame details
+      {{ libLabels.frameDetails }}
     </mat-expansion-panel-header>
     <savant-lib-property-list [data]="frame" [comparedData]="comparedFrame"></savant-lib-property-list>
   </mat-expansion-panel>

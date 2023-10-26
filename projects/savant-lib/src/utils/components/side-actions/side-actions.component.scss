@@ -1,0 +1,8 @@
+@use '@angular/material' as mat;
+
+.actions {
+  margin-bottom: 10px;
+}
+.selected {
+  color: mat.get-color-from-palette(mat.$deep-purple-palette, 500);
+}

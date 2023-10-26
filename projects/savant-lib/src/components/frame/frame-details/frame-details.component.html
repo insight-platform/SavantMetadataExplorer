@@ -1,0 +1,22 @@
+<savant-lib-side-actions (copyData)="copyFrame()"
+                 (showJson)="showJson = $event"></savant-lib-side-actions>
+
+<ng-container *ngIf="showJson; else tableView">
+  <div class="json">
+    <pre *ngIf="comparedFrame; else frameData"
+         [innerHTML]="getJsonDataDiff(frame, comparedFrame)"></pre>
+    <ng-template #frameData>
+      <pre [innerHTML]="getJsonData()"></pre>
+    </ng-template>
+  </div>
+</ng-container>
+<ng-template #tableView>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      {{ libLabels.frameDetails }}
+    </mat-expansion-panel-header>
+    <savant-lib-property-list [data]="frame" [comparedData]="comparedFrame"></savant-lib-property-list>
+  </mat-expansion-panel>
+
+  <savant-lib-attribute-list [attributes]="frame.attributes" [comparedAttributes]="comparedFrame?.attributes"></savant-lib-attribute-list>
+</ng-template>

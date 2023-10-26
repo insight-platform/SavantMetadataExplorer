@@ -1,0 +1,24 @@
+{
+  "name": "@savant/savant-lib",
+  "version": "0.0.1",
+  "exports": {
+    "./theming": {
+      "sass": [
+        "./src/components/span/span-list/span-list-theme.scss",
+        "./src/utils/components/side-actions/side-actions-theme.scss"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "@angular/common": "^16.2.0",
+    "@angular/core": "^16.2.0",
+    "ansi_up": "^6.0.2",
+    "lodash": "^4.17.21",
+    "d3": "^7.8.5",
+    "json-diff-ts": "^1.2.6"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

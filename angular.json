@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "SavantFrame": {
+    "SavantMetadataExplorer": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -12,7 +12,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "sf",
+      "prefix": "savant",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -44,8 +44,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1mb",
-                  "maximumError": "10mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -73,10 +73,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "SavantFrame:build:production"
+              "browserTarget": "SavantMetadataExplorer:build:production"
             },
             "development": {
-              "browserTarget": "SavantFrame:build:development"
+              "browserTarget": "SavantMetadataExplorer:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "SavantFrame:build"
+            "browserTarget": "SavantMetadataExplorer:build"
           }
         },
         "test": {
@@ -113,6 +113,48 @@
             "lintFilePatterns": [
               "src/**/*.ts",
               "src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "savant-lib": {
+      "projectType": "library",
+      "root": "projects/savant-lib",
+      "sourceRoot": "projects/savant-lib/src",
+      "prefix": "savant-lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/savant-lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/savant-lib/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/savant-lib/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/savant-lib/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/savant-lib/**/*.ts",
+              "projects/savant-lib/**/*.html"
             ]
           }
         }

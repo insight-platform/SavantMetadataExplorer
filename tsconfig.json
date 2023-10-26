@@ -17,6 +17,11 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "paths": {
+      "savant-lib": [
+        "dist/savant-lib"
+      ]
+    },
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",

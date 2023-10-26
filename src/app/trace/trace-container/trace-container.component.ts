@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType } from '../../api/models/model';
+import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType, Palette } from 'savant-lib';
 import { isNil, uniq } from 'lodash';
 import { FormControl } from '@angular/forms';
 import { TraceService } from '../../api/services/trace.service';
 
 @Component({
-  selector: 'sf-trace-container',
+  selector: 'savant-trace-container',
   templateUrl: './trace-container.component.html',
   styleUrls: ['./trace-container.component.scss']
 })
 export class TraceContainerComponent {
   traceId = '566293635d0eebfa891701d5c4cc69f8';
+  colorPalette = Palette.amber;
   traceIdFormControl = new FormControl<string>('', {nonNullable: true});
   spansWithFrame: ISpan[] = [];
   spansWithLog: ISpan[] = [];
@@ -38,7 +39,7 @@ export class TraceContainerComponent {
     this.selectedFrameIndex = -1;
     const traceId = this.traceIdFormControl.value;
     if (traceId) {
-      this._traceService.get(traceId)
+      this._traceService.getMockData() //get(traceId)
         .subscribe(trace => {
           if (!trace.traceID) {
             this.noSpanWithFrames = false;

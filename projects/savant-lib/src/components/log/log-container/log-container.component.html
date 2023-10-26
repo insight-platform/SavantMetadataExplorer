@@ -1,0 +1,14 @@
+<div id="log-viewer" class="log-viewer">
+  <div class="log-item" *ngFor="let item of safeLogs; first as isFirst; last as isLast">
+    <div *ngIf="isFirst || isLast; else delta" class="item-timestamp">{{ item.timestamp }}</div>
+    <ng-template #delta>
+      <div class="item-timestamp">
+        <div>{{ logLabels.fromStart }}|<br/>{{ item.startTimestampDelta }}|</div>
+        <div>{{ logLabels.fromPrevious }}<br/>{{ item.previousTimestampDelta }}</div>
+      </div>
+    </ng-template>
+    <div class="item-message">
+      <span *ngFor="let line of item.lines" [innerHTML]="line"></span>
+    </div>
+  </div>
+</div>

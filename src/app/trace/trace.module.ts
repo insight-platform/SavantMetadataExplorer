@@ -6,12 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { SharedModule } from '../utils/shared/shared.module';
-import { SpanModule } from '../span/span.module';
+import { FrameModule, LogModule, SharedModule, SpanModule } from 'savant-lib';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
-import { FrameModule } from '../frame/frame.module';
-import { LogModule } from '../log/log.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 

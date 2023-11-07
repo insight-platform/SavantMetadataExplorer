@@ -10,6 +10,7 @@
           <mat-icon>open_in_new</mat-icon>
         </button>
         <button *ngIf="i !== selectedIndex"
+                [disabled]="selectedIndex === -1"
                 [matTooltip]="tooltipLabels.compareFrame"
                 (click)="$event.stopPropagation();compareSpan.emit(i)"
                 [ngClass]="{ 'selected': selectedCompareIndex === i }"
@@ -20,7 +21,7 @@
     </div>
   </mat-expansion-panel-header>
   <div class="content">
-    <div>{{ libLabels.startTime }}: {{ span.startTime | date: 'MMM dd, yyyy \'at\' hh:mm a' }}</div>
+    <div>{{ libLabels.startTime }}: {{ (span.startTime / 1000) | date: 'MMM dd, yyyy \'at\' hh:mm a' }}</div>
     <div>{{ libLabels.processId }}: {{ span.processID }}</div>
     <div>{{ libLabels.spanId }}: {{ span.spanID }}</div>
   </div>

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IData, ITrace } from 'savant-lib';
 import { data } from '../models/data';
+import { IData, ITrace } from '../../../../projects/savant-lib/src/models/model';
 
 @Injectable({
   providedIn: 'root',

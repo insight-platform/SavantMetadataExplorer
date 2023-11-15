@@ -1,4 +1,261 @@
-import { ITrace } from 'savant-lib';
+import { IFrameJson, IFrameJsonObject, ITrace } from '../../../../projects/savant-lib/src/models/model';
+
+export const frame: IFrameJson = {
+  attributes: [
+    {
+      hint: 'PlatformConfig',
+      is_persistent: true,
+      name: 'CamMode',
+      namespace: 'Configuration',
+      values: [
+        {
+          confidence: null,
+          value: {
+            String: 'fisheye',
+          },
+        },
+        {
+          confidence: null,
+          value: {
+            IntegerVector: [
+              200,
+              200,
+            ],
+          },
+        },
+      ],
+    },
+  ],
+  codec: 'h264',
+  content: {
+    external: {
+      location: '1111',
+      method: 'redis',
+    },
+  },
+  creation_timestamp_ns: 1695888065807941620,
+  dts: 10000,
+  duration: 10,
+  framerate: '30/1',
+  height: 720,
+  keyframe: true,
+  pts: 10000,
+  source_id: 'test',
+  time_base: [
+    1,
+    1000000,
+  ],
+  transcoding_method: 'Encoded',
+  transformations: [
+    {
+      initial_size: [
+        1920,
+        1080,
+      ],
+    },
+    {
+      scale: [
+        1280,
+        720,
+      ],
+    },
+    {
+      padding: [
+        120,
+        0,
+        0,
+        0,
+      ],
+    },
+    {
+      resulting_size: [
+        1400,
+        720,
+      ],
+    },
+  ],
+  type: 'VideoFrame',
+  uuid: 'fb736fa2-86e9-4073-b88a-b8985ae8a00b',
+  version: '0.1.70',
+  width: 1400,
+  objects: [
+    {
+      attributes: [],
+      bbox: {
+        angle: null,
+        height: 0,
+        width: 0,
+        xc: 0,
+        yc: 0,
+      },
+      confidence: null,
+      draw_label: null,
+      frame: 'test1',
+      id: 0,
+      label: 'test2',
+      namespace: 'test',
+      parent: null,
+      pyobjects: 'not_implemented',
+      track_box: null,
+      track_id: null,
+    },
+    {
+      attributes: [],
+      bbox: {
+        angle: null,
+        height: 0,
+        width: 0,
+        xc: 0,
+        yc: 0,
+      },
+      confidence: null,
+      draw_label: null,
+      frame: 'test1',
+      id: 1,
+      label: 'test',
+      namespace: 'test2',
+      parent: 0,
+      pyobjects: 'not_implemented',
+      track_box: null,
+      track_id: null,
+    },
+    {
+      attributes: [],
+      bbox: {
+        angle: null,
+        height: 0,
+        width: 0,
+        xc: 0,
+        yc: 0,
+      },
+      confidence: null,
+      draw_label: null,
+      frame: 'test1',
+      id: 2,
+      label: 'test2',
+      namespace: 'test2',
+      parent: 0,
+      pyobjects: 'not_implemented',
+      track_box: null,
+      track_id: null,
+    },
+    {
+      attributes: [
+        {
+          hint: 'PlatformConfig',
+          is_persistent: true,
+          name: 'CamMode',
+          namespace: 'Configuration',
+          values: [
+            {
+              confidence: null,
+              value: {
+                String: 'fisheye',
+              },
+            },
+          ],
+        },
+      ],
+      bbox: {
+        angle: null,
+        height: 10,
+        width: 10,
+        xc: 0,
+        yc: 0,
+      },
+      confidence: null,
+      draw_label: null,
+      frame: 'test1',
+      id: 3,
+      label: 'test2',
+      namespace: 'test2',
+      parent: 2,
+      pyobjects: 'not_implemented',
+      track_box: null,
+      track_id: null,
+    },
+    {
+      attributes: [],
+      bbox: {
+        angle: null,
+        height: 40,
+        width: 40,
+        xc: 0,
+        yc: 0,
+      },
+      confidence: null,
+      draw_label: null,
+      frame: 'test1',
+      id: 4,
+      label: 'test',
+      namespace: 'test2',
+      parent: 1,
+      pyobjects: 'not_implemented',
+      track_box: null,
+      track_id: null,
+    },
+    {
+      attributes: [],
+      bbox: {
+        angle: null,
+        height: 0,
+        width: 0,
+        xc: 0,
+        yc: 0,
+      },
+      confidence: null,
+      draw_label: null,
+      frame: 'test1',
+      id: 5,
+      label: 'test',
+      namespace: 'test2',
+      parent: 1,
+      pyobjects: 'not_implemented',
+      track_box: null,
+      track_id: null,
+    },
+    {
+      attributes: [],
+      bbox: {
+        angle: null,
+        height: 0,
+        width: 0,
+        xc: 0,
+        yc: 0,
+      },
+      confidence: null,
+      draw_label: null,
+      frame: 'test1',
+      id: 6,
+      label: 'test2',
+      namespace: 'test2',
+      parent: 3,
+      pyobjects: 'not_implemented',
+      track_box: null,
+      track_id: null,
+    },
+  ],
+};
+export const object: IFrameJsonObject = {
+  attributes: [],
+  bbox: {
+    angle: null,
+    height: 0,
+    width: 0,
+    xc: 0,
+    yc: 0,
+  },
+  confidence: null,
+  draw_label: null,
+  frame: 'test1',
+  id: 0,
+  label: 'test2',
+  namespace: 'test',
+  parent: null,
+  pyobjects: 'not_implemented',
+  track_box: null,
+  track_id: null,
+};
 
 export const data: ITrace = {
   traceID: 'cb8b182cff2f87b73b5d1fcbe0bb846d',
@@ -56,27 +313,27 @@ export const data: ITrace = {
                   {
                     confidence: null,
                     value: {
-                      String: 'fisheye'
-                    }
+                      String: 'fisheye',
+                    },
                   },
                   {
                     confidence: null,
                     value: {
                       IntegerVector: [
                         200,
-                        200
-                      ]
-                    }
-                  }
-                ]
-              }
+                        200,
+                      ],
+                    },
+                  },
+                ],
+              },
             ],
             codec: 'h264',
             content: {
               external: {
                 location: '1111',
-                method: 'redis'
-              }
+                method: 'redis',
+              },
             },
             creation_timestamp_ns: 1695888065807941620,
             dts: 10000,
@@ -88,36 +345,36 @@ export const data: ITrace = {
             source_id: 'test',
             time_base: [
               1,
-              1000000
+              1000000,
             ],
             transcoding_method: 'Encoded',
             transformations: [
               {
                 initial_size: [
                   1920,
-                  1080
-                ]
+                  1080,
+                ],
               },
               {
                 scale: [
                   1280,
-                  720
-                ]
+                  720,
+                ],
               },
               {
                 padding: [
                   120,
                   0,
                   0,
-                  0
-                ]
+                  0,
+                ],
               },
               {
                 resulting_size: [
                   1400,
-                  720
-                ]
-              }
+                  720,
+                ],
+              },
             ],
             type: 'VideoFrame',
             uuid: 'fb736fa2-86e9-4073-b88a-b8985ae8a00b',
@@ -195,11 +452,11 @@ export const data: ITrace = {
                       {
                         confidence: null,
                         value: {
-                          String: 'fisheye'
-                        }
+                          String: 'fisheye',
+                        },
                       },
-                    ]
-                  }
+                    ],
+                  },
                 ],
                 bbox: {
                   angle: null,
@@ -326,24 +583,24 @@ export const data: ITrace = {
                   {
                     confidence: null,
                     value: {
-                      String: 'fisheye'
-                    }
+                      String: 'fisheye',
+                    },
                   },
                   {
                     confidence: null,
                     value: {
                       IntegerVector: [
                         180,
-                        180
-                      ]
-                    }
-                  }
-                ]
-              }
+                        180,
+                      ],
+                    },
+                  },
+                ],
+              },
             ],
             codec: 'h264',
             content: {
-              internal: null
+              internal: null,
             },
             creation_timestamp_ns: 1695888352201220391,
             dts: 10000,
@@ -355,36 +612,36 @@ export const data: ITrace = {
             source_id: 'test',
             time_base: [
               1,
-              1000000
+              1000000,
             ],
             transcoding_method: 'Encoded',
             transformations: [
               {
                 initial_size: [
                   1920,
-                  1080
-                ]
+                  1080,
+                ],
               },
               {
                 scale: [
                   1280,
-                  720
-                ]
+                  720,
+                ],
               },
               {
                 padding: [
                   120,
                   0,
                   0,
-                  0
-                ]
+                  0,
+                ],
               },
               {
                 resulting_size: [
                   1400,
-                  720
-                ]
-              }
+                  720,
+                ],
+              },
             ],
             type: 'VideoFrame',
             uuid: '5b031cbc-ccd8-4e58-9f47-4d56b29c9c7c',

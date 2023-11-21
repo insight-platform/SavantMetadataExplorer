@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@insight-platform'
+      - name: Build the Docker image
+        run: docker build . --file projects/savant-lib/Dockerfile --tag savant-image
+      - name: Publish from image
+        run: docker run savant-image bash -c "npm config set @insight-platform:registry=https://npm.pkg.github.com; npm config set -- '//npm.pkg.github.com/:_authToken' '${{ secrets.GITHUB_TOKEN }}'; npm version patch; npm publish"

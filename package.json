@@ -1,6 +1,13 @@
 {
   "name": "savant-metadata-explorer",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/insight-platform/SavantMetadataExplorer.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

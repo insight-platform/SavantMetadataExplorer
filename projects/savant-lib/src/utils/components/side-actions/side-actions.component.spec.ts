@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SideActionsComponent } from './side-actions.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('SideActionsComponent', () => {
   let component: SideActionsComponent;
@@ -8,7 +11,12 @@ describe('SideActionsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SideActionsComponent]
+      declarations: [SideActionsComponent],
+      imports: [
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+      ],
     });
     fixture = TestBed.createComponent(SideActionsComponent);
     component = fixture.componentInstance;

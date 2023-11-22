@@ -1,0 +1,37 @@
+name: savant-github-actions
+on: [push]
+jobs:
+  check-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: npm install
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Base checkout
+        uses: actions/checkout@v4
+      - name: Base node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Linting
+        run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Base checkout
+        uses: actions/checkout@v4
+      - name: Base node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Testing
+        run: npm run test

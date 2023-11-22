@@ -1,8 +1,15 @@
 import { Component } from '@angular/core';
-import { IFrameJson, ILogFilter, ISpan, ITreeSpan, ReferenceType, Palette } from 'savant-lib';
 import { isNil, uniq } from 'lodash';
 import { FormControl } from '@angular/forms';
 import { TraceService } from '../../api/services/trace.service';
+import { Palette } from '../../../../projects/savant-lib/src/utils';
+import {
+  IFrameJson,
+  ILogFilter,
+  ISpan,
+  ITreeSpan,
+  ReferenceType,
+} from '../../../../projects/savant-lib/src/models/model';
 
 @Component({
   selector: 'savant-trace-container',

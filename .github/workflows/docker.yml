@@ -1,12 +1,9 @@
-name: Docker Image CI
-
-on:
-  push:
-    branches: [ "main" ]
-
+name: Publish lib
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "startsWith(github.ref, 'refs/tags/')"
     permissions:
       packages: write
       contents: read

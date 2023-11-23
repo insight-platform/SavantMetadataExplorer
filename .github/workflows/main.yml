@@ -1,4 +1,4 @@
-name: savant-github-actions
+name: Main actions
 on: [push]
 jobs:
   check-packages:
